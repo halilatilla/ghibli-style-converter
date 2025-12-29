@@ -8,7 +8,9 @@ Transform your photos into magical **Studio Ghibli-style** artwork using AI.
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38B2AC?style=flat-square&logo=tailwind-css)
 
 <p align="center">
-  <img width="2456" height="1860" alt="CleanShot 2025-12-30 at 01 03 10@2x" src="https://github.com/user-attachments/assets/3f3e8f92-e4ab-4c93-af99-9e2a716291da" />
+  
+  <img width="1280" height="1170" alt="CleanShot 2025-12-30 at 02 06 43" src="https://github.com/user-attachments/assets/93977eda-7741-47c5-a4d4-58daa98b880e" />
+
 </p>
 
 
