@@ -8,8 +8,9 @@ Transform your photos into magical **Studio Ghibli-style** artwork using AI.
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38B2AC?style=flat-square&logo=tailwind-css)
 
 <p align="center">
-  <img src="https://placehold.co/800x400/e8f5e9/2e7d32?text=GhibliStyle+Converter+Demo" alt="Demo" />
+  <img width="2456" height="1860" alt="CleanShot 2025-12-30 at 01 03 10@2x" src="https://github.com/user-attachments/assets/3f3e8f92-e4ab-4c93-af99-9e2a716291da" />
 </p>
+
 
 ## ✨ Features
 
