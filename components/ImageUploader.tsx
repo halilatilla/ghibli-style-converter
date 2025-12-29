@@ -9,9 +9,10 @@ interface ImageUploaderProps {
   selectedImage: string | null
   onClear: () => void
   disabled: boolean
+  className?: string
 }
 
-export default function ImageUploader({ onImageSelected, selectedImage, onClear, disabled }: ImageUploaderProps) {
+export default function ImageUploader({ onImageSelected, selectedImage, onClear, disabled, className }: ImageUploaderProps) {
   const [isDragging, setIsDragging] = useState(false)
 
   const processFile = (file: File) => {
@@ -32,8 +33,8 @@ export default function ImageUploader({ onImageSelected, selectedImage, onClear,
 
   if (selectedImage) {
     return (
-      <div className="relative group rounded-2xl overflow-hidden shadow-md border border-slate-200 dark:border-slate-700">
-        <img src={`data:image/jpeg;base64,${selectedImage}`} alt="Original" className="w-full h-auto max-h-[500px] object-cover" />
+      <div className={cn("relative group rounded-2xl overflow-hidden shadow-md border border-slate-200 dark:border-slate-700 h-full flex items-center justify-center bg-slate-900", className)}>
+        <img src={`data:image/jpeg;base64,${selectedImage}`} alt="Original" className="max-w-full max-h-full object-contain" />
         {!disabled && (
           <button onClick={onClear} className="absolute top-2 right-2 p-2 bg-white/90 dark:bg-slate-800/90 backdrop-blur rounded-full text-slate-600 dark:text-slate-300 hover:text-red-500 dark:hover:text-red-400 shadow-sm">
             <X className="w-5 h-5" />
@@ -49,11 +50,12 @@ export default function ImageUploader({ onImageSelected, selectedImage, onClear,
       onDragLeave={(e) => { e.preventDefault(); setIsDragging(false) }}
       onDrop={handleDrop}
       className={cn(
-        "relative border-2 border-dashed rounded-2xl p-12 text-center transition-all",
+        "relative border-2 border-dashed rounded-2xl p-12 text-center transition-all flex flex-col items-center justify-center h-full",
         isDragging 
           ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/50" 
           : "border-slate-300 dark:border-slate-700 hover:border-emerald-400 dark:hover:border-emerald-500",
-        disabled && "opacity-50 pointer-events-none"
+        disabled && "opacity-50 pointer-events-none",
+        className
       )}
     >
       <input

@@ -133,13 +133,14 @@ export default function Home() {
                   1. Upload Reference
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-6 flex-grow flex flex-col">
-                <div className="flex-grow flex flex-col">
+              <CardContent className="p-6 flex-grow flex flex-col h-full">
+                <div className="flex-grow flex flex-col h-full">
                   <ImageUploader
                     onImageSelected={handleImageSelected}
                     selectedImage={selectedImage}
                     onClear={handleClear}
                     disabled={status === "processing"}
+                    className="h-full"
                   />
                 </div>
               </CardContent>
