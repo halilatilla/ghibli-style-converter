@@ -2,9 +2,10 @@
 
 Transform your photos into magical **Studio Ghibli-style** artwork using AI.
 
-![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue?style=flat-square&logo=typescript)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?style=flat-square&logo=tailwind-css)
+![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue?style=flat-square&logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38B2AC?style=flat-square&logo=tailwind-css)
 
 <p align="center">
   <img src="https://placehold.co/800x400/e8f5e9/2e7d32?text=GhibliStyle+Converter+Demo" alt="Demo" />
@@ -18,6 +19,7 @@ Transform your photos into magical **Studio Ghibli-style** artwork using AI.
 - 💾 **One-Click Download** - Download your generated artwork instantly
 - 📱 **Responsive Design** - Works beautifully on desktop and mobile
 - ⚡ **Fast Processing** - Results in seconds
+- 🛡️ **Rate Limiting** - Built-in protection with Upstash Redis
 
 ## 🚀 Getting Started
 
@@ -28,37 +30,51 @@ Transform your photos into magical **Studio Ghibli-style** artwork using AI.
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/yourusername/ghibli-style-converter.git
    cd ghibli-style-converter
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Set up environment variables**
-   
-   Create a `.env.local` file in the root directory with your API keys.
+
+   Create a `.env.local` file in the root directory:
+
+   ```env
+   # Required
+   GEMINI_API_KEY=your_gemini_api_key
+
+   # Optional - for production rate limiting
+   UPSTASH_REDIS_REST_URL=your_upstash_url
+   UPSTASH_REDIS_REST_TOKEN=your_upstash_token
+   ```
 
 4. **Run the development server**
+
    ```bash
    npm run dev
    ```
 
 5. **Open your browser**
-   
+
    Navigate to [http://localhost:3000](http://localhost:3000)
 
 ## 🛠️ Tech Stack
 
-| Technology | Purpose |
-|------------|---------|
-| [Next.js 14](https://nextjs.org/) | React framework |
-| [TypeScript](https://www.typescriptlang.org/) | Type safety |
-| [Tailwind CSS](https://tailwindcss.com/) | Styling |
-| [Lucide React](https://lucide.dev/) | Icons |
+| Technology                                    | Version | Purpose         |
+| --------------------------------------------- | ------- | --------------- |
+| [Next.js](https://nextjs.org/)                | 16      | React framework |
+| [React](https://react.dev/)                   | 19      | UI library      |
+| [TypeScript](https://www.typescriptlang.org/) | 5.9     | Type safety     |
+| [Tailwind CSS](https://tailwindcss.com/)      | 4       | Styling         |
+| [Upstash](https://upstash.com/)               | -       | Rate limiting   |
+| [Lucide React](https://lucide.dev/)           | -       | Icons           |
 
 ## 📁 Project Structure
 
@@ -67,7 +83,7 @@ ghibli-style-converter/
 ├── app/
 │   ├── api/
 │   │   └── generate/
-│   │       └── route.ts      # API endpoint
+│   │       └── route.ts      # API endpoint with rate limiting
 │   ├── globals.css
 │   ├── layout.tsx
 │   └── page.tsx              # Main app page
@@ -83,9 +99,17 @@ ghibli-style-converter/
 ## 💡 Usage Tips
 
 - **Landscapes** and scenic shots work exceptionally well
-- **Portraits** will be stylized significantly 
+- **Portraits** will be stylized significantly
 - Try adding **weather conditions** to the prompt (e.g., "sunset", "rainy day")
 - Experiment with **different art styles** in your prompt
+
+## 🔒 Rate Limiting
+
+The API includes built-in rate limiting:
+
+- **5 requests per minute** per user
+- Uses Upstash Redis in production
+- Falls back to in-memory limiting for development
 
 ## 📝 License
 
