@@ -32,10 +32,10 @@ export default function ImageUploader({ onImageSelected, selectedImage, onClear,
 
   if (selectedImage) {
     return (
-      <div className="relative group rounded-2xl overflow-hidden shadow-md border border-slate-200">
+      <div className="relative group rounded-2xl overflow-hidden shadow-md border border-slate-200 dark:border-slate-700">
         <img src={`data:image/jpeg;base64,${selectedImage}`} alt="Original" className="w-full h-auto max-h-[500px] object-cover" />
         {!disabled && (
-          <button onClick={onClear} className="absolute top-2 right-2 p-2 bg-white/90 backdrop-blur rounded-full text-slate-600 hover:text-red-500 shadow-sm">
+          <button onClick={onClear} className="absolute top-2 right-2 p-2 bg-white/90 dark:bg-slate-800/90 backdrop-blur rounded-full text-slate-600 dark:text-slate-300 hover:text-red-500 dark:hover:text-red-400 shadow-sm">
             <X className="w-5 h-5" />
           </button>
         )}
@@ -50,7 +50,9 @@ export default function ImageUploader({ onImageSelected, selectedImage, onClear,
       onDrop={handleDrop}
       className={cn(
         "relative border-2 border-dashed rounded-2xl p-12 text-center transition-all",
-        isDragging ? "border-emerald-500 bg-emerald-50" : "border-slate-300 hover:border-emerald-400",
+        isDragging 
+          ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/50" 
+          : "border-slate-300 dark:border-slate-700 hover:border-emerald-400 dark:hover:border-emerald-500",
         disabled && "opacity-50 pointer-events-none"
       )}
     >
@@ -62,12 +64,17 @@ export default function ImageUploader({ onImageSelected, selectedImage, onClear,
         disabled={disabled}
       />
       <div className="flex flex-col items-center space-y-4">
-        <div className={cn("p-4 rounded-full", isDragging ? "bg-emerald-200 text-emerald-700" : "bg-slate-100 text-slate-400")}>
+        <div className={cn(
+          "p-4 rounded-full", 
+          isDragging 
+            ? "bg-emerald-200 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300" 
+            : "bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500"
+        )}>
           {isDragging ? <ImageIcon className="w-8 h-8" /> : <Upload className="w-8 h-8" />}
         </div>
         <div>
-          <p className="text-lg font-semibold text-slate-700">{isDragging ? "Drop it here!" : "Upload a photo"}</p>
-          <p className="text-sm text-slate-500 mt-1">Click to browse or drag and drop</p>
+          <p className="text-lg font-semibold text-slate-700 dark:text-slate-200">{isDragging ? "Drop it here!" : "Upload a photo"}</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Click to browse or drag and drop</p>
         </div>
       </div>
     </div>

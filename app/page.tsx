@@ -61,15 +61,15 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50">
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950">
       <Header />
       <main className="flex-grow container mx-auto px-4 py-8 max-w-6xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           <div className="space-y-6">
-            <Card className="rounded-3xl">
+            <Card className="rounded-3xl dark:bg-slate-900 dark:border-slate-800">
               <CardHeader>
-                <CardTitle className="flex items-center text-lg">
-                  <span className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-sm mr-3">1</span>
+                <CardTitle className="flex items-center text-lg dark:text-slate-100">
+                  <span className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-sm mr-3">1</span>
                   Upload Reference
                 </CardTitle>
               </CardHeader>
@@ -83,10 +83,10 @@ export default function Home() {
               </CardContent>
             </Card>
 
-            <Card className="rounded-3xl">
+            <Card className="rounded-3xl dark:bg-slate-900 dark:border-slate-800">
               <CardHeader>
-                <CardTitle className="flex items-center text-lg">
-                  <span className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-sm mr-3">2</span>
+                <CardTitle className="flex items-center text-lg dark:text-slate-100">
+                  <span className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-sm mr-3">2</span>
                   Style Prompt
                 </CardTitle>
               </CardHeader>
@@ -97,9 +97,9 @@ export default function Home() {
                     onChange={(e) => setPrompt(e.target.value)}
                     rows={4}
                     disabled={status === "processing"}
-                    className="pr-12"
+                    className="pr-12 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-100"
                   />
-                  <Wand2 className="absolute top-3 right-3 text-slate-400 w-5 h-5" />
+                  <Wand2 className="absolute top-3 right-3 text-slate-400 dark:text-slate-500 w-5 h-5" />
                 </div>
                 <Button
                   onClick={handleGenerate}
@@ -129,24 +129,24 @@ export default function Home() {
           </div>
 
           <div className="space-y-6">
-            <Card className="rounded-3xl min-h-[500px]">
+            <Card className="rounded-3xl min-h-[500px] dark:bg-slate-900 dark:border-slate-800">
               <CardHeader>
-                <CardTitle className="flex items-center text-lg">
-                  <span className="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-sm mr-3">3</span>
+                <CardTitle className="flex items-center text-lg dark:text-slate-100">
+                  <span className="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400 flex items-center justify-center text-sm mr-3">3</span>
                   Result
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex-grow flex items-center justify-center">
-                <div className="w-full h-80 flex items-center justify-center bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 overflow-hidden relative group">
+                <div className="w-full h-80 flex items-center justify-center bg-slate-50 dark:bg-slate-800 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700 overflow-hidden relative group">
                   {status === "processing" ? (
                     <div className="text-center p-8">
                       <div className="relative w-24 h-24 mx-auto mb-6">
-                        <div className="absolute inset-0 border-4 border-slate-200 rounded-full" />
+                        <div className="absolute inset-0 border-4 border-slate-200 dark:border-slate-700 rounded-full" />
                         <div className="absolute inset-0 border-4 border-emerald-500 rounded-full border-t-transparent animate-spin" />
                         <Sparkles className="absolute inset-0 m-auto text-emerald-500 w-8 h-8 animate-pulse" />
                       </div>
-                      <h3 className="text-xl font-semibold text-slate-800 mb-2">Creating Magic</h3>
-                      <p className="text-slate-500">This usually takes 5-10 seconds.</p>
+                      <h3 className="text-xl font-semibold text-slate-800 dark:text-slate-100 mb-2">Creating Magic</h3>
+                      <p className="text-slate-500 dark:text-slate-400">This usually takes 5-10 seconds.</p>
                     </div>
                   ) : generatedImage ? (
                     <div className="relative w-full h-full flex items-center justify-center bg-slate-900">
@@ -161,9 +161,9 @@ export default function Home() {
                       </Button>
                     </div>
                   ) : (
-                    <div className="text-center p-12 text-slate-400">
-                      <div className="w-20 h-20 bg-slate-100 rounded-full mx-auto mb-4 flex items-center justify-center">
-                        <Wand2 className="w-10 h-10 text-slate-300" />
+                    <div className="text-center p-12 text-slate-400 dark:text-slate-500">
+                      <div className="w-20 h-20 bg-slate-100 dark:bg-slate-700 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <Wand2 className="w-10 h-10 text-slate-300 dark:text-slate-500" />
                       </div>
                       <p className="font-medium">No artwork generated yet</p>
                     </div>
@@ -172,9 +172,9 @@ export default function Home() {
               </CardContent>
             </Card>
 
-            <div className="bg-emerald-50 border border-emerald-100 p-6 rounded-2xl">
-              <h3 className="font-bold text-emerald-800 mb-2">Tips for best results</h3>
-              <ul className="list-disc list-inside text-sm text-emerald-700 space-y-1">
+            <div className="bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-100 dark:border-emerald-900 p-6 rounded-2xl">
+              <h3 className="font-bold text-emerald-800 dark:text-emerald-300 mb-2">Tips for best results</h3>
+              <ul className="list-disc list-inside text-sm text-emerald-700 dark:text-emerald-400 space-y-1">
                 <li>Landscapes and scenic shots work exceptionally well.</li>
                 <li>Selfies will be stylized significantly.</li>
                 <li>Try adding weather conditions to the prompt.</li>
