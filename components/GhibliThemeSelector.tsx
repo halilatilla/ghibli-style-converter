@@ -9,6 +9,7 @@ import {
   Ghost,
   Castle,
   CloudSun,
+  DoorOpen,
 } from "lucide-react";
 import {
   useGhibliTheme,
@@ -17,45 +18,47 @@ import {
 } from "./GhibliThemeContext";
 
 const FILM_ICONS: Record<GhibliFilm, React.ReactNode> = {
-  totoro: <TreePine className="w-4 h-4" />,
-  spirited: <Ghost className="w-4 h-4" />,
-  howl: <CloudSun className="w-4 h-4" />,
-  mononoke: <Sparkles className="w-4 h-4" />,
-  laputa: <Castle className="w-4 h-4" />,
+  totoro: <TreePine className="w-5 h-5" />,
+  spirited: <Ghost className="w-5 h-5" />,
+  howl: <CloudSun className="w-5 h-5" />,
+  mononoke: <Sparkles className="w-5 h-5" />,
+  laputa: <Castle className="w-5 h-5" />,
 };
 
 export default function GhibliThemeSelector() {
   const { film, setFilm, theme } = useGhibliTheme();
   const [isOpen, setIsOpen] = useState(false);
+  const [hoveredTheme, setHoveredTheme] = useState<string | null>(null);
 
   return (
     <div className="relative">
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-slate-800/70 backdrop-blur-md border-2 border-slate-700/50 hover:bg-slate-800/90 hover:border-slate-600/60 transition-all group shadow-lg"
+        className="flex items-center gap-3 px-5 py-3 rounded-full bg-slate-800/70 backdrop-blur-md border-2 border-slate-700/50 hover:bg-slate-800/90 hover:border-slate-600/60 transition-all group shadow-lg wobbly-box"
         whileHover={{ scale: 1.02, y: -1 }}
         whileTap={{ scale: 0.98 }}
       >
         <motion.div
-          className="w-6 h-6 rounded-full shadow-md"
+          className="w-8 h-8 rounded-full shadow-md flex items-center justify-center relative overflow-hidden"
           style={{
             backgroundColor: theme.colors.primary,
-            boxShadow: `0 0 12px ${theme.colors.primary}40, 0 0 0 2px ${theme.colors.secondary}40, 0 0 0 4px rgba(30, 41, 59, 0.5)`,
           }}
-          animate={{
-            boxShadow: [
-              `0 0 12px ${theme.colors.primary}40, 0 0 0 2px ${theme.colors.secondary}40, 0 0 0 4px rgba(30, 41, 59, 0.5)`,
-              `0 0 20px ${theme.colors.accent}50, 0 0 0 2px ${theme.colors.accent}60, 0 0 0 4px rgba(30, 41, 59, 0.5)`,
-              `0 0 12px ${theme.colors.primary}40, 0 0 0 2px ${theme.colors.secondary}40, 0 0 0 4px rgba(30, 41, 59, 0.5)`,
-            ],
-          }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <span className="text-sm font-semibold text-slate-100 hidden sm:inline">
-          {theme.name}
-        </span>
+        >
+          <div className="absolute inset-0 opacity-20 bg-white mix-blend-overlay animate-pulse" />
+          {FILM_ICONS[film]}
+        </motion.div>
+
+        <div className="hidden sm:flex flex-col items-start">
+          <span className="text-xs text-slate-400 font-display">
+            Current World
+          </span>
+          <span className="text-sm font-bold text-slate-100 font-display">
+            {theme.name}
+          </span>
+        </div>
+
         <ChevronDown
-          className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${
+          className={`w-4 h-4 text-slate-400 transition-transform duration-500 ${
             isOpen ? "rotate-180" : ""
           }`}
         />
@@ -64,40 +67,45 @@ export default function GhibliThemeSelector() {
       <AnimatePresence>
         {isOpen && (
           <>
-            {/* Backdrop */}
             <div
-              className="fixed inset-0 z-40"
+              className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
               onClick={() => setIsOpen(false)}
             />
 
-            {/* Dropdown */}
             <motion.div
-              initial={{ opacity: 0, y: -10, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10, scale: 0.95 }}
-              transition={{ duration: 0.3, type: "spring", bounce: 0.3 }}
-              className="absolute right-0 top-full mt-3 w-80 bg-slate-900/95 backdrop-blur-xl rounded-3xl shadow-2xl border-2 border-slate-700/50 overflow-hidden z-50"
+              initial={{ opacity: 0, y: -20, scale: 0.9, rotateX: -10 }}
+              animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+              exit={{ opacity: 0, y: -20, scale: 0.9, rotateX: 10 }}
+              transition={{ duration: 0.4, type: "spring", bounce: 0.4 }}
+              className="absolute right-0 top-full mt-4 w-96 bg-slate-900/95 backdrop-blur-2xl rounded-4xl shadow-2xl border-2 border-slate-700/50 overflow-hidden z-50 origin-top-right"
             >
-              <div className="p-5 border-b-2 border-slate-800/50 bg-gradient-to-br from-slate-800/50 to-slate-900/50">
-                <h3 className="font-display text-xl font-bold text-slate-100 flex items-center gap-2">
-                  <motion.div
-                    animate={{ rotate: [0, 10, -10, 0] }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                  >
-                    <Sparkles className="w-5 h-5 text-amber-400" />
-                  </motion.div>
-                  Choose Your World
+              <div className="p-6 border-b-2 border-slate-800/50 relative overflow-hidden">
+                {/* Dynamic header background based on hovered theme */}
+                <motion.div
+                  className="absolute inset-0 opacity-20 transition-colors duration-500"
+                  style={{
+                    background: hoveredTheme
+                      ? `linear-gradient(135deg, ${
+                          GHIBLI_THEMES[hoveredTheme as GhibliFilm].colors
+                            .primary
+                        }, ${
+                          GHIBLI_THEMES[hoveredTheme as GhibliFilm].colors
+                            .secondary
+                        })`
+                      : "transparent",
+                  }}
+                />
+
+                <h3 className="font-display text-xl font-bold text-slate-100 flex items-center gap-2 relative z-10">
+                  <DoorOpen className="w-5 h-5 text-amber-400" />
+                  Select a Portal
                 </h3>
-                <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">
-                  Each film brings its own magical atmosphere
+                <p className="text-xs text-slate-400 mt-1.5 leading-relaxed relative z-10 font-display">
+                  Step into another world...
                 </p>
               </div>
 
-              <div className="p-3 space-y-2 max-h-96 overflow-y-auto">
+              <div className="p-3 space-y-3 max-h-[60vh] overflow-y-auto custom-scrollbar">
                 {Object.values(GHIBLI_THEMES).map((t, index) => (
                   <motion.button
                     key={t.id}
@@ -105,79 +113,64 @@ export default function GhibliThemeSelector() {
                       setFilm(t.id);
                       setIsOpen(false);
                     }}
+                    onMouseEnter={() => setHoveredTheme(t.id)}
+                    onMouseLeave={() => setHoveredTheme(null)}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    whileHover={{ scale: 1.02, x: 4 }}
+                    transition={{ delay: index * 0.1 }}
+                    whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className={`w-full flex items-center gap-3 p-3 rounded-2xl transition-all text-left group relative overflow-hidden ${
+                    className={`w-full relative overflow-hidden rounded-2xl group transition-all duration-300 ${
                       film === t.id
-                        ? "bg-slate-800/80 shadow-lg"
-                        : "hover:bg-slate-800/50"
+                        ? "ring-2 ring-offset-2 ring-offset-slate-900"
+                        : "hover:ring-1 hover:ring-slate-700"
                     }`}
+                    style={{
+                      borderColor: t.colors.primary,
+                    }}
                   >
-                    {/* Background gradient on hover */}
+                    {/* Portal Background */}
                     <div
-                      className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity"
+                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                       style={{
-                        background: `linear-gradient(135deg, ${t.colors.primary}, ${t.colors.secondary})`,
+                        background: `linear-gradient(135deg, ${t.colors.primary}20, ${t.colors.secondary}20)`,
                       }}
                     />
 
-                    {/* Color indicator */}
-                    <motion.div
-                      className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg shrink-0 relative z-10"
-                      style={{
-                        background: `linear-gradient(135deg, ${t.colors.primary}, ${t.colors.secondary})`,
-                        boxShadow: `0 4px 12px ${t.colors.primary}40, inset 0 2px 4px rgba(255,255,255,0.2)`,
-                      }}
-                      whileHover={{ rotate: 8 }}
-                    >
-                      {FILM_ICONS[t.id]}
-                    </motion.div>
-
-                    <div className="flex-1 min-w-0 relative z-10">
-                      <div className="flex items-center gap-2 mb-0.5">
-                        <span className="font-semibold text-slate-100 text-sm truncate">
-                          {t.name}
-                        </span>
-                        {film === t.id && (
-                          <motion.span
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            className="w-2 h-2 rounded-full shadow-lg"
-                            style={{
-                              backgroundColor: t.colors.accent,
-                              boxShadow: `0 0 8px ${t.colors.accent}`,
-                            }}
-                          />
-                        )}
+                    <div className="relative p-4 flex items-center gap-4 z-10">
+                      {/* Icon Circle */}
+                      <div
+                        className="w-14 h-14 rounded-full flex items-center justify-center text-white shadow-lg shrink-0 transition-transform duration-500 group-hover:rotate-12 group-hover:scale-110"
+                        style={{
+                          background: `linear-gradient(135deg, ${t.colors.primary}, ${t.colors.secondary})`,
+                          boxShadow: `0 4px 12px ${t.colors.primary}40`,
+                        }}
+                      >
+                        {FILM_ICONS[t.id]}
                       </div>
-                      <span className="text-xs text-slate-400 font-medium block mb-1">
-                        {t.japaneseName}
-                      </span>
-                      <p className="text-xs text-slate-500 leading-relaxed">
-                        {t.description}
-                      </p>
-                    </div>
 
-                    {/* Color swatches */}
-                    <div className="flex gap-1 shrink-0 relative z-10">
-                      <motion.div
-                        className="w-5 h-5 rounded-full border-2 border-slate-700 shadow-sm"
-                        style={{ backgroundColor: t.colors.primary }}
-                        whileHover={{ scale: 1.2 }}
-                      />
-                      <motion.div
-                        className="w-5 h-5 rounded-full border-2 border-slate-700 shadow-sm"
-                        style={{ backgroundColor: t.colors.secondary }}
-                        whileHover={{ scale: 1.2 }}
-                      />
-                      <motion.div
-                        className="w-5 h-5 rounded-full border-2 border-slate-700 shadow-sm"
-                        style={{ backgroundColor: t.colors.accent }}
-                        whileHover={{ scale: 1.2 }}
-                      />
+                      <div className="flex-1 text-left">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="font-display font-bold text-slate-100 text-lg">
+                            {t.name}
+                          </span>
+                        </div>
+                        <span className="text-xs text-slate-400 font-medium block mb-1 font-sans opacity-70">
+                          {t.japaneseName}
+                        </span>
+                        <p className="text-xs text-slate-300/80 leading-snug line-clamp-2 font-display">
+                          {t.description}
+                        </p>
+                      </div>
+
+                      {/* Active Indicator */}
+                      {film === t.id && (
+                        <motion.div
+                          layoutId="active-portal"
+                          className="absolute right-4 w-2 h-2 rounded-full"
+                          style={{ backgroundColor: t.colors.accent }}
+                        />
+                      )}
                     </div>
                   </motion.button>
                 ))}

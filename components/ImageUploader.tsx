@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Upload, Image as ImageIcon, X, Camera } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useGhibliTheme } from "./GhibliThemeContext";
+import { TotoroSVG } from "./TotoroSVG";
 
 interface ImageUploaderProps {
   onImageSelected: (base64: string, mimeType: string) => void;
@@ -22,6 +23,7 @@ export default function ImageUploader({
   className,
 }: ImageUploaderProps) {
   const [isDragging, setIsDragging] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
   const { theme } = useGhibliTheme();
 
   const processFile = (file: File) => {
@@ -80,6 +82,8 @@ export default function ImageUploader({
         setIsDragging(false);
       }}
       onDrop={handleDrop}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
       animate={{
         borderColor: isDragging
           ? theme.colors.primary
@@ -89,7 +93,7 @@ export default function ImageUploader({
           : "rgba(0, 0, 0, 0)",
       }}
       className={cn(
-        "relative border-2 border-dashed rounded-2xl p-8 text-center transition-all flex flex-col items-center justify-center cursor-pointer group",
+        "relative border-2 border-dashed rounded-2xl p-8 text-center transition-all flex flex-col items-center justify-center cursor-pointer group wobbly-box",
         disabled && "opacity-50 pointer-events-none",
         className
       )}
@@ -98,47 +102,42 @@ export default function ImageUploader({
         type="file"
         accept="image/*"
         onChange={(e) => e.target.files?.[0] && processFile(e.target.files[0])}
-        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
         disabled={disabled}
       />
 
-      <div className="flex flex-col items-center space-y-4">
-        {/* Icon container */}
+      <div className="flex flex-col items-center space-y-4 relative z-10">
+        {/* Totoro Container */}
         <motion.div
           animate={{
-            y: isDragging ? -5 : 0,
+            y: isDragging ? -10 : 0,
             scale: isDragging ? 1.1 : 1,
           }}
-          className={cn(
-            "p-5 rounded-full transition-all",
-            isDragging
-              ? "text-white shadow-lg"
-              : "bg-slate-800/80 text-slate-500 group-hover:text-slate-300"
-          )}
-          style={isDragging ? { backgroundColor: theme.colors.primary } : {}}
+          className="p-2 transition-all"
         >
-          {isDragging ? (
-            <ImageIcon className="w-10 h-10" />
-          ) : (
-            <Camera className="w-10 h-10" />
-          )}
+          <div className="w-32 h-32 relative">
+             <TotoroSVG 
+                state={isDragging ? "drag" : isHovering ? "hover" : "idle"} 
+                className="w-full h-full"
+             />
+          </div>
         </motion.div>
 
         {/* Text */}
         <div>
           <p
-            className="text-lg font-semibold transition-colors"
+            className="text-lg font-display font-semibold transition-colors"
             style={{ color: isDragging ? theme.colors.primary : undefined }}
           >
-            {isDragging ? "Drop it like it's hot! 🔥" : "Drop your photo here"}
+            {isDragging ? "I'll catch it!" : "Give it to Totoro"}
           </p>
-          <p className="text-sm text-slate-400 mt-1">
-            or click to browse your files
+          <p className="text-sm text-slate-400 mt-1 font-display">
+            or click to choose a memory
           </p>
         </div>
 
         {/* Supported formats */}
-        <div className="flex items-center gap-2 text-xs text-slate-500">
+        <div className="flex items-center gap-2 text-xs text-slate-500 font-sans">
           <span className="px-2 py-1 rounded-full bg-slate-800/80">JPG</span>
           <span className="px-2 py-1 rounded-full bg-slate-800/80">PNG</span>
           <span className="px-2 py-1 rounded-full bg-slate-800/80">WEBP</span>

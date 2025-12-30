@@ -21,6 +21,7 @@ import {
   KodamaSilhouette,
   SootSprite,
 } from "@/components/GhibliBackground";
+import { LoadingSootSprites } from "@/components/SootSprites";
 import { useGhibliTheme } from "@/components/GhibliThemeContext";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -227,11 +228,12 @@ export default function Home() {
             className="flex flex-col gap-6"
           >
             {/* Upload Card - matches height with Your Masterpiece */}
-            <Card className="ghibli-card flex flex-col dappled-light">
-              <CardHeader className="border-b-2 border-slate-700/40 pb-5 pt-6 px-7 shrink-0">
+            <Card className="ghibli-card flex flex-col dappled-light wobbly-box border-none">
+              <CardHeader className="border-b-2 border-slate-700/40 pb-5 pt-6 px-7 shrink-0 relative">
+                <div className="absolute inset-0 watercolor-edge opacity-20 pointer-events-none" />
                 <CardTitle className="flex items-center text-lg font-bold text-slate-100">
                   <motion.div
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-lg mr-4 text-white shadow-lg"
+                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-lg mr-4 text-white shadow-lg wobbly-circle"
                     style={{ 
                       background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
                       boxShadow: `0 4px 12px ${theme.colors.primary}40, inset 0 2px 4px rgba(255,255,255,0.2)`
@@ -258,11 +260,12 @@ export default function Home() {
             </Card>
 
             {/* Prompt Card */}
-            <Card className="ghibli-card flex flex-col dappled-light">
-              <CardHeader className="border-b-2 border-slate-700/40 pb-5 pt-6 px-7 shrink-0">
+            <Card className="ghibli-card flex flex-col dappled-light wobbly-box border-none">
+              <CardHeader className="border-b-2 border-slate-700/40 pb-5 pt-6 px-7 shrink-0 relative">
+                <div className="absolute inset-0 watercolor-edge opacity-20 pointer-events-none" />
                 <CardTitle className="flex items-center text-lg font-bold text-slate-100">
                   <motion.div
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-lg mr-4 text-white shadow-lg relative"
+                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-lg mr-4 text-white shadow-lg relative wobbly-circle"
                     style={{ 
                       background: `linear-gradient(135deg, ${theme.colors.accent}, ${theme.colors.secondary})`,
                       boxShadow: `0 4px 12px ${theme.colors.accent}40, inset 0 2px 4px rgba(255,255,255,0.2)`
@@ -388,11 +391,12 @@ export default function Home() {
             className="flex flex-col gap-6"
           >
             {/* Result Card - same aspect ratio as Upload Card */}
-            <Card className="ghibli-card flex flex-col overflow-hidden dappled-light">
-              <CardHeader className="border-b-2 border-slate-700/40 pb-5 pt-6 px-7 shrink-0">
+            <Card className="ghibli-card flex flex-col overflow-hidden dappled-light wobbly-box border-none">
+              <CardHeader className="border-b-2 border-slate-700/40 pb-5 pt-6 px-7 shrink-0 relative">
+                <div className="absolute inset-0 watercolor-edge opacity-20 pointer-events-none" />
                 <CardTitle className="flex items-center text-lg font-bold text-slate-100">
                   <motion.div
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-lg mr-4 text-white shadow-lg"
+                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-lg mr-4 text-white shadow-lg wobbly-circle"
                     style={{ 
                       background: `linear-gradient(135deg, ${theme.colors.secondary}, ${theme.colors.primary})`,
                       boxShadow: `0 4px 12px ${theme.colors.secondary}40, inset 0 2px 4px rgba(255,255,255,0.2)`
@@ -425,51 +429,20 @@ export default function Home() {
               <CardContent className="p-5 relative">
                 <div className="w-full aspect-video flex items-center justify-center relative rounded-2xl overflow-hidden bg-slate-950/30 border-2 border-dashed border-slate-800/50">
                   {status === "processing" ? (
-                    <div className="text-center p-6 relative z-10 max-w-sm">
+                    <div className="text-center p-6 relative z-10 max-w-sm w-full">
                       {/* Magical loading animation */}
-                      <div className="relative w-24 h-24 mx-auto mb-4">
-                        <motion.div
-                          className="absolute inset-0 rounded-full opacity-30"
-                          style={{
-                            border: `4px solid ${theme.colors.secondary}`,
-                          }}
-                        />
-                        <motion.div
-                          className="absolute inset-0 rounded-full border-t-transparent"
-                          style={{
-                            border: `4px solid ${theme.colors.primary}`,
-                          }}
-                          animate={{ rotate: 360 }}
-                          transition={{
-                            duration: 1.5,
-                            repeat: Infinity,
-                            ease: "linear",
-                          }}
-                        />
-                        <motion.div
-                          className="absolute inset-0 m-auto w-14 h-14 rounded-full flex items-center justify-center"
-                          style={{
-                            backgroundColor: `${theme.colors.primary}20`,
-                            color: theme.colors.primary,
-                          }}
-                          animate={{ scale: [1, 1.1, 1] }}
-                          transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                          }}
-                        >
-                          <TotoroSilhouette className="w-8 h-8" />
-                        </motion.div>
-                      </div>
-                      <h3
-                        className="font-display text-2xl mb-1"
+                      <LoadingSootSprites />
+                      
+                      <motion.h3
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="font-display text-2xl mb-1 mt-4"
                         style={{ color: theme.colors.primary }}
                       >
                         Creating Magic...
-                      </h3>
-                      <p className="text-slate-400 text-xs">
-                        The forest spirits are painting...
+                      </motion.h3>
+                      <p className="text-slate-400 text-xs font-display">
+                        The soot sprites are hard at work!
                       </p>
                     </div>
                   ) : generatedImage ? (
@@ -552,7 +525,7 @@ export default function Home() {
                     <Button
                       onClick={handleDownload}
                       size="lg"
-                      className="rounded-full h-12 px-6 bg-slate-800/90 backdrop-blur text-white hover:bg-slate-700 shadow-xl border border-slate-700/50 font-semibold"
+                      className="rounded-full h-12 px-6 bg-slate-800/90 backdrop-blur text-white hover:bg-slate-700 shadow-xl border border-slate-700/50 font-semibold ghibli-button"
                     >
                       <Download className="w-5 h-5 mr-2" />
                       Download
@@ -565,7 +538,7 @@ export default function Home() {
             {/* Tips Section - Enhanced Ghibli style */}
             <motion.div
               whileHover={{ scale: 1.02, y: -2 }}
-              className="ghibli-card p-6 dappled-light relative overflow-hidden"
+              className="ghibli-card p-6 dappled-light relative overflow-hidden wobbly-box border-none"
             >
               {/* Decorative corner accent */}
               <div 
