@@ -526,3 +526,34 @@ input:focus, textarea:focus {
   background: rgba(148, 163, 184, 0.3) !important;
   border-color: rgba(148, 163, 184, 0.5) !important;
 }
+
+/* ============================================
+   iOS Safe Area Support
+   ============================================ */
+
+@supports (padding: env(safe-area-inset-bottom)) {
+  .mobile-safe-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+  
+  .mobile-safe-top {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
+  
+  .mobile-safe-left {
+    padding-left: max(1rem, env(safe-area-inset-left));
+  }
+  
+  .mobile-safe-right {
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+}
+
+/* ============================================
+   Touch Optimization
+   ============================================ */
+
+.touch-manipulation {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}

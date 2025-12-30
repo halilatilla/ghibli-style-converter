@@ -202,7 +202,7 @@ export default function Home() {
         >
           {/* Decorative floating elements */}
           <motion.div
-            className="absolute -top-8 left-1/4 opacity-30"
+            className="absolute -top-8 left-1/4 opacity-30 hidden sm:block"
             animate={{ 
               y: [0, -10, 0],
               rotate: [0, 5, -5, 0]
@@ -212,7 +212,7 @@ export default function Home() {
             <Sparkles className="w-8 h-8" style={{ color: theme.colors.accent }} />
           </motion.div>
           <motion.div
-            className="absolute -top-6 right-1/4 opacity-30"
+            className="absolute -top-6 right-1/4 opacity-30 hidden sm:block"
             animate={{ 
               y: [0, -8, 0],
               rotate: [0, -5, 5, 0]
@@ -334,7 +334,7 @@ export default function Home() {
                         key={preset.name}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer ${
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer touch-manipulation ${
                           selectedPreset === preset.name
                             ? "text-white shadow-lg"
                             : "bg-slate-800/80 text-slate-200 hover:bg-slate-700"
@@ -718,7 +718,7 @@ export default function Home() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ delay: 0.1 }}
-              className="absolute top-6 right-6 z-10 p-3 bg-slate-800/90 backdrop-blur-sm rounded-full text-white hover:bg-slate-700 hover:text-red-400 shadow-xl border border-slate-700/50 transition-all cursor-pointer group"
+              className="absolute top-4 sm:top-6 right-4 sm:right-6 z-10 p-3 bg-slate-800/90 backdrop-blur-sm rounded-full text-white hover:bg-slate-700 hover:text-red-400 shadow-xl border border-slate-700/50 transition-all cursor-pointer group touch-manipulation"
               onClick={(e) => {
                 e.stopPropagation();
                 setIsFullscreen(false);
@@ -735,7 +735,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
               transition={{ delay: 0.2 }}
-              className="absolute bottom-6 right-6 z-10 group flex items-center gap-2 px-6 py-3 bg-slate-800/90 backdrop-blur-sm rounded-full text-white hover:bg-slate-700 shadow-xl border border-slate-700/50 transition-all cursor-pointer font-semibold"
+              className="absolute bottom-4 sm:bottom-6 right-4 sm:right-6 z-10 group flex items-center gap-2 px-6 py-3 bg-slate-800/90 backdrop-blur-sm rounded-full text-white hover:bg-slate-700 shadow-xl border border-slate-700/50 transition-all cursor-pointer font-semibold touch-manipulation"
               onClick={(e) => {
                 e.stopPropagation();
                 handleDownload();
@@ -777,7 +777,7 @@ export default function Home() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ delay: 0.5 }}
-              className="absolute bottom-6 left-6 text-slate-400 text-sm font-display flex items-center gap-2"
+              className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 text-slate-400 text-sm font-display hidden sm:flex items-center gap-2"
             >
               <kbd className="px-2 py-1 bg-slate-800/90 backdrop-blur-sm rounded border border-slate-700/50 text-xs font-mono">
                 ESC

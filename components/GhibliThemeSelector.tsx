@@ -34,7 +34,7 @@ export default function GhibliThemeSelector() {
     <div className="relative">
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-3 px-5 py-3 rounded-full bg-slate-800/70 backdrop-blur-md border-2 border-slate-700/50 hover:bg-slate-800/90 hover:border-slate-600/60 transition-all group shadow-lg wobbly-box cursor-pointer"
+        className="flex items-center gap-3 px-5 py-3 rounded-full bg-slate-800/70 backdrop-blur-md border-2 border-slate-700/50 hover:bg-slate-800/90 hover:border-slate-600/60 transition-all group shadow-lg wobbly-box cursor-pointer touch-manipulation"
         whileHover={{ scale: 1.02, y: -1 }}
         whileTap={{ scale: 0.98 }}
       >
@@ -77,7 +77,7 @@ export default function GhibliThemeSelector() {
               animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
               exit={{ opacity: 0, y: -20, scale: 0.9, rotateX: 10 }}
               transition={{ duration: 0.4, type: "spring", bounce: 0.4 }}
-              className="absolute right-0 top-full mt-4 w-96 bg-slate-900/95 backdrop-blur-2xl rounded-4xl shadow-2xl border-2 border-slate-700/50 overflow-hidden z-50 origin-top-right"
+              className="absolute right-0 top-full mt-4 w-96 max-w-[calc(100vw-2rem)] bg-slate-900/95 backdrop-blur-2xl rounded-4xl shadow-2xl border-2 border-slate-700/50 overflow-hidden z-50 origin-top-right"
             >
               <div className="p-6 border-b-2 border-slate-800/50 relative overflow-hidden">
                 {/* Dynamic header background based on hovered theme */}
@@ -120,7 +120,7 @@ export default function GhibliThemeSelector() {
                     transition={{ delay: index * 0.1 }}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className={`w-full relative overflow-hidden rounded-2xl group transition-all duration-300 cursor-pointer ${
+                    className={`w-full relative overflow-hidden rounded-2xl group transition-all duration-300 cursor-pointer touch-manipulation ${
                       film === t.id
                         ? "ring-2 ring-offset-2 ring-offset-slate-900"
                         : "hover:ring-1 hover:ring-slate-700"
