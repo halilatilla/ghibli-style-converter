@@ -15,6 +15,7 @@ import {
   X,
   Maximize2,
 } from "lucide-react";
+import { toast } from "sonner";
 import Header from "@/components/Header";
 import ImageUploader from "@/components/ImageUploader";
 import GhibliBackground from "@/components/GhibliBackground";
@@ -28,7 +29,6 @@ import { useGhibliTheme } from "@/components/GhibliThemeContext";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 
 type ProcessingStatus = "idle" | "processing" | "success" | "error";
 
@@ -124,7 +124,11 @@ export default function Home() {
   };
 
   const handleGenerate = async () => {
-    if (!selectedImage) return;
+    if (!selectedImage) {
+      toast.error("Please upload an image first!");
+      return;
+    }
+    
     setStatus("processing");
     setError("");
 
@@ -135,12 +139,22 @@ export default function Home() {
         body: JSON.stringify({ image: selectedImage, mimeType, prompt }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to generate");
+      
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to generate");
+      }
+      
       setGeneratedImage(data.image);
       setStatus("success");
+      toast.success("🎨 Your Ghibli character is ready!", {
+        description: "Click the image to view in fullscreen",
+      });
     } catch (e: any) {
       setError(e.message);
       setStatus("error");
+      toast.error("❌ Transformation failed", {
+        description: e.message || "Something went wrong. Please try again.",
+      });
     }
   };
 
@@ -381,24 +395,6 @@ export default function Home() {
                     )}
                   </Button>
                 </motion.div>
-
-                <AnimatePresence>
-                  {status === "error" && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                    >
-                      <Alert
-                        variant="destructive"
-                        className="rounded-2xl border-red-900/50 bg-red-900/20 text-red-300"
-                      >
-                        <AlertCircle className="h-4 w-4" />
-                        <AlertDescription>{error}</AlertDescription>
-                      </Alert>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
               </CardContent>
             </Card>
           </motion.div>

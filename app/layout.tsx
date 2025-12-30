@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { GhibliThemeProvider } from "@/components/GhibliThemeContext";
 import { Quicksand, Caveat } from "next/font/google";
 import { JsonLd } from "./jsonld";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const quicksand = Quicksand({
@@ -118,7 +119,25 @@ export default function RootLayout({
         className={`${quicksand.variable} ${caveat.variable} font-sans antialiased`}
       >
         <ThemeProvider>
-          <GhibliThemeProvider>{children}</GhibliThemeProvider>
+          <GhibliThemeProvider>
+            {children}
+            <Toaster 
+              position="top-center"
+              closeButton
+              richColors
+              theme="dark"
+              toastOptions={{
+                style: {
+                  background: 'rgba(15, 23, 42, 0.95)',
+                  backdropFilter: 'blur(12px)',
+                  border: '1px solid rgba(148, 163, 184, 0.2)',
+                  borderRadius: '1rem',
+                  fontFamily: 'var(--font-quicksand)',
+                },
+                className: 'ghibli-toast',
+              }}
+            />
+          </GhibliThemeProvider>
         </ThemeProvider>
       </body>
     </html>
