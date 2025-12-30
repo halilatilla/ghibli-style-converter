@@ -8,7 +8,7 @@ Transform yourself into a **Studio Ghibli character** using AI. Create stunning 
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38B2AC?style=flat-square&logo=tailwind-css)
 
 <p align="center">
-   <img width="1270" height="1312" alt="CleanShot 2025-12-30 at 14 24 47" src="https://github.com/user-attachments/assets/61d799bc-65ad-4a19-af65-a2080f89b237" />
+   <img width="1301" height="1327" alt="CleanShot 2025-12-30 at 18 50 34" src="https://github.com/user-attachments/assets/cb7e30e4-7311-4e85-a989-4421eb2d4f28" />
 </p>
 
 
