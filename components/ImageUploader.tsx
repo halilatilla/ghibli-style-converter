@@ -62,7 +62,7 @@ export default function ImageUploader({
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={onClear}
-            className="absolute top-3 right-3 p-2 bg-slate-800/90 backdrop-blur-sm rounded-full text-slate-300 hover:text-red-400 shadow-lg transition-colors z-10"
+            className="absolute top-3 right-3 p-2 bg-slate-800/90 backdrop-blur-sm rounded-full text-slate-300 hover:text-red-400 shadow-lg transition-colors z-10 cursor-pointer"
           >
             <X className="w-5 h-5" />
           </motion.button>

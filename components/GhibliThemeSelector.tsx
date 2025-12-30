@@ -34,7 +34,7 @@ export default function GhibliThemeSelector() {
     <div className="relative">
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-3 px-5 py-3 rounded-full bg-slate-800/70 backdrop-blur-md border-2 border-slate-700/50 hover:bg-slate-800/90 hover:border-slate-600/60 transition-all group shadow-lg wobbly-box"
+        className="flex items-center gap-3 px-5 py-3 rounded-full bg-slate-800/70 backdrop-blur-md border-2 border-slate-700/50 hover:bg-slate-800/90 hover:border-slate-600/60 transition-all group shadow-lg wobbly-box cursor-pointer"
         whileHover={{ scale: 1.02, y: -1 }}
         whileTap={{ scale: 0.98 }}
       >
@@ -120,7 +120,7 @@ export default function GhibliThemeSelector() {
                     transition={{ delay: index * 0.1 }}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className={`w-full relative overflow-hidden rounded-2xl group transition-all duration-300 ${
+                    className={`w-full relative overflow-hidden rounded-2xl group transition-all duration-300 cursor-pointer ${
                       film === t.id
                         ? "ring-2 ring-offset-2 ring-offset-slate-900"
                         : "hover:ring-1 hover:ring-slate-700"

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Download,
@@ -12,6 +12,8 @@ import {
   Palette,
   Leaf,
   Wind,
+  X,
+  Maximize2,
 } from "lucide-react";
 import Header from "@/components/Header";
 import ImageUploader from "@/components/ImageUploader";
@@ -32,28 +34,34 @@ type ProcessingStatus = "idle" | "processing" | "success" | "error";
 
 const STYLE_PRESETS = [
   {
-    name: "Classic Ghibli",
-    emoji: "🏯",
+    name: "Spirited Away",
+    emoji: "🌸",
     prompt:
-      "Studio Ghibli style, detailed hand-drawn background, vibrant colors, whimsical atmosphere, Miyazaki art style.",
+      "Transform this person into a Studio Ghibli character in the style of Spirited Away. Hand-drawn anime character with expressive eyes, soft features, Miyazaki's signature art style, vibrant colors, whimsical and magical atmosphere.",
   },
   {
-    name: "Watercolor Dream",
-    emoji: "🎨",
+    name: "Totoro Adventure",
+    emoji: "🌳",
     prompt:
-      "Soft watercolor style, dreamy atmosphere, pastel colors, gentle lighting, Studio Ghibli inspired landscapes.",
+      "Transform this person into a Studio Ghibli character like Satsuki or Mei from My Neighbor Totoro. Innocent and cheerful expression, simple countryside clothing, hand-drawn anime style with warm earthy tones.",
   },
   {
-    name: "Retro Anime",
-    emoji: "📺",
+    name: "Howl's Moving Castle",
+    emoji: "✨",
     prompt:
-      "90s anime aesthetic, cel shaded, retro grain, nostalgic vibe, detailed clouds and sky.",
+      "Transform this person into an elegant Studio Ghibli character from Howl's Moving Castle. Detailed Victorian-style clothing, flowing hair, expressive features, magical and romantic atmosphere, Miyazaki's beautiful watercolor-like style.",
   },
   {
-    name: "Forest Spirit",
-    emoji: "🌿",
+    name: "Princess Mononoke",
+    emoji: "🐺",
     prompt:
-      "Lush green forest, mossy textures, dappled sunlight, magical nature atmosphere, Totoro style background.",
+      "Transform this person into a fierce Studio Ghibli character like Princess Mononoke. Strong and determined expression, tribal/warrior attire, bold colors, connection with nature, epic and adventurous atmosphere.",
+  },
+  {
+    name: "Kiki's Delivery",
+    emoji: "🧹",
+    prompt:
+      "Transform this person into a charming Studio Ghibli character like Kiki. Youthful and optimistic expression, simple clothing style, bright and cheerful colors, coming-of-age story aesthetic.",
   },
 ];
 
@@ -92,12 +100,13 @@ export default function Home() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [mimeType, setMimeType] = useState("image/jpeg");
   const [prompt, setPrompt] = useState(
-    "Recreate this image in the style of Studio Ghibli anime, vibrant colors, detailed background, hand-drawn aesthetic."
+    "Transform this person into a Studio Ghibli anime character in Miyazaki's signature art style. Expressive anime eyes, soft facial features, hand-drawn aesthetic, vibrant colors, whimsical and magical atmosphere. Keep the person's essence but reimagine them as a Ghibli character."
   );
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [status, setStatus] = useState<ProcessingStatus>("idle");
   const [error, setError] = useState("");
   const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const { theme } = useGhibliTheme();
 
@@ -148,6 +157,17 @@ export default function Home() {
     setSelectedPreset(preset.name);
   };
 
+  // Keyboard support for fullscreen (ESC to close)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isFullscreen) {
+        setIsFullscreen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isFullscreen]);
+
   return (
     <div className="min-h-screen flex flex-col relative">
       {/* Noise texture */}
@@ -195,7 +215,7 @@ export default function Home() {
               textShadow: `0 2px 12px ${theme.colors.primary}40, 0 4px 24px ${theme.colors.accent}20`
             }}
           >
-            Transform Your World
+            Become a Ghibli Character
             {/* Hand-drawn underline */}
             <motion.div
               className="absolute -bottom-2 left-0 right-0 h-1 rounded-full opacity-60"
@@ -208,14 +228,14 @@ export default function Home() {
             />
           </h2>
           <p className="text-slate-300 text-lg max-w-xl mx-auto leading-relaxed">
-            Upload a photo and watch it come to life in the{" "}
+            Upload your photo and transform into a{" "}
             <span 
               className="font-display text-xl font-semibold"
               style={{ color: theme.colors.accent }}
             >
-              magical style
+              Miyazaki character
             </span>
-            {" "}of Studio Ghibli
+            {" "}from your favorite Studio Ghibli film
           </p>
         </motion.div>
 
@@ -300,7 +320,7 @@ export default function Home() {
                         key={preset.name}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer ${
                           selectedPreset === preset.name
                             ? "text-white shadow-lg"
                             : "bg-slate-800/80 text-slate-200 hover:bg-slate-700"
@@ -329,7 +349,7 @@ export default function Home() {
                     rows={3}
                     disabled={status === "processing"}
                     className="min-h-[80px] pr-12 resize-none bg-slate-950/50 border-2 border-slate-700/50 focus:border-[var(--ghibli-primary)] text-slate-100 rounded-2xl text-sm shadow-sm transition-all placeholder:text-slate-500"
-                    placeholder="Describe the magical transformation..."
+                    placeholder="Describe how you want to become a Ghibli character..."
                   />
                   <div className="absolute top-3 right-3 p-1.5 bg-slate-800/80 rounded-lg text-slate-500">
                     <Sparkles className="w-4 h-4" />
@@ -356,7 +376,7 @@ export default function Home() {
                     ) : (
                       <>
                         <Wind className="w-5 h-5 mr-3" />
-                        Transform to Ghibli Style
+                        Transform Into Character
                       </>
                     )}
                   </Button>
@@ -426,7 +446,7 @@ export default function Home() {
                   </span>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-5 relative">
+              <CardContent className="p-5">
                 <div className="w-full aspect-video flex items-center justify-center relative rounded-2xl overflow-hidden bg-slate-950/30 border-2 border-dashed border-slate-800/50">
                   {status === "processing" ? (
                     <div className="text-center p-6 relative z-10 max-w-sm w-full">
@@ -446,22 +466,59 @@ export default function Home() {
                       </p>
                     </div>
                   ) : generatedImage ? (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{
-                        duration: 0.6,
-                        type: "spring",
-                        bounce: 0.3,
-                      }}
-                      className="w-full h-full flex items-center justify-center p-2"
-                    >
-                      <img
-                        src={generatedImage}
-                        alt="Generated Ghibli Style"
-                        className="w-full h-full object-contain rounded-xl shadow-2xl"
-                      />
-                    </motion.div>
+                    <>
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{
+                          duration: 0.6,
+                          type: "spring",
+                          bounce: 0.3,
+                        }}
+                        className="w-full h-full flex items-center justify-center p-2 relative group/image cursor-pointer"
+                        onClick={() => setIsFullscreen(true)}
+                      >
+                        <img
+                          src={generatedImage}
+                          alt="Generated Ghibli Character"
+                          className="w-full h-full object-contain rounded-xl shadow-2xl"
+                        />
+                        
+                        {/* Fullscreen hint overlay */}
+                        <div className="absolute inset-0 bg-black/0 group-hover/image:bg-black/20 transition-all duration-300 rounded-xl flex items-center justify-center">
+                          <motion.div
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            whileHover={{ opacity: 1, scale: 1 }}
+                            className="opacity-0 group-hover/image:opacity-100 transition-opacity duration-300"
+                          >
+                            <div className="bg-slate-800/90 backdrop-blur-sm rounded-full p-3 border border-slate-700/50 shadow-xl">
+                              <Maximize2 className="w-6 h-6 text-white" />
+                            </div>
+                          </motion.div>
+                        </div>
+                      </motion.div>
+                      
+                      {/* Download button - positioned over the image */}
+                      <motion.div
+                        className="absolute bottom-4 right-4 z-10 group"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5 }}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <Button
+                          onClick={handleDownload}
+                          size="lg"
+                          className="rounded-full h-10 w-10 group-hover:w-auto group-hover:px-5 bg-slate-800/90 backdrop-blur text-white hover:bg-slate-700 shadow-xl border border-slate-700/50 font-semibold ghibli-button text-sm transition-all duration-300 flex items-center justify-center overflow-hidden"
+                        >
+                          <Download className="w-4 h-4 shrink-0" />
+                          <span className="w-0 group-hover:w-auto group-hover:ml-2 overflow-hidden transition-all duration-300 whitespace-nowrap">
+                            Download
+                          </span>
+                        </Button>
+                      </motion.div>
+                    </>
                   ) : (
                     <div className="text-center p-6 relative">
                       <FloatingSpirits />
@@ -485,7 +542,7 @@ export default function Home() {
                         Waiting for Magic
                       </p>
                       <p className="text-slate-500 text-xs">
-                        Upload a photo to awaken the spirits
+                        Upload your photo to begin the transformation
                       </p>
 
                       {/* Decorative Kodama */}
@@ -511,27 +568,6 @@ export default function Home() {
                     </div>
                   )}
                 </div>
-
-                {/* Download button - outside overflow container */}
-                {generatedImage && (
-                  <motion.div
-                    className="absolute bottom-8 right-8 z-10"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Button
-                      onClick={handleDownload}
-                      size="lg"
-                      className="rounded-full h-12 px-6 bg-slate-800/90 backdrop-blur text-white hover:bg-slate-700 shadow-xl border border-slate-700/50 font-semibold ghibli-button"
-                    >
-                      <Download className="w-5 h-5 mr-2" />
-                      Download
-                    </Button>
-                  </motion.div>
-                )}
               </CardContent>
             </Card>
 
@@ -585,7 +621,7 @@ export default function Home() {
                       >
                         ✦
                       </motion.span>
-                      <span>Landscapes and nature shots get the best <span className="font-semibold text-slate-200">"Miyazaki"</span> look.</span>
+                      <span>Clear, front-facing photos work best for <span className="font-semibold text-slate-200">character transformation</span>.</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <motion.span 
@@ -596,7 +632,7 @@ export default function Home() {
                       >
                         ✦
                       </motion.span>
-                      <span>Try the <span className="font-bold" style={{ color: theme.colors.secondary }}>"Forest Spirit"</span> preset for lush greenery.</span>
+                      <span>Try the <span className="font-bold" style={{ color: theme.colors.secondary }}>"Spirited Away"</span> preset for classic Miyazaki style.</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <motion.span 
@@ -607,7 +643,7 @@ export default function Home() {
                       >
                         ✦
                       </motion.span>
-                      <span>Ensure your image is well-lit for best details.</span>
+                      <span>Well-lit photos with visible facial features give the best results.</span>
                     </li>
                   </ul>
                 </div>
@@ -668,6 +704,93 @@ export default function Home() {
           </motion.div>
         </motion.div>
       </footer>
+
+      {/* Fullscreen Modal */}
+      <AnimatePresence>
+        {isFullscreen && generatedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex items-center justify-center p-4"
+            onClick={() => setIsFullscreen(false)}
+          >
+            {/* Close button */}
+            <motion.button
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ delay: 0.1 }}
+              className="absolute top-6 right-6 z-10 p-3 bg-slate-800/90 backdrop-blur-sm rounded-full text-white hover:bg-slate-700 hover:text-red-400 shadow-xl border border-slate-700/50 transition-all cursor-pointer group"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsFullscreen(false);
+              }}
+              whileHover={{ scale: 1.1, rotate: 90 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <X className="w-6 h-6" />
+            </motion.button>
+
+            {/* Download button in fullscreen */}
+            <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ delay: 0.2 }}
+              className="absolute bottom-6 right-6 z-10 group flex items-center gap-2 px-6 py-3 bg-slate-800/90 backdrop-blur-sm rounded-full text-white hover:bg-slate-700 shadow-xl border border-slate-700/50 transition-all cursor-pointer font-semibold"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDownload();
+              }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Download className="w-5 h-5" />
+              <span>Download</span>
+            </motion.button>
+
+            {/* Image container */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ 
+                type: "spring",
+                stiffness: 300,
+                damping: 30,
+                delay: 0.1 
+              }}
+              className="relative max-w-7xl max-h-[90vh] w-full h-full flex items-center justify-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={generatedImage}
+                alt="Generated Ghibli Character - Fullscreen"
+                className="max-w-full max-h-full object-contain rounded-2xl shadow-2xl"
+                style={{
+                  boxShadow: `0 20px 60px ${theme.colors.primary}40, 0 0 100px ${theme.colors.accent}20`
+                }}
+              />
+            </motion.div>
+
+            {/* ESC hint */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ delay: 0.5 }}
+              className="absolute bottom-6 left-6 text-slate-400 text-sm font-display flex items-center gap-2"
+            >
+              <kbd className="px-2 py-1 bg-slate-800/90 backdrop-blur-sm rounded border border-slate-700/50 text-xs font-mono">
+                ESC
+              </kbd>
+              <span>to close</span>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

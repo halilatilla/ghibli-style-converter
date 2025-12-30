@@ -3,7 +3,7 @@ export function JsonLd() {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
     name: 'GhibliStyle Converter',
-    description: 'Transform your photos into magical Studio Ghibli-style artwork using AI. Experience authentic hand-drawn anime aesthetics inspired by Miyazaki\'s masterpieces.',
+    description: 'Transform yourself into a Studio Ghibli character using AI. Turn your photos into Miyazaki-style anime characters from Spirited Away, Totoro, Howl\'s Moving Castle, and more.',
     url: 'https://ghiblistyle-converter.vercel.app',
     applicationCategory: 'MultimediaApplication',
     operatingSystem: 'Any',
@@ -26,15 +26,15 @@ export function JsonLd() {
       worstRating: '1',
     },
     featureList: [
-      'AI-powered image transformation',
-      '5 Studio Ghibli film themes',
+      'AI-powered character transformation',
+      '5 iconic Ghibli film character styles',
       'Custom prompt support',
-      'Drag and drop upload',
+      'Drag and drop photo upload',
       'One-click download',
       'Responsive design',
-      'Fast processing',
+      'Fast character generation',
     ],
-    keywords: 'Studio Ghibli, anime art generator, AI image transformation, Miyazaki art style, photo to anime converter',
+    keywords: 'Studio Ghibli, Miyazaki character, anime character generator, AI character transformation, photo to anime character, Ghibli avatar creator',
   }
 
   const breadcrumb = {
@@ -59,23 +59,23 @@ export function JsonLd() {
         name: 'What is GhibliStyle Converter?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'GhibliStyle Converter is an AI-powered web application that transforms your photos into Studio Ghibli-style artwork. It captures the authentic hand-drawn aesthetic of Miyazaki\'s films including My Neighbor Totoro, Spirited Away, Howl\'s Moving Castle, Princess Mononoke, and Castle in the Sky.',
+          text: 'GhibliStyle Converter is an AI-powered web application that transforms you into a Studio Ghibli character. Upload your photo and see yourself reimagined in Miyazaki\'s signature art style from films like Spirited Away, My Neighbor Totoro, Howl\'s Moving Castle, Princess Mononoke, and Kiki\'s Delivery Service.',
         },
       },
       {
         '@type': 'Question',
-        name: 'How does the Ghibli style transformation work?',
+        name: 'How does the character transformation work?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Simply upload your photo, choose one of the 5 Studio Ghibli film themes, optionally customize the style with prompts or presets, and click transform. Our AI will process your image and generate beautiful Ghibli-style artwork in seconds.',
+          text: 'Simply upload your photo, choose one of 5 iconic Ghibli film character styles, optionally customize with prompts, and click transform. Our AI will process your photo and generate a beautiful Miyazaki-style anime character version of you in seconds.',
         },
       },
       {
         '@type': 'Question',
-        name: 'What themes are available?',
+        name: 'What character styles are available?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'We offer 5 authentic Studio Ghibli film themes: My Neighbor Totoro (forest greens), Spirited Away (mystical purples), Howl\'s Moving Castle (sky blues), Princess Mononoke (ancient forest), and Castle in the Sky (bright skies). Each theme uses film-accurate color palettes.',
+          text: 'We offer 5 character styles based on iconic Ghibli films: Spirited Away (magical and whimsical), Totoro Adventure (innocent and cheerful), Howl\'s Moving Castle (elegant Victorian), Princess Mononoke (fierce warrior), and Kiki\'s Delivery Service (youthful optimism). Each captures the unique aesthetic of the film.',
         },
       },
       {
@@ -83,15 +83,15 @@ export function JsonLd() {
         name: 'Is GhibliStyle Converter free to use?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Yes! GhibliStyle Converter is completely free to use. Simply visit the website and start transforming your photos into Ghibli-style artwork.',
+          text: 'Yes! GhibliStyle Converter is completely free to use. Simply visit the website and start transforming yourself into a Ghibli character.',
         },
       },
       {
         '@type': 'Question',
-        name: 'What types of images work best?',
+        name: 'What types of photos work best?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Landscapes and nature photography work exceptionally well, as they capture the essence of Studio Ghibli\'s environmental storytelling. Well-lit images produce the best details. The Forest Spirit preset is perfect for lush greenery.',
+          text: 'Clear, front-facing portrait photos work best for character transformation. Well-lit images with visible facial features produce the most detailed and accurate Ghibli-style characters. The Spirited Away preset is perfect for classic Miyazaki character style.',
         },
       },
     ],

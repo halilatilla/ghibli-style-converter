@@ -20,27 +20,28 @@ const caveat = Caveat({
 export const metadata: Metadata = {
   metadataBase: new URL("https://ghiblistyle-converter.vercel.app"), // Update with your actual domain
   title: {
-    default: "GhibliStyle Converter - Transform Photos into Studio Ghibli Art",
+    default: "GhibliStyle Converter - Become a Miyazaki Character",
     template: "%s | GhibliStyle Converter",
   },
   description:
-    "Transform your photos into magical Studio Ghibli-style artwork using AI. Experience authentic hand-drawn anime aesthetics inspired by Miyazaki's masterpieces - Totoro, Spirited Away, Howl's Moving Castle, and more.",
+    "Transform yourself into a Studio Ghibli character using AI. Turn your photos into Miyazaki-style anime characters from Spirited Away, Totoro, Howl's Moving Castle, Princess Mononoke, and Kiki's Delivery Service.",
   keywords: [
     "Studio Ghibli",
-    "Ghibli style converter",
-    "anime art generator",
+    "Ghibli character creator",
+    "Miyazaki character",
+    "anime character generator",
     "AI image transformation",
     "Miyazaki art style",
-    "Totoro filter",
-    "Spirited Away style",
-    "anime photo editor",
-    "hand-drawn animation",
-    "watercolor anime art",
-    "Japanese animation style",
-    "Ghibli aesthetic",
-    "AI art generator",
-    "photo to anime",
+    "Spirited Away character",
+    "Totoro style character",
+    "anime character maker",
+    "Ghibli avatar creator",
+    "photo to anime character",
     "Ghibli filter",
+    "become anime character",
+    "AI character transformation",
+    "Ghibli style portrait",
+    "anime character converter",
   ],
   authors: [{ name: "GhibliStyle Team" }],
   creator: "GhibliStyle Converter",
@@ -54,24 +55,24 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://ghiblistyle-converter.vercel.app",
-    title: "GhibliStyle Converter - Transform Photos into Studio Ghibli Art",
+    title: "GhibliStyle Converter - Become a Miyazaki Character",
     description:
-      "Transform your photos into magical Studio Ghibli-style artwork using AI. Choose from 5 iconic film themes: Totoro, Spirited Away, Howl's Moving Castle, Princess Mononoke, and Castle in the Sky.",
+      "Transform yourself into a Studio Ghibli character using AI. Choose from 5 iconic film styles: Spirited Away, Totoro, Howl's Moving Castle, Princess Mononoke, and Kiki's Delivery Service.",
     siteName: "GhibliStyle Converter",
     images: [
       {
         url: "/og-image.png", // We'll create this
         width: 1200,
         height: 630,
-        alt: "GhibliStyle Converter - AI-powered Ghibli art transformation",
+        alt: "GhibliStyle Converter - Turn your photo into a Miyazaki character",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "GhibliStyle Converter - Transform Photos into Studio Ghibli Art",
+    title: "GhibliStyle Converter - Become a Miyazaki Character",
     description:
-      "Transform your photos into magical Studio Ghibli-style artwork using AI. Experience authentic Miyazaki aesthetics.",
+      "Transform yourself into a Studio Ghibli character using AI. Experience becoming a Miyazaki anime character from your favorite films.",
     images: ["/og-image.png"],
     creator: "@ghiblistyle", // Update with actual Twitter handle if available
   },

@@ -1,6 +1,6 @@
 # 🎨 GhibliStyle Converter
 
-Transform your photos into magical **Studio Ghibli-style** artwork using AI.
+Transform yourself into a **Studio Ghibli character** using AI. Become a Miyazaki anime character from your favorite films!
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)
 ![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react)
@@ -15,15 +15,15 @@ Transform your photos into magical **Studio Ghibli-style** artwork using AI.
 ## ✨ Features
 
 - 🎨 **Authentic Ghibli Design** - UI inspired by Studio Ghibli's iconic visual style
-- 🎭 **5 Film Themes** - Switch between Totoro, Spirited Away, Howl's Moving Castle, Princess Mononoke, and Castle in the Sky
-- 🖼️ **Drag & Drop Upload** - Easy image upload with drag and drop support
-- 🤖 **AI-Powered Transformation** - Convert any photo to Ghibli anime style
-- ✏️ **Custom Prompts** - Fine-tune the style with your own prompts or use presets
-- 💾 **One-Click Download** - Download your generated artwork instantly
+- 🎭 **5 Character Styles** - Transform into characters from Spirited Away, Totoro, Howl's Moving Castle, Princess Mononoke, and Kiki's Delivery Service
+- 🖼️ **Drag & Drop Upload** - Easy photo upload with drag and drop support
+- 🤖 **AI-Powered Character Transformation** - Turn yourself into a Miyazaki anime character
+- ✏️ **Custom Prompts** - Fine-tune your character style with custom prompts or use presets
+- 💾 **One-Click Download** - Download your Ghibli character portrait instantly
 - 🌊 **Watercolor Effects** - Hand-drawn textures and soft gradients throughout
 - ✨ **Magical Animations** - Floating particles, gentle glows, and organic movements
 - 📱 **Responsive Design** - Works beautifully on desktop and mobile
-- ⚡ **Fast Processing** - Results in seconds
+- ⚡ **Fast Processing** - Your character generated in seconds
 - 🛡️ **Rate Limiting** - Built-in protection with Upstash Redis
 - 🔍 **SEO Optimized** - Comprehensive meta tags, Open Graph, and structured data
 
@@ -115,25 +115,25 @@ This project captures the essence of Studio Ghibli's visual language:
 - **Whimsical Details** - Floating particles, gentle glows, and magical touches
 - **Hand-drawn Typography** - Caveat font for that authentic handwritten feel
 
-### Theme Colors
+### Character Style Themes
 
-Each theme is carefully crafted from the actual films:
+Each character style captures the essence of iconic Ghibli films:
 
-- **Totoro** 🌿 - Forest greens and sunshine yellows
-- **Spirited Away** 🏮 - Mystical purples and golden lantern glows
-- **Howl's Moving Castle** ☁️ - Sky blues and warm peach tones
-- **Princess Mononoke** 🌲 - Deep forest greens and blood red accents
-- **Castle in the Sky** ⚙️ - Bright sky blues and ancient bronze
+- **Spirited Away** 🌸 - Magical and whimsical characters with expressive features
+- **Totoro Adventure** 🌳 - Innocent and cheerful countryside style
+- **Howl's Moving Castle** ✨ - Elegant Victorian-era characters with flowing details
+- **Princess Mononoke** 🐺 - Fierce warrior aesthetic with bold colors
+- **Kiki's Delivery Service** 🧹 - Youthful and optimistic character design
 
 ## 💡 Usage Tips
 
-- **Landscapes** and scenic shots work exceptionally well
-- **Nature photography** gets the best "Miyazaki" treatment
-- Try the **"Forest Spirit"** preset for lush greenery
-- **Portraits** will be stylized significantly
-- Ensure your image is **well-lit** for best details
-- Try adding **weather conditions** to the prompt (e.g., "sunset", "rainy day")
-- Experiment with **different art styles** in your prompt
+- **Clear, front-facing portraits** work best for character transformation
+- Ensure your photo is **well-lit** with visible facial features
+- Try the **"Spirited Away"** preset for classic Miyazaki character style
+- **Headshots or selfies** produce the most detailed anime character results
+- Experiment with different **character style prompts** for unique looks
+- Each film theme captures a different **character personality**
+- **Natural lighting** photos give the best hand-drawn aesthetic
 
 ## 🔒 Rate Limiting
 
