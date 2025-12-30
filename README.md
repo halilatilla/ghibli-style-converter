@@ -8,7 +8,7 @@ Transform yourself into a **Studio Ghibli character** using AI. Become a Miyazak
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38B2AC?style=flat-square&logo=tailwind-css)
 
 <p align="center">
-<img width="1229" height="1289" alt="CleanShot 2025-12-30 at 13 56 40" src="https://github.com/user-attachments/assets/d51e5157-e88f-4c6a-814d-7873715d1d77" />
+   <img width="1270" height="1312" alt="CleanShot 2025-12-30 at 14 24 47" src="https://github.com/user-attachments/assets/61d799bc-65ad-4a19-af65-a2080f89b237" />
 </p>
 
 
