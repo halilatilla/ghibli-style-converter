@@ -5,11 +5,17 @@ import { type NextRequest, NextResponse } from "next/server";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 
+// Redis client for daily usage tracking
+const redis = process.env.UPSTASH_REDIS_REST_URL ? Redis.fromEnv() : null;
+
+// Daily usage cap - adjust this number based on your budget
+const DAILY_LIMIT = 30; // Total requests per day
+
 // Create rate limiter - 5 requests per user per minute
 // Uses Upstash Redis for persistent rate limiting (works with serverless)
-const ratelimit = process.env.UPSTASH_REDIS_REST_URL
+const ratelimit = redis
   ? new Ratelimit({
-      redis: Redis.fromEnv(),
+      redis,
       limiter: Ratelimit.slidingWindow(5, "1 m"), // 5 requests per minute
       analytics: true,
     })
@@ -19,6 +25,9 @@ const ratelimit = process.env.UPSTASH_REDIS_REST_URL
 const ipRequestCounts = new Map<string, { count: number; resetTime: number }>();
 const RATE_LIMIT = 5; // requests
 const RATE_WINDOW = 60 * 1000; // 1 minute in ms
+
+// In-memory daily usage (for development)
+let dailyUsage = { count: 0, resetTime: Date.now() + 24 * 60 * 60 * 1000 };
 
 function checkInMemoryRateLimit(ip: string): {
   success: boolean;
@@ -38,6 +47,34 @@ function checkInMemoryRateLimit(ip: string): {
 
   record.count++;
   return { success: true, remaining: RATE_LIMIT - record.count };
+}
+
+async function checkDailyLimit(): Promise<boolean> {
+  if (!redis) {
+    // In-memory fallback for development
+    const now = Date.now();
+    if (now > dailyUsage.resetTime) {
+      dailyUsage = { count: 0, resetTime: now + 24 * 60 * 60 * 1000 };
+    }
+    if (dailyUsage.count >= DAILY_LIMIT) {
+      return false;
+    }
+    dailyUsage.count++;
+    return true;
+  }
+
+  // Redis-based daily limit
+  const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+  const dailyKey = `daily_usage:${today}`;
+
+  const count = await redis.incr(dailyKey);
+
+  // Set expiry on first increment
+  if (count === 1) {
+    await redis.expire(dailyKey, 24 * 60 * 60); // 24 hours
+  }
+
+  return count <= DAILY_LIMIT;
 }
 
 export async function POST(req: NextRequest) {
@@ -75,6 +112,18 @@ export async function POST(req: NextRequest) {
             "Retry-After": "60",
           },
         }
+      );
+    }
+
+    // Check daily limit
+    const dailyAllowed = await checkDailyLimit();
+    if (!dailyAllowed) {
+      return NextResponse.json(
+        {
+          error:
+            "Daily usage limit reached. This demo has a daily cap to manage costs. Please try again tomorrow!",
+        },
+        { status: 429 }
       );
     }
 
