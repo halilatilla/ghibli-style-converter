@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import { GhibliThemeProvider } from "@/components/GhibliThemeContext";
-import { Quicksand, Caveat } from "next/font/google";
-import { JsonLd } from "./jsonld";
+import { Caveat, Quicksand } from "next/font/google";
 import { Toaster } from "sonner";
+import { GhibliThemeProvider } from "@/components/GhibliThemeContext";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import { JsonLd } from "./jsonld";
 import "./globals.css";
 
 const quicksand = Quicksand({
@@ -94,9 +94,7 @@ export const metadata: Metadata = {
       { url: "/icon-16x16.png", sizes: "16x16", type: "image/png" },
       { url: "/icon-32x32.png", sizes: "32x32", type: "image/png" },
     ],
-    apple: [
-      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
-    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
   },
   manifest: "/manifest.json",
   alternates: {
@@ -105,36 +103,30 @@ export const metadata: Metadata = {
   category: "Art & Design",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
         <JsonLd />
       </head>
-      <body
-        className={`${quicksand.variable} ${caveat.variable} font-sans antialiased`}
-      >
+      <body className={`${quicksand.variable} ${caveat.variable} font-sans antialiased`}>
         <ThemeProvider>
           <GhibliThemeProvider>
             {children}
-            <Toaster 
+            <Toaster
               position="top-center"
               closeButton
               richColors
               theme="dark"
               toastOptions={{
                 style: {
-                  background: 'rgba(15, 23, 42, 0.95)',
-                  backdropFilter: 'blur(12px)',
-                  border: '1px solid rgba(148, 163, 184, 0.2)',
-                  borderRadius: '1rem',
-                  fontFamily: 'var(--font-quicksand)',
+                  background: "rgba(15, 23, 42, 0.95)",
+                  backdropFilter: "blur(12px)",
+                  border: "1px solid rgba(148, 163, 184, 0.2)",
+                  borderRadius: "1rem",
+                  fontFamily: "var(--font-quicksand)",
                 },
-                className: 'ghibli-toast',
+                className: "ghibli-toast",
               }}
             />
           </GhibliThemeProvider>

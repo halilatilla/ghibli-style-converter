@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode,
-} from "react";
+import { createContext, type ReactNode, useContext, useEffect, useState } from "react";
 
 export type GhibliFilm = "totoro" | "spirited" | "howl" | "mononoke" | "laputa";
 
@@ -49,10 +43,8 @@ export const GHIBLI_THEMES: Record<GhibliFilm, GhibliThemeConfig> = {
       textMuted: "#6B8E76", // Muted moss green
     },
     particles: "dust",
-    gradient:
-      "linear-gradient(135deg, #E8F5E9 0%, #F1F8E9 35%, #FFF9E6 75%, #FFFDE7 100%)",
-    gradientDark:
-      "linear-gradient(135deg, #1C2E1C 0%, #2F4538 40%, #3A4F3D 70%, #1A2818 100%)",
+    gradient: "linear-gradient(135deg, #E8F5E9 0%, #F1F8E9 35%, #FFF9E6 75%, #FFFDE7 100%)",
+    gradientDark: "linear-gradient(135deg, #1C2E1C 0%, #2F4538 40%, #3A4F3D 70%, #1A2818 100%)",
   },
   spirited: {
     id: "spirited",
@@ -71,10 +63,8 @@ export const GHIBLI_THEMES: Record<GhibliFilm, GhibliThemeConfig> = {
       textMuted: "#7A6B8F", // Muted purple
     },
     particles: "spirits",
-    gradient:
-      "linear-gradient(135deg, #E8D4F8 0%, #F0E6FF 40%, #FFF3E0 75%, #FFFBEA 100%)",
-    gradientDark:
-      "linear-gradient(135deg, #1A1229 0%, #2D1F45 40%, #3D2E52 70%, #1F1A2B 100%)",
+    gradient: "linear-gradient(135deg, #E8D4F8 0%, #F0E6FF 40%, #FFF3E0 75%, #FFFBEA 100%)",
+    gradientDark: "linear-gradient(135deg, #1A1229 0%, #2D1F45 40%, #3D2E52 70%, #1F1A2B 100%)",
   },
   howl: {
     id: "howl",
@@ -93,10 +83,8 @@ export const GHIBLI_THEMES: Record<GhibliFilm, GhibliThemeConfig> = {
       textMuted: "#6A7D91", // Muted blue-gray
     },
     particles: "clouds",
-    gradient:
-      "linear-gradient(135deg, #E3F2FD 0%, #F0F4F8 35%, #FFF0F0 75%, #FFF8F0 100%)",
-    gradientDark:
-      "linear-gradient(135deg, #182433 0%, #2E3D4F 40%, #3A4A5D 70%, #1A2838 100%)",
+    gradient: "linear-gradient(135deg, #E3F2FD 0%, #F0F4F8 35%, #FFF0F0 75%, #FFF8F0 100%)",
+    gradientDark: "linear-gradient(135deg, #182433 0%, #2E3D4F 40%, #3A4A5D 70%, #1A2838 100%)",
   },
   mononoke: {
     id: "mononoke",
@@ -115,10 +103,8 @@ export const GHIBLI_THEMES: Record<GhibliFilm, GhibliThemeConfig> = {
       textMuted: "#556B5E", // Stone gray-green
     },
     particles: "leaves",
-    gradient:
-      "linear-gradient(135deg, #C8E6C9 0%, #E8F0EB 40%, #EFF5E8 75%, #F5F8F0 100%)",
-    gradientDark:
-      "linear-gradient(135deg, #0D1F15 0%, #1F3829 40%, #2D4538 70%, #152820 100%)",
+    gradient: "linear-gradient(135deg, #C8E6C9 0%, #E8F0EB 40%, #EFF5E8 75%, #F5F8F0 100%)",
+    gradientDark: "linear-gradient(135deg, #0D1F15 0%, #1F3829 40%, #2D4538 70%, #152820 100%)",
   },
   laputa: {
     id: "laputa",
@@ -137,10 +123,8 @@ export const GHIBLI_THEMES: Record<GhibliFilm, GhibliThemeConfig> = {
       textMuted: "#5A7A94", // Weathered blue
     },
     particles: "crystals",
-    gradient:
-      "linear-gradient(135deg, #E1F5FE 0%, #E8F4FC 35%, #FFF3E0 75%, #FFF8E1 100%)",
-    gradientDark:
-      "linear-gradient(135deg, #0F1D2B 0%, #1E3A52 40%, #2D4A63 70%, #1A2C3D 100%)",
+    gradient: "linear-gradient(135deg, #E1F5FE 0%, #E8F4FC 35%, #FFF3E0 75%, #FFF8E1 100%)",
+    gradientDark: "linear-gradient(135deg, #0F1D2B 0%, #1E3A52 40%, #2D4A63 70%, #1A2C3D 100%)",
   },
 };
 
@@ -150,9 +134,7 @@ interface GhibliThemeContextType {
   setFilm: (film: GhibliFilm) => void;
 }
 
-const GhibliThemeContext = createContext<GhibliThemeContextType | undefined>(
-  undefined
-);
+const GhibliThemeContext = createContext<GhibliThemeContextType | undefined>(undefined);
 
 export function GhibliThemeProvider({ children }: { children: ReactNode }) {
   const [film, setFilm] = useState<GhibliFilm>("totoro");
@@ -176,10 +158,7 @@ export function GhibliThemeProvider({ children }: { children: ReactNode }) {
       root.style.setProperty("--ghibli-secondary", theme.colors.secondary);
       root.style.setProperty("--ghibli-accent", theme.colors.accent);
       root.style.setProperty("--ghibli-background", theme.colors.background);
-      root.style.setProperty(
-        "--ghibli-background-dark",
-        theme.colors.backgroundDark
-      );
+      root.style.setProperty("--ghibli-background-dark", theme.colors.backgroundDark);
       root.style.setProperty("--ghibli-gradient", theme.gradient);
       root.style.setProperty("--ghibli-gradient-dark", theme.gradientDark);
       root.setAttribute("data-ghibli-film", film);
@@ -187,9 +166,7 @@ export function GhibliThemeProvider({ children }: { children: ReactNode }) {
   }, [film, mounted]);
 
   return (
-    <GhibliThemeContext.Provider
-      value={{ film, theme: GHIBLI_THEMES[film], setFilm }}
-    >
+    <GhibliThemeContext.Provider value={{ film, theme: GHIBLI_THEMES[film], setFilm }}>
       {children}
     </GhibliThemeContext.Provider>
   );

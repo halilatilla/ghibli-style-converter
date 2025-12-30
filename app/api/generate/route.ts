@@ -1,7 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
-import { NextRequest, NextResponse } from "next/server";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
+import { type NextRequest, NextResponse } from "next/server";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 
@@ -105,7 +105,7 @@ export async function POST(req: NextRequest) {
       const parts = candidates[0].content?.parts;
       if (parts) {
         for (const part of parts) {
-          if (part.inlineData && part.inlineData.data) {
+          if (part.inlineData?.data) {
             return NextResponse.json(
               {
                 image: `data:${
@@ -132,9 +132,6 @@ export async function POST(req: NextRequest) {
     );
   } catch (e: any) {
     console.error("API Error:", e);
-    return NextResponse.json(
-      { error: e.message || "Failed to generate image." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: e.message || "Failed to generate image." }, { status: 500 });
   }
 }

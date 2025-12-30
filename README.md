@@ -71,6 +71,36 @@ Transform yourself into a **Studio Ghibli character** using AI. Become a Miyazak
 
    Navigate to [http://localhost:3000](http://localhost:3000)
 
+## 🧹 Code Quality
+
+This project uses [Biome](https://biomejs.dev/) for linting and formatting. Available commands:
+
+```bash
+# Check code for issues (lint + format check)
+npm run check
+
+# Check and auto-fix issues
+npm run check:fix
+
+# Format all files
+npm run format
+
+# Lint only
+npm run lint
+
+# Lint and auto-fix
+npm run lint:fix
+```
+
+### VSCode Integration
+
+The project includes VSCode settings that enable:
+- ✅ Format on save
+- ✅ Auto-fix on save
+- ✅ Organize imports on save
+
+Install the [Biome VSCode extension](https://marketplace.visualstudio.com/items?itemName=biomejs.biome) for the best experience.
+
 ## 🛠️ Tech Stack
 
 | Technology                                    | Version | Purpose              |
@@ -79,6 +109,7 @@ Transform yourself into a **Studio Ghibli character** using AI. Become a Miyazak
 | [React](https://react.dev/)                   | 19      | UI library           |
 | [TypeScript](https://www.typescriptlang.org/) | 5.9     | Type safety          |
 | [Tailwind CSS](https://tailwindcss.com/)      | 4       | Styling              |
+| [Biome](https://biomejs.dev/)                 | 2.3     | Linting & Formatting |
 | [Framer Motion](https://www.framer.com/motion/) | -     | Animations           |
 | [Google Fonts](https://fonts.google.com/)     | -       | Quicksand & Caveat   |
 | [Upstash](https://upstash.com/)               | -       | Rate limiting        |

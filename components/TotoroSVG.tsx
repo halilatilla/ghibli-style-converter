@@ -1,4 +1,3 @@
-import React from "react";
 import { motion } from "framer-motion";
 
 export const TotoroSVG = ({
@@ -21,12 +20,7 @@ export const TotoroSVG = ({
     >
       <defs>
         <filter id="sketch">
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.02"
-            numOctaves="3"
-            result="noise"
-          />
+          <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" result="noise" />
           <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" />
         </filter>
       </defs>
@@ -116,41 +110,17 @@ export const TotoroSVG = ({
 
         {/* Eyes */}
         <g transform={isCurious ? "translate(0, -5)" : ""}>
-          <circle
-            cx="70"
-            cy="50"
-            r="8"
-            fill="white"
-            stroke="#4A5A5A"
-            strokeWidth="2"
-          />
-          <circle
-            cx="130"
-            cy="50"
-            r="8"
-            fill="white"
-            stroke="#4A5A5A"
-            strokeWidth="2"
-          />
+          <circle cx="70" cy="50" r="8" fill="white" stroke="#4A5A5A" strokeWidth="2" />
+          <circle cx="130" cy="50" r="8" fill="white" stroke="#4A5A5A" strokeWidth="2" />
 
           <circle cx={isCurious ? "72" : "70"} cy="50" r="2.5" fill="black">
             {isHappy && (
-              <animate
-                attributeName="r"
-                values="2.5;0.5;2.5"
-                dur="0.2s"
-                repeatCount="2"
-              />
+              <animate attributeName="r" values="2.5;0.5;2.5" dur="0.2s" repeatCount="2" />
             )}
           </circle>
           <circle cx={isCurious ? "132" : "130"} cy="50" r="2.5" fill="black">
             {isHappy && (
-              <animate
-                attributeName="r"
-                values="2.5;0.5;2.5"
-                dur="0.2s"
-                repeatCount="2"
-              />
+              <animate attributeName="r" values="2.5;0.5;2.5" dur="0.2s" repeatCount="2" />
             )}
           </circle>
         </g>
@@ -160,12 +130,7 @@ export const TotoroSVG = ({
 
         {/* Mouth - Changes with state */}
         {isHappy ? (
-          <path
-            d="M85,70 Q100,85 115,70"
-            fill="none"
-            stroke="#333"
-            strokeWidth="2"
-          />
+          <path d="M85,70 Q100,85 115,70" fill="none" stroke="#333" strokeWidth="2" />
         ) : (
           <path d="M95,70 L105,70" fill="none" stroke="#333" strokeWidth="2" />
         )}

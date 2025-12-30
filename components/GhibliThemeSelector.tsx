@@ -1,21 +1,9 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
+import { Castle, ChevronDown, CloudSun, DoorOpen, Ghost, Sparkles, TreePine } from "lucide-react";
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  ChevronDown,
-  Sparkles,
-  TreePine,
-  Ghost,
-  Castle,
-  CloudSun,
-  DoorOpen,
-} from "lucide-react";
-import {
-  useGhibliTheme,
-  GHIBLI_THEMES,
-  GhibliFilm,
-} from "./GhibliThemeContext";
+import { GHIBLI_THEMES, type GhibliFilm, useGhibliTheme } from "./GhibliThemeContext";
 
 const FILM_ICONS: Record<GhibliFilm, React.ReactNode> = {
   totoro: <TreePine className="w-5 h-5" />,
@@ -49,12 +37,8 @@ export default function GhibliThemeSelector() {
         </motion.div>
 
         <div className="hidden sm:flex flex-col items-start">
-          <span className="text-xs text-slate-400 font-display">
-            Current World
-          </span>
-          <span className="text-sm font-bold text-slate-100 font-display">
-            {theme.name}
-          </span>
+          <span className="text-xs text-slate-400 font-display">Current World</span>
+          <span className="text-sm font-bold text-slate-100 font-display">{theme.name}</span>
         </div>
 
         <ChevronDown
@@ -86,12 +70,8 @@ export default function GhibliThemeSelector() {
                   style={{
                     background: hoveredTheme
                       ? `linear-gradient(135deg, ${
-                          GHIBLI_THEMES[hoveredTheme as GhibliFilm].colors
-                            .primary
-                        }, ${
-                          GHIBLI_THEMES[hoveredTheme as GhibliFilm].colors
-                            .secondary
-                        })`
+                          GHIBLI_THEMES[hoveredTheme as GhibliFilm].colors.primary
+                        }, ${GHIBLI_THEMES[hoveredTheme as GhibliFilm].colors.secondary})`
                       : "transparent",
                   }}
                 />

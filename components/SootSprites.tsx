@@ -1,5 +1,4 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 
 export const SootSpriteSVG = ({ className = "" }: { className?: string }) => (
   <svg viewBox="0 0 100 100" className={className}>
@@ -29,16 +28,16 @@ export const LoadingSootSprites = () => {
           key={i}
           className="absolute w-12 h-12"
           initial={{ x: -100, y: Math.random() * 40 }}
-          animate={{ 
-            x: ['100%', '0%'],
+          animate={{
+            x: ["100%", "0%"],
             y: [Math.random() * 20, Math.random() * -20, Math.random() * 20],
-            rotate: [0, 360]
+            rotate: [0, 360],
           }}
-          transition={{ 
+          transition={{
             duration: 3 + Math.random() * 2,
             repeat: Infinity,
             delay: i * 0.5,
-            ease: "linear"
+            ease: "linear",
           }}
         >
           <SootSpriteSVG />
@@ -47,4 +46,3 @@ export const LoadingSootSprites = () => {
     </div>
   );
 };
-

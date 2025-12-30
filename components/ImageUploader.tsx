@@ -1,8 +1,8 @@
 "use client";
 
-import { useCallback, useState } from "react";
 import { motion } from "framer-motion";
-import { Upload, Image as ImageIcon, X, Camera } from "lucide-react";
+import { X } from "lucide-react";
+import { useCallback, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useGhibliTheme } from "./GhibliThemeContext";
 import { TotoroSVG } from "./TotoroSVG";
@@ -26,21 +26,27 @@ export default function ImageUploader({
   const [isHovering, setIsHovering] = useState(false);
   const { theme } = useGhibliTheme();
 
-  const processFile = (file: File) => {
-    if (!file.type.startsWith("image/")) return;
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const result = reader.result as string;
-      onImageSelected(result.split(",")[1], file.type);
-    };
-    reader.readAsDataURL(file);
-  };
+  const processFile = useCallback(
+    (file: File) => {
+      if (!file.type.startsWith("image/")) return;
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        onImageSelected(result.split(",")[1], file.type);
+      };
+      reader.readAsDataURL(file);
+    },
+    [onImageSelected]
+  );
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-    if (e.dataTransfer.files[0]) processFile(e.dataTransfer.files[0]);
-  }, []);
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      setIsDragging(false);
+      if (e.dataTransfer.files[0]) processFile(e.dataTransfer.files[0]);
+    },
+    [processFile]
+  );
 
   if (selectedImage) {
     return (
@@ -85,12 +91,8 @@ export default function ImageUploader({
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
       animate={{
-        borderColor: isDragging
-          ? theme.colors.primary
-          : "rgba(148, 163, 184, 0.3)",
-        backgroundColor: isDragging
-          ? `${theme.colors.primary}10`
-          : "rgba(0, 0, 0, 0)",
+        borderColor: isDragging ? theme.colors.primary : "rgba(148, 163, 184, 0.3)",
+        backgroundColor: isDragging ? `${theme.colors.primary}10` : "rgba(0, 0, 0, 0)",
       }}
       className={cn(
         "relative border-2 border-dashed rounded-2xl p-8 text-center transition-all flex flex-col items-center justify-center cursor-pointer group wobbly-box",
@@ -116,10 +118,10 @@ export default function ImageUploader({
           className="p-2 transition-all"
         >
           <div className="w-32 h-32 relative">
-             <TotoroSVG 
-                state={isDragging ? "drag" : isHovering ? "hover" : "idle"} 
-                className="w-full h-full"
-             />
+            <TotoroSVG
+              state={isDragging ? "drag" : isHovering ? "hover" : "idle"}
+              className="w-full h-full"
+            />
           </div>
         </motion.div>
 
@@ -131,9 +133,7 @@ export default function ImageUploader({
           >
             {isDragging ? "I'll catch it!" : "Give it to Totoro"}
           </p>
-          <p className="text-sm text-slate-400 mt-1 font-display">
-            or click to choose a memory
-          </p>
+          <p className="text-sm text-slate-400 mt-1 font-display">or click to choose a memory</p>
         </div>
 
         {/* Supported formats */}

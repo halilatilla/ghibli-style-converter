@@ -1,34 +1,32 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   Download,
-  RefreshCw,
-  AlertCircle,
-  Wand2,
-  Sparkles,
   Image as ImageIcon,
-  Palette,
   Leaf,
+  Maximize2,
+  Palette,
+  RefreshCw,
+  Sparkles,
+  Wand2,
   Wind,
   X,
-  Maximize2,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import Header from "@/components/Header";
-import ImageUploader from "@/components/ImageUploader";
-import GhibliBackground from "@/components/GhibliBackground";
-import {
-  TotoroSilhouette,
+import GhibliBackground, {
   KodamaSilhouette,
   SootSprite,
+  TotoroSilhouette,
 } from "@/components/GhibliBackground";
-import { LoadingSootSprites } from "@/components/SootSprites";
 import { useGhibliTheme } from "@/components/GhibliThemeContext";
+import Header from "@/components/Header";
+import ImageUploader from "@/components/ImageUploader";
+import { LoadingSootSprites } from "@/components/SootSprites";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
 
 type ProcessingStatus = "idle" | "processing" | "success" | "error";
 
@@ -104,7 +102,7 @@ export default function Home() {
   );
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [status, setStatus] = useState<ProcessingStatus>("idle");
-  const [error, setError] = useState("");
+  const [_error, setError] = useState("");
   const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -128,7 +126,7 @@ export default function Home() {
       toast.error("Please upload an image first!");
       return;
     }
-    
+
     setStatus("processing");
     setError("");
 
@@ -139,11 +137,11 @@ export default function Home() {
         body: JSON.stringify({ image: selectedImage, mimeType, prompt }),
       });
       const data = await res.json();
-      
+
       if (!res.ok) {
         throw new Error(data.error || "Failed to generate");
       }
-      
+
       setGeneratedImage(data.image);
       setStatus("success");
       toast.success("🎨 Your Ghibli character is ready!", {
@@ -203,9 +201,9 @@ export default function Home() {
           {/* Decorative floating elements */}
           <motion.div
             className="absolute -top-8 left-1/4 opacity-30 hidden sm:block"
-            animate={{ 
+            animate={{
               y: [0, -10, 0],
-              rotate: [0, 5, -5, 0]
+              rotate: [0, 5, -5, 0],
             }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
           >
@@ -213,9 +211,9 @@ export default function Home() {
           </motion.div>
           <motion.div
             className="absolute -top-6 right-1/4 opacity-30 hidden sm:block"
-            animate={{ 
+            animate={{
               y: [0, -8, 0],
-              rotate: [0, -5, 5, 0]
+              rotate: [0, -5, 5, 0],
             }}
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
           >
@@ -224,17 +222,17 @@ export default function Home() {
 
           <h2
             className="font-display text-5xl md:text-6xl mb-3 relative inline-block"
-            style={{ 
+            style={{
               color: theme.colors.primary,
-              textShadow: `0 2px 12px ${theme.colors.primary}40, 0 4px 24px ${theme.colors.accent}20`
+              textShadow: `0 2px 12px ${theme.colors.primary}40, 0 4px 24px ${theme.colors.accent}20`,
             }}
           >
             Become a Ghibli Character
             {/* Hand-drawn underline */}
             <motion.div
               className="absolute -bottom-2 left-0 right-0 h-1 rounded-full opacity-60"
-              style={{ 
-                background: `linear-gradient(90deg, transparent, ${theme.colors.accent}, transparent)`
+              style={{
+                background: `linear-gradient(90deg, transparent, ${theme.colors.accent}, transparent)`,
               }}
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
@@ -243,13 +241,13 @@ export default function Home() {
           </h2>
           <p className="text-slate-300 text-lg max-w-xl mx-auto leading-relaxed">
             Upload your photo and transform into a{" "}
-            <span 
+            <span
               className="font-display text-xl font-semibold"
               style={{ color: theme.colors.accent }}
             >
               Miyazaki character
-            </span>
-            {" "}from your favorite Studio Ghibli film
+            </span>{" "}
+            from your favorite Studio Ghibli film
           </p>
         </motion.div>
 
@@ -268,9 +266,9 @@ export default function Home() {
                 <CardTitle className="flex items-center text-lg font-bold text-slate-100">
                   <motion.div
                     className="w-12 h-12 rounded-2xl flex items-center justify-center text-lg mr-4 text-white shadow-lg wobbly-circle"
-                    style={{ 
+                    style={{
                       background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
-                      boxShadow: `0 4px 12px ${theme.colors.primary}40, inset 0 2px 4px rgba(255,255,255,0.2)`
+                      boxShadow: `0 4px 12px ${theme.colors.primary}40, inset 0 2px 4px rgba(255,255,255,0.2)`,
                     }}
                     whileHover={{ rotate: 12, scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -300,18 +298,18 @@ export default function Home() {
                 <CardTitle className="flex items-center text-lg font-bold text-slate-100">
                   <motion.div
                     className="w-12 h-12 rounded-2xl flex items-center justify-center text-lg mr-4 text-white shadow-lg relative wobbly-circle"
-                    style={{ 
+                    style={{
                       background: `linear-gradient(135deg, ${theme.colors.accent}, ${theme.colors.secondary})`,
-                      boxShadow: `0 4px 12px ${theme.colors.accent}40, inset 0 2px 4px rgba(255,255,255,0.2)`
+                      boxShadow: `0 4px 12px ${theme.colors.accent}40, inset 0 2px 4px rgba(255,255,255,0.2)`,
                     }}
                     whileHover={{ rotate: -12, scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    animate={{ 
+                    animate={{
                       boxShadow: [
                         `0 4px 12px ${theme.colors.accent}40, inset 0 2px 4px rgba(255,255,255,0.2)`,
                         `0 4px 16px ${theme.colors.accent}60, inset 0 2px 4px rgba(255,255,255,0.25)`,
                         `0 4px 12px ${theme.colors.accent}40, inset 0 2px 4px rgba(255,255,255,0.2)`,
-                      ]
+                      ],
                     }}
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                   >
@@ -370,10 +368,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
+                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                   <Button
                     onClick={handleGenerate}
                     disabled={!selectedImage || status === "processing"}
@@ -413,9 +408,9 @@ export default function Home() {
                 <CardTitle className="flex items-center text-lg font-bold text-slate-100">
                   <motion.div
                     className="w-12 h-12 rounded-2xl flex items-center justify-center text-lg mr-4 text-white shadow-lg wobbly-circle"
-                    style={{ 
+                    style={{
                       background: `linear-gradient(135deg, ${theme.colors.secondary}, ${theme.colors.primary})`,
-                      boxShadow: `0 4px 12px ${theme.colors.secondary}40, inset 0 2px 4px rgba(255,255,255,0.2)`
+                      boxShadow: `0 4px 12px ${theme.colors.secondary}40, inset 0 2px 4px rgba(255,255,255,0.2)`,
                     }}
                     animate={{
                       boxShadow:
@@ -448,7 +443,7 @@ export default function Home() {
                     <div className="text-center p-6 relative z-10 max-w-sm w-full">
                       {/* Magical loading animation */}
                       <LoadingSootSprites />
-                      
+
                       <motion.h3
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -479,7 +474,7 @@ export default function Home() {
                           alt="Generated Ghibli Character"
                           className="w-full h-full object-contain rounded-xl shadow-2xl"
                         />
-                        
+
                         {/* Fullscreen hint overlay */}
                         <div className="absolute inset-0 bg-black/0 group-hover/image:bg-black/20 transition-all duration-300 rounded-xl flex items-center justify-center">
                           <motion.div
@@ -493,7 +488,7 @@ export default function Home() {
                           </motion.div>
                         </div>
                       </motion.div>
-                      
+
                       {/* Download button - positioned over the image */}
                       <motion.div
                         className="absolute bottom-4 right-4 z-10 group"
@@ -573,21 +568,23 @@ export default function Home() {
               className="ghibli-card p-6 dappled-light relative overflow-hidden wobbly-box border-none"
             >
               {/* Decorative corner accent */}
-              <div 
+              <div
                 className="absolute top-0 right-0 w-32 h-32 opacity-10 blur-2xl rounded-full"
-                style={{ background: `radial-gradient(circle, ${theme.colors.accent}, transparent)` }}
+                style={{
+                  background: `radial-gradient(circle, ${theme.colors.accent}, transparent)`,
+                }}
               />
-              
+
               <div className="flex items-start gap-5 relative z-10">
                 <motion.div
                   className="p-4 rounded-2xl shrink-0 text-white shadow-lg"
-                  style={{ 
+                  style={{
                     background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
-                    boxShadow: `0 4px 12px ${theme.colors.primary}40, inset 0 2px 4px rgba(255,255,255,0.2)`
+                    boxShadow: `0 4px 12px ${theme.colors.primary}40, inset 0 2px 4px rgba(255,255,255,0.2)`,
                   }}
-                  animate={{ 
+                  animate={{
                     rotate: [0, 6, -6, 0],
-                    y: [0, -3, 0]
+                    y: [0, -3, 0],
                   }}
                   transition={{
                     duration: 5,
@@ -600,16 +597,16 @@ export default function Home() {
                 <div>
                   <h3
                     className="font-display text-2xl mb-3"
-                    style={{ 
+                    style={{
                       color: theme.colors.primary,
-                      textShadow: `0 2px 8px ${theme.colors.primary}30`
+                      textShadow: `0 2px 8px ${theme.colors.primary}30`,
                     }}
                   >
                     Pro Tips for Magic
                   </h3>
                   <ul className="text-slate-300 space-y-2.5 text-sm leading-relaxed">
                     <li className="flex items-start gap-3">
-                      <motion.span 
+                      <motion.span
                         className="text-lg mt-0.5 shrink-0"
                         style={{ color: theme.colors.accent }}
                         animate={{ scale: [1, 1.2, 1] }}
@@ -617,29 +614,53 @@ export default function Home() {
                       >
                         ✦
                       </motion.span>
-                      <span>Clear, front-facing photos work best for <span className="font-semibold text-slate-200">character transformation</span>.</span>
+                      <span>
+                        Clear, front-facing photos work best for{" "}
+                        <span className="font-semibold text-slate-200">
+                          character transformation
+                        </span>
+                        .
+                      </span>
                     </li>
                     <li className="flex items-start gap-3">
-                      <motion.span 
+                      <motion.span
                         className="text-lg mt-0.5 shrink-0"
                         style={{ color: theme.colors.accent }}
                         animate={{ scale: [1, 1.2, 1] }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                          delay: 0.3,
+                        }}
                       >
                         ✦
                       </motion.span>
-                      <span>Try the <span className="font-bold" style={{ color: theme.colors.secondary }}>"Spirited Away"</span> preset for classic Miyazaki style.</span>
+                      <span>
+                        Try the{" "}
+                        <span className="font-bold" style={{ color: theme.colors.secondary }}>
+                          "Spirited Away"
+                        </span>{" "}
+                        preset for classic Miyazaki style.
+                      </span>
                     </li>
                     <li className="flex items-start gap-3">
-                      <motion.span 
+                      <motion.span
                         className="text-lg mt-0.5 shrink-0"
                         style={{ color: theme.colors.accent }}
                         animate={{ scale: [1, 1.2, 1] }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                          delay: 0.6,
+                        }}
                       >
                         ✦
                       </motion.span>
-                      <span>Well-lit photos with visible facial features give the best results.</span>
+                      <span>
+                        Well-lit photos with visible facial features give the best results.
+                      </span>
                     </li>
                   </ul>
                 </div>
@@ -660,20 +681,20 @@ export default function Home() {
             Inspired by the magic of{" "}
             <motion.span
               className="font-display text-xl inline-block"
-              style={{ 
+              style={{
                 color: theme.colors.primary,
-                textShadow: `0 2px 8px ${theme.colors.primary}40`
+                textShadow: `0 2px 8px ${theme.colors.primary}40`,
               }}
-              whileHover={{ 
+              whileHover={{
                 scale: 1.1,
                 y: -2,
-                textShadow: `0 4px 12px ${theme.colors.accent}60`
+                textShadow: `0 4px 12px ${theme.colors.accent}60`,
               }}
             >
               Studio Ghibli
             </motion.span>
           </p>
-          <motion.div 
+          <motion.div
             className="flex justify-center gap-2 mt-3"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -752,11 +773,11 @@ export default function Home() {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={{ 
+              transition={{
                 type: "spring",
                 stiffness: 300,
                 damping: 30,
-                delay: 0.1 
+                delay: 0.1,
               }}
               className="relative max-w-7xl max-h-[90vh] w-full h-full flex items-center justify-center"
               onClick={(e) => e.stopPropagation()}
@@ -766,7 +787,7 @@ export default function Home() {
                 alt="Generated Ghibli Character - Fullscreen"
                 className="max-w-full max-h-full object-contain rounded-2xl shadow-2xl"
                 style={{
-                  boxShadow: `0 20px 60px ${theme.colors.primary}40, 0 0 100px ${theme.colors.accent}20`
+                  boxShadow: `0 20px 60px ${theme.colors.primary}40, 0 0 100px ${theme.colors.accent}20`,
                 }}
               />
             </motion.div>
