@@ -1,6 +1,6 @@
 # 🎨 GhibliStyle Converter
 
-Transform yourself into a **Studio Ghibli character** using AI. Become a Miyazaki anime character from your favorite films!
+Transform yourself into a **Studio Ghibli character** using AI. Create stunning images or animated videos as a Miyazaki anime character from your favorite films!
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)
 ![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react)
@@ -14,18 +14,30 @@ Transform yourself into a **Studio Ghibli character** using AI. Become a Miyazak
 
 ## ✨ Features
 
+### Core Features
 - 🎨 **Authentic Ghibli Design** - UI inspired by Studio Ghibli's iconic visual style
 - 🎭 **5 Character Styles** - Transform into characters from Spirited Away, Totoro, Howl's Moving Castle, Princess Mononoke, and Kiki's Delivery Service
 - 🖼️ **Drag & Drop Upload** - Easy photo upload with drag and drop support
-- 🤖 **AI-Powered Character Transformation** - Turn yourself into a Miyazaki anime character
+- 🤖 **AI-Powered Transformations** - Turn yourself into a Miyazaki anime character
 - ✏️ **Custom Prompts** - Fine-tune your character style with custom prompts or use presets
-- 💾 **One-Click Download** - Download your Ghibli character portrait instantly
+- 💾 **One-Click Download** - Download your creations instantly
 - 🌊 **Watercolor Effects** - Hand-drawn textures and soft gradients throughout
 - ✨ **Magical Animations** - Floating particles, gentle glows, and organic movements
 - 📱 **Responsive Design** - Works beautifully on desktop and mobile
-- ⚡ **Fast Processing** - Your character generated in seconds
 - 🛡️ **Rate Limiting** - Built-in protection with Upstash Redis
 - 🔍 **SEO Optimized** - Comprehensive meta tags, Open Graph, and structured data
+
+### 🎬 NEW: Video Generation
+- **Animated Ghibli Videos** - Create 8-second animated videos using Google's Veo 3.1 AI
+- **Cinematic Animations** - Watch your character come to life with smooth, natural movements
+- **Movie-Specific Scenes** - Each film theme has unique animation prompts and settings
+- **720p HD Quality** - High-quality MP4 videos ready to share
+- **Real-Time Progress** - Track video generation with live status updates
+- **Fast Processing** - Videos ready in 1-3 minutes
+
+### Two Modes Available
+- 📸 **Transform Photo** - Generate stunning Ghibli-style images in 5-15 seconds
+- 🎬 **Create Video** - Generate 8-second animated videos in 1-3 minutes
 
 ## 🚀 Getting Started
 
@@ -53,13 +65,15 @@ Transform yourself into a **Studio Ghibli character** using AI. Become a Miyazak
    Create a `.env.local` file in the root directory:
 
    ```env
-   # Required
+   # Required - Must have access to Gemini image generation AND Veo video models
    GEMINI_API_KEY=your_gemini_api_key
 
    # Optional - for production rate limiting
    UPSTASH_REDIS_REST_URL=your_upstash_url
    UPSTASH_REDIS_REST_TOKEN=your_upstash_token
    ```
+
+   **Note:** Video generation requires access to Google's Veo 3.1 model, which may be in limited preview. Request access from Google AI Studio if needed.
 
 4. **Run the development server**
 
@@ -111,6 +125,8 @@ Install the [Biome VSCode extension](https://marketplace.visualstudio.com/items?
 | [Tailwind CSS](https://tailwindcss.com/)      | 4       | Styling              |
 | [Biome](https://biomejs.dev/)                 | 2.3     | Linting & Formatting |
 | [Framer Motion](https://www.framer.com/motion/) | -     | Animations           |
+| [Google Gemini AI](https://ai.google.dev/)    | -       | Image & Video AI     |
+| [Google Veo 3.1](https://deepmind.google/technologies/veo/) | -  | Video generation     |
 | [Google Fonts](https://fonts.google.com/)     | -       | Quicksand & Caveat   |
 | [Upstash](https://upstash.com/)               | -       | Rate limiting        |
 | [Lucide React](https://lucide.dev/)           | -       | Icons                |
@@ -121,15 +137,19 @@ Install the [Biome VSCode extension](https://marketplace.visualstudio.com/items?
 ghibli-style-converter/
 ├── app/
 │   ├── api/
-│   │   └── generate/
-│   │       └── route.ts      # API endpoint with rate limiting
+│   │   ├── generate/
+│   │   │   └── route.ts          # Image generation API endpoint
+│   │   └── generate-video/
+│   │       └── route.ts          # Video generation API endpoint (NEW)
 │   ├── globals.css
 │   ├── layout.tsx
-│   └── page.tsx              # Main app page
+│   └── page.tsx                  # Main app page with photo/video modes
 ├── components/
-│   ├── ui/                   # Reusable UI components
+│   ├── ui/                       # Reusable UI components
+│   ├── GhibliBackground.tsx      # Animated backgrounds
 │   ├── Header.tsx
-│   └── ImageUploader.tsx
+│   ├── ImageUploader.tsx         # Photo upload component
+│   └── VideoUploader.tsx         # Video upload component (NEW)
 ├── lib/
 │   └── utils.ts
 └── ...config files
@@ -150,29 +170,56 @@ This project captures the essence of Studio Ghibli's visual language:
 
 Each character style captures the essence of iconic Ghibli films:
 
+#### Photo Mode
 - **Spirited Away** 🌸 - Magical and whimsical characters with expressive features
 - **Totoro Adventure** 🌳 - Innocent and cheerful countryside style
 - **Howl's Moving Castle** ✨ - Elegant Victorian-era characters with flowing details
 - **Princess Mononoke** 🐺 - Fierce warrior aesthetic with bold colors
 - **Kiki's Delivery Service** 🧹 - Youthful and optimistic character design
 
+#### Video Mode
+- **Spirited Away** 🌸 - Character in mystical bathhouse with floating spirits
+- **Totoro Adventure** 🌳 - Character in sunlit forest with falling leaves
+- **Howl's Moving Castle** ✨ - Elegant character with magical sparkles and flowing movement
+- **Princess Mononoke** 🐺 - Warrior in forest with mystical spirits
+- **Kiki's Delivery Service** 🧹 - Cheerful character with gentle breeze animation
+
 ## 💡 Usage Tips
 
+### For Photo Mode 📸
 - **Clear, front-facing portraits** work best for character transformation
 - Ensure your photo is **well-lit** with visible facial features
 - Try the **"Spirited Away"** preset for classic Miyazaki character style
 - **Headshots or selfies** produce the most detailed anime character results
 - Experiment with different **character style prompts** for unique looks
-- Each film theme captures a different **character personality**
 - **Natural lighting** photos give the best hand-drawn aesthetic
+- Processing time: **5-15 seconds**
+
+### For Video Mode 🎬
+- Use the same high-quality photos as photo mode for best results
+- Video generation takes **1-3 minutes** - don't close the window!
+- Each movie theme creates unique animated scenes
+- Videos are **8 seconds long** at **720p HD quality**
+- Perfect for social media sharing and profile videos
+- Watch the real-time progress updates during generation
 
 ## 🔒 Rate Limiting
 
-The API includes built-in rate limiting:
+The API includes built-in rate limiting to manage costs:
 
+### Photo Generation
 - **5 requests per minute** per user
+- **30 images per day** globally
 - Uses Upstash Redis in production
 - Falls back to in-memory limiting for development
+
+### Video Generation
+- **2 requests per hour** per user (more restrictive due to cost)
+- **10 videos per day** globally
+- 5-minute timeout protection
+- Separate rate limit tracking from photos
+
+**Note:** Video generation is significantly more expensive than image generation (~$0.20-0.50 per video vs ~$0.01 per image), hence the stricter limits.
 
 ## 🔍 SEO Features
 
