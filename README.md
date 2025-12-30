@@ -11,12 +11,16 @@ Transform yourself into a **Studio Ghibli character** using AI. Create stunning 
    <img width="1301" height="1327" alt="CleanShot 2025-12-30 at 18 50 34" src="https://github.com/user-attachments/assets/cb7e30e4-7311-4e85-a989-4421eb2d4f28" />
 </p>
 
-<p align="center">
-   
-https://github.com/user-attachments/assets/d542c691-e1ee-4bd5-abb1-df3f6e1272bc
-</p>
-
-https://github.com/user-attachments/assets/3331937f-4227-4c89-b406-12de7f56f153
+<table>
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <video src="https://github.com/user-attachments/assets/d542c691-e1ee-4bd5-abb1-df3f6e1272bc" width="100%" height="400" controls></video>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <video src="https://github.com/user-attachments/assets/3331937f-4227-4c89-b406-12de7f56f153" width="100%" height="400" controls></video>
+    </td>
+  </tr>
+</table>
 
 
 
