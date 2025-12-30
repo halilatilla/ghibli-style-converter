@@ -76,6 +76,12 @@ const STYLE_PRESETS = [
   },
 ];
 
+const DEFAULT_PHOTO_PROMPT =
+  "Transform this person into a Studio Ghibli anime character in Miyazaki's signature art style. Expressive anime eyes, soft facial features, hand-drawn aesthetic, vibrant colors, whimsical and magical atmosphere. Keep the person's essence but reimagine them as a Ghibli character.";
+
+const DEFAULT_VIDEO_PROMPT =
+  "Transform this person into a Studio Ghibli character. The character is alive and breathing, with subtle natural movements, wind gently blowing through hair, and a soft cinematic lighting. Magical atmosphere with a hand-drawn animation style.";
+
 // Floating decorative elements
 function FloatingSpirits() {
   return (
@@ -111,9 +117,7 @@ export default function Home() {
   const [mode, setMode] = useState<Mode>("photo");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [mimeType, setMimeType] = useState("image/jpeg");
-  const [prompt, setPrompt] = useState(
-    "Transform this person into a Studio Ghibli anime character in Miyazaki's signature art style. Expressive anime eyes, soft facial features, hand-drawn aesthetic, vibrant colors, whimsical and magical atmosphere. Keep the person's essence but reimagine them as a Ghibli character."
-  );
+  const [prompt, setPrompt] = useState(DEFAULT_PHOTO_PROMPT);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [generatedVideo, setGeneratedVideo] = useState<string | null>(null);
   const [status, setStatus] = useState<ProcessingStatus>("idle");
@@ -144,6 +148,16 @@ export default function Home() {
     setGeneratedImage(null);
     setGeneratedVideo(null);
     setStatus("idle");
+
+    // Update prompt based on mode and current preset
+    if (selectedPreset) {
+      const preset = STYLE_PRESETS.find((p) => p.name === selectedPreset);
+      if (preset) {
+        setPrompt(newMode === "video" ? preset.videoPrompt : preset.prompt);
+      }
+    } else {
+      setPrompt(newMode === "video" ? DEFAULT_VIDEO_PROMPT : DEFAULT_PHOTO_PROMPT);
+    }
   };
 
   const handleGenerate = async () => {

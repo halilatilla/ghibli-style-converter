@@ -103,7 +103,8 @@ export async function POST(req: NextRequest) {
     if (!rateLimitResult.success) {
       return NextResponse.json(
         {
-          error: "Too many video requests. You can generate 2 videos per hour. Please try again later.",
+          error:
+            "Too many video requests. You can generate 2 videos per hour. Please try again later.",
         },
         {
           status: 429,
@@ -134,7 +135,7 @@ export async function POST(req: NextRequest) {
     // Start video generation
     let operation = await ai.models.generateVideos({
       model: "veo-3.1-fast-generate-preview",
-      prompt: `${prompt}. Cinematic Studio Ghibli style animation with hand-drawn aesthetic, soft watercolor colors, magical atmosphere, smooth natural movement.`,
+      prompt: `${prompt}. Create a cinematic Studio Ghibli style video. Hand-drawn animation aesthetic, soft watercolor colors, magical atmosphere, smooth natural movement, high quality.`,
       image: {
         imageBytes: image,
         mimeType: mimeType,
@@ -158,7 +159,8 @@ export async function POST(req: NextRequest) {
         console.error("Video generation timeout");
         return NextResponse.json(
           {
-            error: "Video generation timed out. Please try with a different photo or try again later.",
+            error:
+              "Video generation timed out. Please try with a different photo or try again later.",
           },
           { status: 504 }
         );
@@ -257,4 +259,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
