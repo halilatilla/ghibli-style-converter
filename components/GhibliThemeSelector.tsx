@@ -1,9 +1,20 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { ChevronDown, Sparkles, TreePine, Ghost, Castle, CloudSun } from "lucide-react"
-import { useGhibliTheme, GHIBLI_THEMES, GhibliFilm } from "./GhibliThemeContext"
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  ChevronDown,
+  Sparkles,
+  TreePine,
+  Ghost,
+  Castle,
+  CloudSun,
+} from "lucide-react";
+import {
+  useGhibliTheme,
+  GHIBLI_THEMES,
+  GhibliFilm,
+} from "./GhibliThemeContext";
 
 const FILM_ICONS: Record<GhibliFilm, React.ReactNode> = {
   totoro: <TreePine className="w-4 h-4" />,
@@ -11,11 +22,11 @@ const FILM_ICONS: Record<GhibliFilm, React.ReactNode> = {
   howl: <CloudSun className="w-4 h-4" />,
   mononoke: <Sparkles className="w-4 h-4" />,
   laputa: <Castle className="w-4 h-4" />,
-}
+};
 
 export default function GhibliThemeSelector() {
-  const { film, setFilm, theme } = useGhibliTheme()
-  const [isOpen, setIsOpen] = useState(false)
+  const { film, setFilm, theme } = useGhibliTheme();
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="relative">
@@ -25,37 +36,40 @@ export default function GhibliThemeSelector() {
         whileHover={{ scale: 1.02, y: -1 }}
         whileTap={{ scale: 0.98 }}
       >
-        <motion.div 
-          className="w-6 h-6 rounded-full ring-2 ring-offset-2 ring-offset-slate-800 shadow-md"
-          style={{ 
+        <motion.div
+          className="w-6 h-6 rounded-full shadow-md"
+          style={{
             backgroundColor: theme.colors.primary,
-            ringColor: theme.colors.secondary,
-            boxShadow: `0 0 12px ${theme.colors.primary}40`
+            boxShadow: `0 0 12px ${theme.colors.primary}40, 0 0 0 2px ${theme.colors.secondary}40, 0 0 0 4px rgba(30, 41, 59, 0.5)`,
           }}
-          animate={{ 
+          animate={{
             boxShadow: [
-              `0 0 12px ${theme.colors.primary}40`,
-              `0 0 20px ${theme.colors.accent}50`,
-              `0 0 12px ${theme.colors.primary}40`,
-            ]
+              `0 0 12px ${theme.colors.primary}40, 0 0 0 2px ${theme.colors.secondary}40, 0 0 0 4px rgba(30, 41, 59, 0.5)`,
+              `0 0 20px ${theme.colors.accent}50, 0 0 0 2px ${theme.colors.accent}60, 0 0 0 4px rgba(30, 41, 59, 0.5)`,
+              `0 0 12px ${theme.colors.primary}40, 0 0 0 2px ${theme.colors.secondary}40, 0 0 0 4px rgba(30, 41, 59, 0.5)`,
+            ],
           }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         />
         <span className="text-sm font-semibold text-slate-100 hidden sm:inline">
           {theme.name}
         </span>
-        <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
+        <ChevronDown
+          className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        />
       </motion.button>
 
       <AnimatePresence>
         {isOpen && (
           <>
             {/* Backdrop */}
-            <div 
+            <div
               className="fixed inset-0 z-40"
               onClick={() => setIsOpen(false)}
             />
-            
+
             {/* Dropdown */}
             <motion.div
               initial={{ opacity: 0, y: -10, scale: 0.95 }}
@@ -68,7 +82,11 @@ export default function GhibliThemeSelector() {
                 <h3 className="font-display text-xl font-bold text-slate-100 flex items-center gap-2">
                   <motion.div
                     animate={{ rotate: [0, 10, -10, 0] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
                   >
                     <Sparkles className="w-5 h-5 text-amber-400" />
                   </motion.div>
@@ -78,14 +96,14 @@ export default function GhibliThemeSelector() {
                   Each film brings its own magical atmosphere
                 </p>
               </div>
-              
+
               <div className="p-3 space-y-2 max-h-96 overflow-y-auto">
                 {Object.values(GHIBLI_THEMES).map((t, index) => (
                   <motion.button
                     key={t.id}
                     onClick={() => {
-                      setFilm(t.id)
-                      setIsOpen(false)
+                      setFilm(t.id);
+                      setIsOpen(false);
                     }}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -99,25 +117,25 @@ export default function GhibliThemeSelector() {
                     }`}
                   >
                     {/* Background gradient on hover */}
-                    <div 
+                    <div
                       className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity"
-                      style={{ 
-                        background: `linear-gradient(135deg, ${t.colors.primary}, ${t.colors.secondary})`
+                      style={{
+                        background: `linear-gradient(135deg, ${t.colors.primary}, ${t.colors.secondary})`,
                       }}
                     />
-                    
+
                     {/* Color indicator */}
-                    <motion.div 
+                    <motion.div
                       className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg shrink-0 relative z-10"
-                      style={{ 
+                      style={{
                         background: `linear-gradient(135deg, ${t.colors.primary}, ${t.colors.secondary})`,
-                        boxShadow: `0 4px 12px ${t.colors.primary}40, inset 0 2px 4px rgba(255,255,255,0.2)`
+                        boxShadow: `0 4px 12px ${t.colors.primary}40, inset 0 2px 4px rgba(255,255,255,0.2)`,
                       }}
                       whileHover={{ rotate: 8 }}
                     >
                       {FILM_ICONS[t.id]}
                     </motion.div>
-                    
+
                     <div className="flex-1 min-w-0 relative z-10">
                       <div className="flex items-center gap-2 mb-0.5">
                         <span className="font-semibold text-slate-100 text-sm truncate">
@@ -128,9 +146,9 @@ export default function GhibliThemeSelector() {
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
                             className="w-2 h-2 rounded-full shadow-lg"
-                            style={{ 
+                            style={{
                               backgroundColor: t.colors.accent,
-                              boxShadow: `0 0 8px ${t.colors.accent}`
+                              boxShadow: `0 0 8px ${t.colors.accent}`,
                             }}
                           />
                         )}
@@ -142,20 +160,20 @@ export default function GhibliThemeSelector() {
                         {t.description}
                       </p>
                     </div>
-                    
+
                     {/* Color swatches */}
                     <div className="flex gap-1 shrink-0 relative z-10">
-                      <motion.div 
+                      <motion.div
                         className="w-5 h-5 rounded-full border-2 border-slate-700 shadow-sm"
                         style={{ backgroundColor: t.colors.primary }}
                         whileHover={{ scale: 1.2 }}
                       />
-                      <motion.div 
+                      <motion.div
                         className="w-5 h-5 rounded-full border-2 border-slate-700 shadow-sm"
                         style={{ backgroundColor: t.colors.secondary }}
                         whileHover={{ scale: 1.2 }}
                       />
-                      <motion.div 
+                      <motion.div
                         className="w-5 h-5 rounded-full border-2 border-slate-700 shadow-sm"
                         style={{ backgroundColor: t.colors.accent }}
                         whileHover={{ scale: 1.2 }}
@@ -169,6 +187,5 @@ export default function GhibliThemeSelector() {
         )}
       </AnimatePresence>
     </div>
-  )
+  );
 }
-
