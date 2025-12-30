@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Download,
+  Film,
   Image as ImageIcon,
   Leaf,
   Maximize2,
@@ -27,8 +28,10 @@ import { LoadingSootSprites } from "@/components/SootSprites";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import VideoUploader, { VideoPreview } from "@/components/VideoUploader";
 
 type ProcessingStatus = "idle" | "processing" | "success" | "error";
+type Mode = "photo" | "video";
 
 const STYLE_PRESETS = [
   {
@@ -36,30 +39,40 @@ const STYLE_PRESETS = [
     emoji: "🌸",
     prompt:
       "Transform this person into a Studio Ghibli character in the style of Spirited Away. Hand-drawn anime character with expressive eyes, soft features, Miyazaki's signature art style, vibrant colors, whimsical and magical atmosphere.",
+    videoPrompt:
+      "Transform this person into a Spirited Away character gently turning and smiling in a mystical bathhouse setting with floating spirits and magical sparkles",
   },
   {
     name: "Totoro Adventure",
     emoji: "🌳",
     prompt:
       "Transform this person into a Studio Ghibli character like Satsuki or Mei from My Neighbor Totoro. Innocent and cheerful expression, simple countryside clothing, hand-drawn anime style with warm earthy tones.",
+    videoPrompt:
+      "Transform this person into a Totoro character standing in a sunlit forest with leaves gently falling around them and a cheerful innocent expression",
   },
   {
     name: "Howl's Moving Castle",
     emoji: "✨",
     prompt:
       "Transform this person into an elegant Studio Ghibli character from Howl's Moving Castle. Detailed Victorian-style clothing, flowing hair, expressive features, magical and romantic atmosphere, Miyazaki's beautiful watercolor-like style.",
+    videoPrompt:
+      "Transform this person into a Howl's Moving Castle character in elegant Victorian clothing with magical sparkles and flowing movement in a romantic setting",
   },
   {
     name: "Princess Mononoke",
     emoji: "🐺",
     prompt:
       "Transform this person into a fierce Studio Ghibli character like Princess Mononoke. Strong and determined expression, tribal/warrior attire, bold colors, connection with nature, epic and adventurous atmosphere.",
+    videoPrompt:
+      "Transform this person into a Princess Mononoke warrior character with determined expression and natural forest backdrop with mystical spirits",
   },
   {
     name: "Kiki's Delivery",
     emoji: "🧹",
     prompt:
       "Transform this person into a charming Studio Ghibli character like Kiki. Youthful and optimistic expression, simple clothing style, bright and cheerful colors, coming-of-age story aesthetic.",
+    videoPrompt:
+      "Transform this person into a Kiki character with cheerful expression and gentle breeze moving their hair in a bright optimistic setting",
   },
 ];
 
@@ -95,16 +108,19 @@ function FloatingSpirits() {
 }
 
 export default function Home() {
+  const [mode, setMode] = useState<Mode>("photo");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [mimeType, setMimeType] = useState("image/jpeg");
   const [prompt, setPrompt] = useState(
     "Transform this person into a Studio Ghibli anime character in Miyazaki's signature art style. Expressive anime eyes, soft facial features, hand-drawn aesthetic, vibrant colors, whimsical and magical atmosphere. Keep the person's essence but reimagine them as a Ghibli character."
   );
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
+  const [generatedVideo, setGeneratedVideo] = useState<string | null>(null);
   const [status, setStatus] = useState<ProcessingStatus>("idle");
   const [_error, setError] = useState("");
   const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [generationStatus, setGenerationStatus] = useState<string>("");
 
   const { theme } = useGhibliTheme();
 
@@ -112,12 +128,21 @@ export default function Home() {
     setSelectedImage(base64);
     setMimeType(type);
     setGeneratedImage(null);
+    setGeneratedVideo(null);
     setStatus("idle");
   };
 
   const handleClear = () => {
     setSelectedImage(null);
     setGeneratedImage(null);
+    setGeneratedVideo(null);
+    setStatus("idle");
+  };
+
+  const handleModeChange = (newMode: Mode) => {
+    setMode(newMode);
+    setGeneratedImage(null);
+    setGeneratedVideo(null);
     setStatus("idle");
   };
 
@@ -157,16 +182,64 @@ export default function Home() {
   };
 
   const handleDownload = () => {
-    if (!generatedImage) return;
-    const link = document.createElement("a");
-    link.href = generatedImage;
-    link.download = "ghibli-style-image.png";
-    link.click();
+    if (mode === "video" && generatedVideo) {
+      const link = document.createElement("a");
+      link.href = generatedVideo;
+      link.download = `ghibli-video-${Date.now()}.mp4`;
+      link.click();
+    } else if (mode === "photo" && generatedImage) {
+      const link = document.createElement("a");
+      link.href = generatedImage;
+      link.download = "ghibli-style-image.png";
+      link.click();
+    }
   };
 
   const handlePresetSelect = (preset: (typeof STYLE_PRESETS)[0]) => {
-    setPrompt(preset.prompt);
+    if (mode === "video") {
+      setPrompt(preset.videoPrompt);
+    } else {
+      setPrompt(preset.prompt);
+    }
     setSelectedPreset(preset.name);
+  };
+
+  const handleGenerateVideo = async () => {
+    if (!selectedImage) {
+      toast.error("Please upload an image first!");
+      return;
+    }
+
+    setStatus("processing");
+    setError("");
+    setGenerationStatus("Starting video generation...");
+
+    try {
+      const res = await fetch("/api/generate-video", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image: selectedImage, mimeType, prompt }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to generate video");
+      }
+
+      setGeneratedVideo(data.video);
+      setStatus("success");
+      toast.success("🎬 Your Ghibli video is ready!", {
+        description: "Click to play and enjoy your animation",
+      });
+    } catch (e: any) {
+      setError(e.message);
+      setStatus("error");
+      toast.error("❌ Video generation failed", {
+        description: e.message || "Something went wrong. Please try again.",
+      });
+    } finally {
+      setGenerationStatus("");
+    }
   };
 
   // Keyboard support for fullscreen (ESC to close)
@@ -239,7 +312,7 @@ export default function Home() {
               transition={{ duration: 1.2, delay: 0.5, ease: "easeOut" }}
             />
           </h2>
-          <p className="text-slate-300 text-lg max-w-xl mx-auto leading-relaxed">
+          <p className="text-slate-300 text-lg max-w-xl mx-auto leading-relaxed mb-6">
             Upload your photo and transform into a{" "}
             <span
               className="font-display text-xl font-semibold"
@@ -249,6 +322,55 @@ export default function Home() {
             </span>{" "}
             from your favorite Studio Ghibli film
           </p>
+
+          {/* Mode Switcher Tabs */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+            className="flex justify-center gap-3 mt-8"
+          >
+            <motion.button
+              onClick={() => handleModeChange("photo")}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`flex items-center gap-2 px-6 py-3 rounded-full font-display font-semibold text-base transition-all cursor-pointer ${
+                mode === "photo"
+                  ? "text-white shadow-lg"
+                  : "bg-slate-800/70 text-slate-300 hover:bg-slate-700/80"
+              }`}
+              style={
+                mode === "photo"
+                  ? {
+                      background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
+                    }
+                  : {}
+              }
+            >
+              <ImageIcon className="w-5 h-5" />
+              Transform Photo
+            </motion.button>
+            <motion.button
+              onClick={() => handleModeChange("video")}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`flex items-center gap-2 px-6 py-3 rounded-full font-display font-semibold text-base transition-all cursor-pointer ${
+                mode === "video"
+                  ? "text-white shadow-lg"
+                  : "bg-slate-800/70 text-slate-300 hover:bg-slate-700/80"
+              }`}
+              style={
+                mode === "video"
+                  ? {
+                      background: `linear-gradient(135deg, ${theme.colors.accent}, ${theme.colors.secondary})`,
+                    }
+                  : {}
+              }
+            >
+              <Film className="w-5 h-5" />
+              Create Video
+            </motion.button>
+          </motion.div>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -281,13 +403,23 @@ export default function Home() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-5">
-                <ImageUploader
-                  onImageSelected={handleImageSelected}
-                  selectedImage={selectedImage}
-                  onClear={handleClear}
-                  disabled={status === "processing"}
-                  className="aspect-video"
-                />
+                {mode === "photo" ? (
+                  <ImageUploader
+                    onImageSelected={handleImageSelected}
+                    selectedImage={selectedImage}
+                    onClear={handleClear}
+                    disabled={status === "processing"}
+                    className="aspect-video"
+                  />
+                ) : (
+                  <VideoUploader
+                    onImageSelected={handleImageSelected}
+                    selectedImage={selectedImage}
+                    onClear={handleClear}
+                    disabled={status === "processing"}
+                    className="aspect-video"
+                  />
+                )}
               </CardContent>
             </Card>
 
@@ -370,7 +502,7 @@ export default function Home() {
 
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                   <Button
-                    onClick={handleGenerate}
+                    onClick={mode === "video" ? handleGenerateVideo : handleGenerate}
                     disabled={!selectedImage || status === "processing"}
                     className="w-full h-14 text-lg font-bold rounded-2xl text-white shadow-lg transition-all duration-300 ghibli-button"
                     style={{
@@ -380,16 +512,25 @@ export default function Home() {
                     {status === "processing" ? (
                       <>
                         <RefreshCw className="w-5 h-5 animate-spin mr-3" />
-                        Spirits are painting...
+                        {mode === "video" ? "Spirits are animating..." : "Spirits are painting..."}
                       </>
                     ) : (
                       <>
-                        <Wind className="w-5 h-5 mr-3" />
-                        Transform Into Character
+                        {mode === "video" ? (
+                          <Film className="w-5 h-5 mr-3" />
+                        ) : (
+                          <Wind className="w-5 h-5 mr-3" />
+                        )}
+                        {mode === "video" ? "Create Ghibli Video" : "Transform Into Character"}
                       </>
                     )}
                   </Button>
                 </motion.div>
+                {mode === "video" && (
+                  <p className="text-xs text-slate-400 text-center mt-2 font-display">
+                    ⏱️ Video generation takes 1-3 minutes
+                  </p>
+                )}
               </CardContent>
             </Card>
           </motion.div>
@@ -439,22 +580,53 @@ export default function Home() {
               </CardHeader>
               <CardContent className="p-5">
                 <div className="w-full aspect-video flex items-center justify-center relative rounded-2xl overflow-hidden bg-slate-950/30 border-2 border-dashed border-slate-800/50">
-                  {status === "processing" ? (
-                    <div className="text-center p-6 relative z-10 max-w-sm w-full">
+                  {mode === "video" ? (
+                    <VideoPreview
+                      generatedVideo={generatedVideo}
+                      isGenerating={status === "processing"}
+                      generationStatus={generationStatus}
+                      onDownload={handleDownload}
+                      theme={theme}
+                    />
+                  ) : status === "processing" ? (
+                    <div className="text-center p-6 relative z-10 max-w-md w-full">
                       {/* Magical loading animation */}
                       <LoadingSootSprites />
 
                       <motion.h3
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="font-display text-2xl mb-1 mt-4"
+                        className="font-display text-2xl mb-2 mt-4"
                         style={{ color: theme.colors.primary }}
                       >
-                        Creating Magic...
+                        Creating Your Ghibli Character...
                       </motion.h3>
-                      <p className="text-slate-400 text-xs font-display">
-                        The soot sprites are hard at work!
+                      <p className="text-slate-300 text-sm mb-2 font-display">
+                        The soot sprites are painting your transformation
                       </p>
+                      <p className="text-slate-500 text-xs font-display">
+                        This usually takes 5-15 seconds
+                      </p>
+
+                      {/* Animated progress dots */}
+                      <div className="flex justify-center gap-2 mt-4">
+                        {[0, 1, 2].map((i) => (
+                          <motion.div
+                            key={i}
+                            className="w-2 h-2 rounded-full"
+                            style={{ backgroundColor: theme.colors.accent }}
+                            animate={{
+                              scale: [1, 1.5, 1],
+                              opacity: [0.3, 1, 0.3],
+                            }}
+                            transition={{
+                              duration: 1.5,
+                              repeat: Infinity,
+                              delay: i * 0.2,
+                            }}
+                          />
+                        ))}
+                      </div>
                     </div>
                   ) : generatedImage ? (
                     <>
