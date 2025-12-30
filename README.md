@@ -16,13 +16,18 @@ Transform your photos into magical **Studio Ghibli-style** artwork using AI.
 
 ## ✨ Features
 
+- 🎨 **Authentic Ghibli Design** - UI inspired by Studio Ghibli's iconic visual style
+- 🎭 **5 Film Themes** - Switch between Totoro, Spirited Away, Howl's Moving Castle, Princess Mononoke, and Castle in the Sky
 - 🖼️ **Drag & Drop Upload** - Easy image upload with drag and drop support
-- 🎭 **AI-Powered Transformation** - Convert any photo to Ghibli anime style
-- ✏️ **Custom Prompts** - Fine-tune the style with your own prompts
+- 🤖 **AI-Powered Transformation** - Convert any photo to Ghibli anime style
+- ✏️ **Custom Prompts** - Fine-tune the style with your own prompts or use presets
 - 💾 **One-Click Download** - Download your generated artwork instantly
+- 🌊 **Watercolor Effects** - Hand-drawn textures and soft gradients throughout
+- ✨ **Magical Animations** - Floating particles, gentle glows, and organic movements
 - 📱 **Responsive Design** - Works beautifully on desktop and mobile
 - ⚡ **Fast Processing** - Results in seconds
 - 🛡️ **Rate Limiting** - Built-in protection with Upstash Redis
+- 🔍 **SEO Optimized** - Comprehensive meta tags, Open Graph, and structured data
 
 ## 🚀 Getting Started
 
@@ -70,14 +75,16 @@ Transform your photos into magical **Studio Ghibli-style** artwork using AI.
 
 ## 🛠️ Tech Stack
 
-| Technology                                    | Version | Purpose         |
-| --------------------------------------------- | ------- | --------------- |
-| [Next.js](https://nextjs.org/)                | 16      | React framework |
-| [React](https://react.dev/)                   | 19      | UI library      |
-| [TypeScript](https://www.typescriptlang.org/) | 5.9     | Type safety     |
-| [Tailwind CSS](https://tailwindcss.com/)      | 4       | Styling         |
-| [Upstash](https://upstash.com/)               | -       | Rate limiting   |
-| [Lucide React](https://lucide.dev/)           | -       | Icons           |
+| Technology                                    | Version | Purpose              |
+| --------------------------------------------- | ------- | -------------------- |
+| [Next.js](https://nextjs.org/)                | 16      | React framework      |
+| [React](https://react.dev/)                   | 19      | UI library           |
+| [TypeScript](https://www.typescriptlang.org/) | 5.9     | Type safety          |
+| [Tailwind CSS](https://tailwindcss.com/)      | 4       | Styling              |
+| [Framer Motion](https://www.framer.com/motion/) | -     | Animations           |
+| [Google Fonts](https://fonts.google.com/)     | -       | Quicksand & Caveat   |
+| [Upstash](https://upstash.com/)               | -       | Rate limiting        |
+| [Lucide React](https://lucide.dev/)           | -       | Icons                |
 
 ## 📁 Project Structure
 
@@ -99,10 +106,34 @@ ghibli-style-converter/
 └── ...config files
 ```
 
+## 🎨 Design Philosophy
+
+This project captures the essence of Studio Ghibli's visual language:
+
+- **Authentic Color Palettes** - Film-accurate colors from each Ghibli movie
+- **Watercolor Textures** - Soft, hand-painted feel with organic gradients
+- **Dappled Lighting** - Signature Ghibli light filtering effects
+- **Organic Shapes** - Rounded corners and flowing animations
+- **Whimsical Details** - Floating particles, gentle glows, and magical touches
+- **Hand-drawn Typography** - Caveat font for that authentic handwritten feel
+
+### Theme Colors
+
+Each theme is carefully crafted from the actual films:
+
+- **Totoro** 🌿 - Forest greens and sunshine yellows
+- **Spirited Away** 🏮 - Mystical purples and golden lantern glows
+- **Howl's Moving Castle** ☁️ - Sky blues and warm peach tones
+- **Princess Mononoke** 🌲 - Deep forest greens and blood red accents
+- **Castle in the Sky** ⚙️ - Bright sky blues and ancient bronze
+
 ## 💡 Usage Tips
 
 - **Landscapes** and scenic shots work exceptionally well
+- **Nature photography** gets the best "Miyazaki" treatment
+- Try the **"Forest Spirit"** preset for lush greenery
 - **Portraits** will be stylized significantly
+- Ensure your image is **well-lit** for best details
 - Try adding **weather conditions** to the prompt (e.g., "sunset", "rainy day")
 - Experiment with **different art styles** in your prompt
 
@@ -113,6 +144,29 @@ The API includes built-in rate limiting:
 - **5 requests per minute** per user
 - Uses Upstash Redis in production
 - Falls back to in-memory limiting for development
+
+## 🔍 SEO Features
+
+This project is fully optimized for search engines:
+
+- ✅ **Comprehensive Metadata** - Title, description, keywords, and more
+- ✅ **Open Graph Tags** - Rich social media previews
+- ✅ **Twitter Cards** - Optimized Twitter sharing
+- ✅ **JSON-LD Structured Data** - WebApplication, FAQPage, and Breadcrumbs
+- ✅ **Dynamic OG Image** - Auto-generated Open Graph images
+- ✅ **Sitemap** - Dynamic sitemap generation
+- ✅ **Robots.txt** - Proper crawler instructions
+- ✅ **PWA Manifest** - Progressive Web App support
+- ✅ **Mobile-First** - Responsive and mobile-optimized
+
+### SEO Setup
+
+1. **Update URLs** in `/app/layout.tsx`, `/app/sitemap.ts`, and `/public/robots.txt` with your actual domain
+2. **Create icons** (favicon, PWA icons) - see [SEO_CHECKLIST.md](./SEO_CHECKLIST.md)
+3. **Test structured data** with [Google Rich Results Test](https://search.google.com/test/rich-results)
+4. **Submit sitemap** to Google Search Console
+
+For detailed SEO documentation, see [SEO.md](./SEO.md) and [SEO_CHECKLIST.md](./SEO_CHECKLIST.md).
 
 ## 📝 License
 

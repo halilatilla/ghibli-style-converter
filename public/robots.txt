@@ -1,0 +1,29 @@
+# GhibliStyle Converter - Robots.txt
+# https://ghiblistyle-converter.vercel.app/robots.txt
+
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Disallow API routes and admin paths
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://ghiblistyle-converter.vercel.app/sitemap.xml
+
+# Crawl-delay for polite crawling (optional)
+Crawl-delay: 1
+
+# Special rules for specific bots
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+
+User-agent: Slurp
+Allow: /
+Disallow: /api/
+

@@ -158,22 +158,63 @@ export default function Home() {
       <Header />
 
       <main className="flex-grow container mx-auto px-4 py-8 max-w-6xl relative z-10">
-        {/* Hero section with handwritten title */}
+        {/* Hero section with handwritten title - authentic Ghibli feel */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-10"
+          transition={{ duration: 0.8, type: "spring" }}
+          className="text-center mb-12 relative"
         >
+          {/* Decorative floating elements */}
+          <motion.div
+            className="absolute -top-8 left-1/4 opacity-30"
+            animate={{ 
+              y: [0, -10, 0],
+              rotate: [0, 5, -5, 0]
+            }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <Sparkles className="w-8 h-8" style={{ color: theme.colors.accent }} />
+          </motion.div>
+          <motion.div
+            className="absolute -top-6 right-1/4 opacity-30"
+            animate={{ 
+              y: [0, -8, 0],
+              rotate: [0, -5, 5, 0]
+            }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          >
+            <Sparkles className="w-6 h-6" style={{ color: theme.colors.secondary }} />
+          </motion.div>
+
           <h2
-            className="font-display text-4xl md:text-5xl mb-2"
-            style={{ color: theme.colors.primary }}
+            className="font-display text-5xl md:text-6xl mb-3 relative inline-block"
+            style={{ 
+              color: theme.colors.primary,
+              textShadow: `0 2px 12px ${theme.colors.primary}40, 0 4px 24px ${theme.colors.accent}20`
+            }}
           >
             Transform Your World
+            {/* Hand-drawn underline */}
+            <motion.div
+              className="absolute -bottom-2 left-0 right-0 h-1 rounded-full opacity-60"
+              style={{ 
+                background: `linear-gradient(90deg, transparent, ${theme.colors.accent}, transparent)`
+              }}
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 1.2, delay: 0.5, ease: "easeOut" }}
+            />
           </h2>
-          <p className="text-slate-400 max-w-md mx-auto">
-            Upload a photo and watch it come to life in the magical style of
-            Studio Ghibli
+          <p className="text-slate-300 text-lg max-w-xl mx-auto leading-relaxed">
+            Upload a photo and watch it come to life in the{" "}
+            <span 
+              className="font-display text-xl font-semibold"
+              style={{ color: theme.colors.accent }}
+            >
+              magical style
+            </span>
+            {" "}of Studio Ghibli
           </p>
         </motion.div>
 
@@ -186,17 +227,21 @@ export default function Home() {
             className="flex flex-col gap-6"
           >
             {/* Upload Card - matches height with Your Masterpiece */}
-            <Card className="ghibli-card flex flex-col">
-              <CardHeader className="border-b border-slate-800/50 pb-4 pt-5 px-6 shrink-0">
+            <Card className="ghibli-card flex flex-col dappled-light">
+              <CardHeader className="border-b-2 border-slate-700/40 pb-5 pt-6 px-7 shrink-0">
                 <CardTitle className="flex items-center text-lg font-bold text-slate-100">
                   <motion.div
-                    className="w-10 h-10 rounded-2xl flex items-center justify-center text-lg mr-3 text-white"
-                    style={{ backgroundColor: theme.colors.primary }}
-                    whileHover={{ rotate: 10 }}
+                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-lg mr-4 text-white shadow-lg"
+                    style={{ 
+                      background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
+                      boxShadow: `0 4px 12px ${theme.colors.primary}40, inset 0 2px 4px rgba(255,255,255,0.2)`
+                    }}
+                    whileHover={{ rotate: 12, scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
-                    <ImageIcon className="w-5 h-5" />
+                    <ImageIcon className="w-6 h-6 drop-shadow-md" />
                   </motion.div>
-                  <span className="font-display text-2xl">
+                  <span className="font-display text-2xl" style={{ color: theme.colors.primary }}>
                     Upload Your Photo
                   </span>
                 </CardTitle>
@@ -213,17 +258,31 @@ export default function Home() {
             </Card>
 
             {/* Prompt Card */}
-            <Card className="ghibli-card flex flex-col">
-              <CardHeader className="border-b border-slate-800/50 pb-4 pt-5 px-6 shrink-0">
+            <Card className="ghibli-card flex flex-col dappled-light">
+              <CardHeader className="border-b-2 border-slate-700/40 pb-5 pt-6 px-7 shrink-0">
                 <CardTitle className="flex items-center text-lg font-bold text-slate-100">
                   <motion.div
-                    className="w-10 h-10 rounded-2xl flex items-center justify-center text-lg mr-3 text-white"
-                    style={{ backgroundColor: theme.colors.accent }}
-                    whileHover={{ rotate: -10 }}
+                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-lg mr-4 text-white shadow-lg relative"
+                    style={{ 
+                      background: `linear-gradient(135deg, ${theme.colors.accent}, ${theme.colors.secondary})`,
+                      boxShadow: `0 4px 12px ${theme.colors.accent}40, inset 0 2px 4px rgba(255,255,255,0.2)`
+                    }}
+                    whileHover={{ rotate: -12, scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    animate={{ 
+                      boxShadow: [
+                        `0 4px 12px ${theme.colors.accent}40, inset 0 2px 4px rgba(255,255,255,0.2)`,
+                        `0 4px 16px ${theme.colors.accent}60, inset 0 2px 4px rgba(255,255,255,0.25)`,
+                        `0 4px 12px ${theme.colors.accent}40, inset 0 2px 4px rgba(255,255,255,0.2)`,
+                      ]
+                    }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                   >
-                    <Wand2 className="w-5 h-5" />
+                    <Wand2 className="w-6 h-6 drop-shadow-md" />
                   </motion.div>
-                  <span className="font-display text-2xl">Style Magic</span>
+                  <span className="font-display text-2xl" style={{ color: theme.colors.accent }}>
+                    Style Magic
+                  </span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-5 p-5">
@@ -329,30 +388,36 @@ export default function Home() {
             className="flex flex-col gap-6"
           >
             {/* Result Card - same aspect ratio as Upload Card */}
-            <Card className="ghibli-card flex flex-col overflow-hidden">
-              <CardHeader className="border-b border-slate-800/50 pb-4 pt-5 px-6 shrink-0">
+            <Card className="ghibli-card flex flex-col overflow-hidden dappled-light">
+              <CardHeader className="border-b-2 border-slate-700/40 pb-5 pt-6 px-7 shrink-0">
                 <CardTitle className="flex items-center text-lg font-bold text-slate-100">
                   <motion.div
-                    className="w-10 h-10 rounded-2xl flex items-center justify-center text-lg mr-3 text-white"
-                    style={{ backgroundColor: theme.colors.secondary }}
+                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-lg mr-4 text-white shadow-lg"
+                    style={{ 
+                      background: `linear-gradient(135deg, ${theme.colors.secondary}, ${theme.colors.primary})`,
+                      boxShadow: `0 4px 12px ${theme.colors.secondary}40, inset 0 2px 4px rgba(255,255,255,0.2)`
+                    }}
                     animate={{
                       boxShadow:
                         status === "success"
                           ? [
-                              `0 0 0px ${theme.colors.accent}`,
-                              `0 0 20px ${theme.colors.accent}`,
-                              `0 0 0px ${theme.colors.accent}`,
+                              `0 4px 12px ${theme.colors.secondary}40, 0 0 0px ${theme.colors.accent}`,
+                              `0 4px 16px ${theme.colors.accent}60, 0 0 24px ${theme.colors.accent}`,
+                              `0 4px 12px ${theme.colors.secondary}40, 0 0 0px ${theme.colors.accent}`,
                             ]
-                          : "none",
+                          : `0 4px 12px ${theme.colors.secondary}40, inset 0 2px 4px rgba(255,255,255,0.2)`,
+                      scale: status === "success" ? [1, 1.05, 1] : 1,
                     }}
                     transition={{
                       duration: 2,
                       repeat: status === "success" ? Infinity : 0,
+                      ease: "easeInOut",
                     }}
+                    whileHover={{ rotate: 10, scale: 1.05 }}
                   >
-                    <Sparkles className="w-5 h-5" />
+                    <Sparkles className="w-6 h-6 drop-shadow-md" />
                   </motion.div>
-                  <span className="font-display text-2xl">
+                  <span className="font-display text-2xl" style={{ color: theme.colors.secondary }}>
                     Your Masterpiece
                   </span>
                 </CardTitle>
@@ -497,43 +562,79 @@ export default function Home() {
               </CardContent>
             </Card>
 
-            {/* Tips Section */}
+            {/* Tips Section - Enhanced Ghibli style */}
             <motion.div
-              whileHover={{ scale: 1.01 }}
-              className="ghibli-card p-5"
+              whileHover={{ scale: 1.02, y: -2 }}
+              className="ghibli-card p-6 dappled-light relative overflow-hidden"
             >
-              <div className="flex items-start gap-4">
+              {/* Decorative corner accent */}
+              <div 
+                className="absolute top-0 right-0 w-32 h-32 opacity-10 blur-2xl rounded-full"
+                style={{ background: `radial-gradient(circle, ${theme.colors.accent}, transparent)` }}
+              />
+              
+              <div className="flex items-start gap-5 relative z-10">
                 <motion.div
-                  className="p-3 rounded-2xl shrink-0 text-white"
-                  style={{ backgroundColor: theme.colors.primary }}
-                  animate={{ rotate: [0, 5, -5, 0] }}
+                  className="p-4 rounded-2xl shrink-0 text-white shadow-lg"
+                  style={{ 
+                    background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
+                    boxShadow: `0 4px 12px ${theme.colors.primary}40, inset 0 2px 4px rgba(255,255,255,0.2)`
+                  }}
+                  animate={{ 
+                    rotate: [0, 6, -6, 0],
+                    y: [0, -3, 0]
+                  }}
                   transition={{
-                    duration: 4,
+                    duration: 5,
                     repeat: Infinity,
                     ease: "easeInOut",
                   }}
                 >
-                  <Leaf className="w-5 h-5" />
+                  <Leaf className="w-6 h-6 drop-shadow-md" />
                 </motion.div>
                 <div>
                   <h3
-                    className="font-display text-xl mb-2"
-                    style={{ color: theme.colors.primary }}
+                    className="font-display text-2xl mb-3"
+                    style={{ 
+                      color: theme.colors.primary,
+                      textShadow: `0 2px 8px ${theme.colors.primary}30`
+                    }}
                   >
                     Pro Tips for Magic
                   </h3>
-                  <ul className="text-slate-400 space-y-1.5 text-sm">
-                    <li className="flex items-center gap-2">
-                      <span style={{ color: theme.colors.accent }}>✦</span>
-                      Landscapes and nature shots get the best "Miyazaki" look.
+                  <ul className="text-slate-300 space-y-2.5 text-sm leading-relaxed">
+                    <li className="flex items-start gap-3">
+                      <motion.span 
+                        className="text-lg mt-0.5 shrink-0"
+                        style={{ color: theme.colors.accent }}
+                        animate={{ scale: [1, 1.2, 1] }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                      >
+                        ✦
+                      </motion.span>
+                      <span>Landscapes and nature shots get the best <span className="font-semibold text-slate-200">"Miyazaki"</span> look.</span>
                     </li>
-                    <li className="flex items-center gap-2">
-                      <span style={{ color: theme.colors.accent }}>✦</span>
-                      Try the <b>"Forest Spirit"</b> preset for lush greenery.
+                    <li className="flex items-start gap-3">
+                      <motion.span 
+                        className="text-lg mt-0.5 shrink-0"
+                        style={{ color: theme.colors.accent }}
+                        animate={{ scale: [1, 1.2, 1] }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
+                      >
+                        ✦
+                      </motion.span>
+                      <span>Try the <span className="font-bold" style={{ color: theme.colors.secondary }}>"Forest Spirit"</span> preset for lush greenery.</span>
                     </li>
-                    <li className="flex items-center gap-2">
-                      <span style={{ color: theme.colors.accent }}>✦</span>
-                      Ensure your image is well-lit for best details.
+                    <li className="flex items-start gap-3">
+                      <motion.span 
+                        className="text-lg mt-0.5 shrink-0"
+                        style={{ color: theme.colors.accent }}
+                        animate={{ scale: [1, 1.2, 1] }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
+                      >
+                        ✦
+                      </motion.span>
+                      <span>Ensure your image is well-lit for best details.</span>
                     </li>
                   </ul>
                 </div>
@@ -543,17 +644,56 @@ export default function Home() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="relative z-10 py-6 text-center">
-        <p className="text-sm text-slate-400">
-          Inspired by the magic of{" "}
-          <span
-            className="font-display text-lg"
-            style={{ color: theme.colors.primary }}
+      {/* Footer - Enhanced with Ghibli charm */}
+      <footer className="relative z-10 py-8 text-center">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 1 }}
+        >
+          <p className="text-sm text-slate-400 leading-relaxed">
+            Inspired by the magic of{" "}
+            <motion.span
+              className="font-display text-xl inline-block"
+              style={{ 
+                color: theme.colors.primary,
+                textShadow: `0 2px 8px ${theme.colors.primary}40`
+              }}
+              whileHover={{ 
+                scale: 1.1,
+                y: -2,
+                textShadow: `0 4px 12px ${theme.colors.accent}60`
+              }}
+            >
+              Studio Ghibli
+            </motion.span>
+          </p>
+          <motion.div 
+            className="flex justify-center gap-2 mt-3"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2, duration: 0.8 }}
           >
-            Studio Ghibli
-          </span>
-        </p>
+            {[...Array(5)].map((_, i) => (
+              <motion.div
+                key={i}
+                animate={{
+                  y: [0, -5, 0],
+                  opacity: [0.3, 0.6, 0.3],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.2,
+                }}
+                style={{ color: theme.colors.accent }}
+              >
+                ✦
+              </motion.div>
+            ))}
+          </motion.div>
+        </motion.div>
       </footer>
     </div>
   );

@@ -13,19 +13,21 @@ function seededRandom(seed: number) {
 // Floating particles based on theme
 function DustParticles() {
   const [mounted, setMounted] = useState(false)
+  const { theme } = useGhibliTheme()
   
   useEffect(() => {
     setMounted(true)
   }, [])
 
   const particles = useMemo(() => 
-    Array.from({ length: 30 }, (_, i) => ({
+    Array.from({ length: 40 }, (_, i) => ({
       id: i,
       x: seededRandom(i * 1) * 100,
       y: seededRandom(i * 2) * 100,
-      size: seededRandom(i * 3) * 4 + 2,
-      duration: seededRandom(i * 4) * 20 + 15,
-      delay: seededRandom(i * 5) * 10,
+      size: seededRandom(i * 3) * 3 + 1.5,
+      duration: seededRandom(i * 4) * 25 + 18,
+      delay: seededRandom(i * 5) * 12,
+      blur: seededRandom(i * 6) * 2 + 1,
     })), []
   )
 
@@ -36,17 +38,20 @@ function DustParticles() {
       {particles.map((p) => (
         <motion.div
           key={p.id}
-          className="absolute rounded-full bg-amber-300/40 dark:bg-amber-200/20"
+          className="absolute rounded-full"
           style={{
             left: `${p.x}%`,
             top: `${p.y}%`,
             width: p.size,
             height: p.size,
+            background: `radial-gradient(circle, ${theme.colors.accent}80 0%, ${theme.colors.accent}30 70%, transparent 100%)`,
+            filter: `blur(${p.blur}px)`,
           }}
           animate={{
-            y: [0, -30, 0],
-            x: [0, 10, -10, 0],
-            opacity: [0.2, 0.6, 0.2],
+            y: [0, -40, -20, 0],
+            x: [0, 15, -10, 5, 0],
+            opacity: [0.1, 0.5, 0.3, 0.1],
+            scale: [1, 1.2, 0.9, 1],
           }}
           transition={{
             duration: p.duration,
@@ -62,19 +67,20 @@ function DustParticles() {
 
 function SpiritParticles() {
   const [mounted, setMounted] = useState(false)
+  const { theme } = useGhibliTheme()
   
   useEffect(() => {
     setMounted(true)
   }, [])
 
   const spirits = useMemo(() => 
-    Array.from({ length: 15 }, (_, i) => ({
+    Array.from({ length: 20 }, (_, i) => ({
       id: i,
       x: seededRandom(i * 10) * 100,
       y: seededRandom(i * 20) * 100,
-      size: seededRandom(i * 30) * 8 + 4,
-      duration: seededRandom(i * 40) * 15 + 10,
-      delay: seededRandom(i * 50) * 8,
+      size: seededRandom(i * 30) * 10 + 6,
+      duration: seededRandom(i * 40) * 18 + 12,
+      delay: seededRandom(i * 50) * 10,
     })), []
   )
 
@@ -91,10 +97,10 @@ function SpiritParticles() {
             top: `${s.y}%`,
           }}
           animate={{
-            y: [0, -50, 0],
-            x: [0, 20, -20, 0],
-            opacity: [0, 0.8, 0],
-            scale: [0.5, 1, 0.5],
+            y: [0, -60, -30, 0],
+            x: [0, 25, -15, 10, 0],
+            opacity: [0, 0.7, 0.5, 0],
+            scale: [0.3, 1.1, 0.8, 0.3],
           }}
           transition={{
             duration: s.duration,
@@ -103,10 +109,15 @@ function SpiritParticles() {
             ease: "easeInOut",
           }}
         >
-          {/* Spirit orb */}
+          {/* Spirit orb with authentic Ghibli glow */}
           <div 
-            className="rounded-full bg-gradient-to-br from-purple-300/60 to-amber-200/60 dark:from-purple-400/40 dark:to-amber-300/40 blur-[1px]"
-            style={{ width: s.size, height: s.size }}
+            className="rounded-full blur-[2px]"
+            style={{ 
+              width: s.size, 
+              height: s.size,
+              background: `radial-gradient(circle, ${theme.colors.accent} 0%, ${theme.colors.primary}80 50%, transparent 100%)`,
+              boxShadow: `0 0 ${s.size}px ${theme.colors.accent}60`,
+            }}
           />
         </motion.div>
       ))}
@@ -286,23 +297,35 @@ function BottomClouds() {
   )
 }
 
-// Decorative grass/foliage at bottom
+// Decorative grass/foliage at bottom - organic Ghibli style
 function BottomGrass() {
   return (
-    <div className="absolute bottom-0 left-0 right-0 pointer-events-none">
+    <div className="absolute bottom-0 left-0 right-0 pointer-events-none opacity-80">
       <svg 
-        viewBox="0 0 1440 100" 
+        viewBox="0 0 1440 120" 
         className="w-full h-auto"
         preserveAspectRatio="none"
       >
         <defs>
           <linearGradient id="grassGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" className="[stop-color:var(--ghibli-primary)] [stop-opacity:0.6]" />
-            <stop offset="100%" className="[stop-color:var(--ghibli-secondary)] [stop-opacity:0.8]" />
+            <stop offset="0%" className="[stop-color:var(--ghibli-primary)] [stop-opacity:0.5]" />
+            <stop offset="50%" className="[stop-color:var(--ghibli-secondary)] [stop-opacity:0.7]" />
+            <stop offset="100%" className="[stop-color:var(--ghibli-primary)] [stop-opacity:0.9]" />
+          </linearGradient>
+          <linearGradient id="grassGradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" className="[stop-color:var(--ghibli-secondary)] [stop-opacity:0.3]" />
+            <stop offset="100%" className="[stop-color:var(--ghibli-primary)] [stop-opacity:0.6]" />
           </linearGradient>
         </defs>
+        {/* Back layer - softer */}
         <path 
-          d="M0,100 L0,60 Q20,40 40,55 Q60,70 80,50 Q100,30 120,45 Q140,60 160,40 Q180,20 200,35 Q220,50 240,30 Q260,10 280,25 Q300,40 320,20 Q340,0 360,15 Q380,30 400,10 Q420,30 440,15 Q460,0 480,20 Q500,40 520,25 Q540,10 560,30 Q580,50 600,35 Q620,20 640,40 Q660,60 680,45 Q700,30 720,50 Q740,70 760,55 Q780,40 800,60 Q820,80 840,65 Q860,50 880,70 Q900,90 920,75 Q940,60 960,80 Q980,100 1000,85 Q1020,70 1040,90 Q1060,100 1080,85 Q1100,70 1120,85 Q1140,100 1160,90 Q1180,80 1200,95 Q1220,100 1240,90 Q1260,80 1280,95 Q1300,100 1320,90 Q1340,80 1360,95 Q1380,100 1400,90 Q1420,80 1440,95 L1440,100 Z" 
+          d="M0,120 L0,70 Q30,50 60,65 Q90,80 120,60 Q150,40 180,55 Q210,70 240,50 Q270,30 300,45 Q330,60 360,40 Q390,20 420,35 Q450,50 480,30 Q510,10 540,25 Q570,40 600,20 Q630,35 660,25 Q690,15 720,30 Q750,45 780,35 Q810,25 840,40 Q870,55 900,45 Q930,35 960,50 Q990,65 1020,55 Q1050,45 1080,60 Q1110,75 1140,65 Q1170,55 1200,70 Q1230,85 1260,75 Q1290,65 1320,80 Q1350,95 1380,85 Q1410,75 1440,90 L1440,120 Z" 
+          fill="url(#grassGradient2)"
+          opacity="0.6"
+        />
+        {/* Front layer - more defined */}
+        <path 
+          d="M0,120 L0,75 Q25,55 50,68 Q75,81 100,63 Q125,45 150,58 Q175,71 200,53 Q225,35 250,48 Q275,61 300,43 Q325,25 350,38 Q375,51 400,33 Q425,45 450,38 Q475,31 500,43 Q525,55 550,48 Q575,41 600,53 Q625,65 650,58 Q675,51 700,63 Q725,75 750,68 Q775,61 800,73 Q825,85 850,78 Q875,71 900,83 Q925,95 950,88 Q975,81 1000,93 Q1025,100 1050,93 Q1075,86 1100,98 Q1125,100 1150,93 Q1175,86 1200,98 Q1225,100 1250,93 Q1275,86 1300,98 Q1325,100 1350,93 Q1375,86 1400,98 Q1425,100 1440,95 L1440,120 Z" 
           fill="url(#grassGradient)"
         />
       </svg>
@@ -401,7 +424,7 @@ export default function GhibliBackground() {
 
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
-      {/* Dynamic gradient background */}
+      {/* Dynamic gradient background with watercolor effect */}
       <div 
         className="absolute inset-0 transition-all duration-1000"
         style={{ 
@@ -412,6 +435,31 @@ export default function GhibliBackground() {
         className="absolute inset-0 transition-all duration-1000 dark:opacity-100 opacity-0"
         style={{ 
           background: "var(--ghibli-gradient-dark)",
+        }}
+      />
+      
+      {/* Watercolor wash overlay - authentic Ghibli background feel */}
+      <div 
+        className="absolute inset-0 opacity-40"
+        style={{
+          background: `
+            radial-gradient(ellipse 800px 600px at 20% 30%, ${theme.colors.primary}12 0%, transparent 50%),
+            radial-gradient(ellipse 600px 800px at 80% 70%, ${theme.colors.secondary}10 0%, transparent 50%),
+            radial-gradient(ellipse 700px 500px at 50% 90%, ${theme.colors.accent}08 0%, transparent 50%)
+          `,
+          mixBlendMode: 'multiply',
+        }}
+      />
+      
+      {/* Soft light accents - Ghibli lighting style */}
+      <div 
+        className="absolute inset-0 opacity-30"
+        style={{
+          background: `
+            radial-gradient(circle 400px at 70% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 60%),
+            radial-gradient(circle 300px at 30% 60%, rgba(255, 255, 255, 0.05) 0%, transparent 60%)
+          `,
+          mixBlendMode: 'soft-light',
         }}
       />
       
