@@ -75,7 +75,7 @@ export default function CustomCursor() {
             boxShadow: `0 0 10px ${theme.colors.accent}`,
           }}
         />
-        
+
         {/* Soot Sprite Legs (only visible when hovering/excited) */}
         {isHovering && (
           <motion.div
@@ -83,18 +83,18 @@ export default function CustomCursor() {
             animate={{ opacity: 1, scale: 1 }}
             className="absolute inset-0"
           >
-             {[...Array(6)].map((_, i) => (
+            {[...Array(6)].map((_, i) => (
               <motion.div
                 key={i}
                 className="absolute w-1 h-3 bg-slate-800 rounded-full origin-top"
                 style={{
-                    top: "50%",
-                    left: "50%",
-                    rotate: i * 60,
-                    translateY: "6px"
+                  top: "50%",
+                  left: "50%",
+                  rotate: i * 60,
+                  translateY: "6px",
                 }}
               />
-             ))}
+            ))}
           </motion.div>
         )}
       </motion.div>
@@ -107,7 +107,7 @@ export default function CustomCursor() {
             className="absolute rounded-full bg-white/50"
             style={{ width: 4 + i * 2, height: 4 + i * 2 }}
             animate={{
-              x: [0, (i % 2 === 0 ? 10 : -10)],
+              x: [0, i % 2 === 0 ? 10 : -10],
               y: [0, 10],
               opacity: [0.5, 0],
             }}
@@ -123,4 +123,3 @@ export default function CustomCursor() {
     </motion.div>
   );
 }
-

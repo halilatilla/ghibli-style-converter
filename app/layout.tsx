@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Caveat, Quicksand } from "next/font/google";
 import { Toaster } from "sonner";
-import { GhibliThemeProvider } from "@/components/GhibliThemeContext";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import GhibliFilters from "@/components/GhibliFilters";
 import CustomCursor from "@/components/CustomCursor";
+import GhibliFilters from "@/components/GhibliFilters";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import { GhibliThemeProvider } from "@/features/theme/hooks/useGhibliTheme";
 import { JsonLd } from "./jsonld";
 import "./globals.css";
 
@@ -21,7 +21,7 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ghiblistyle-converter.vercel.app"), // Update with your actual domain
+  metadataBase: new URL("https://ghiblistyle-converter.vercel.app"),
   title: {
     default: "GhibliStyle Converter - Become a Miyazaki Character",
     template: "%s | GhibliStyle Converter",
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     siteName: "GhibliStyle Converter",
     images: [
       {
-        url: "/og-image.png", // We'll create this
+        url: "/og-image.png",
         width: 1200,
         height: 630,
         alt: "GhibliStyle Converter - Turn your photo into a Miyazaki character",
@@ -77,7 +77,7 @@ export const metadata: Metadata = {
     description:
       "Transform yourself into a Studio Ghibli character using AI. Experience becoming a Miyazaki anime character from your favorite films.",
     images: ["/og-image.png"],
-    creator: "@ghiblistyle", // Update with actual Twitter handle if available
+    creator: "@ghiblistyle",
   },
   robots: {
     index: true,

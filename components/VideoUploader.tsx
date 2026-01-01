@@ -3,10 +3,12 @@
 import { motion } from "framer-motion";
 import { Download, Loader2, X } from "lucide-react";
 import { useCallback, useState } from "react";
+import { toast } from "sonner";
+import { MAX_UPLOAD_MB, validateClientFile } from "@/lib/imageValidation";
 import { cn } from "@/lib/utils";
+import { KodamaSilhouette, SootSprite, TotoroSilhouette } from "./GhibliBackground";
 import { useGhibliTheme } from "./GhibliThemeContext";
 import { TotoroSVG } from "./TotoroSVG";
-import { KodamaSilhouette, SootSprite, TotoroSilhouette } from "./GhibliBackground";
 
 interface VideoUploaderProps {
   onImageSelected: (base64: string, mimeType: string) => void;
@@ -29,7 +31,11 @@ export default function VideoUploader({
 
   const processFile = useCallback(
     (file: File) => {
-      if (!file.type.startsWith("image/")) return;
+      const validation = validateClientFile(file);
+      if (!validation.ok) {
+        toast.error("Upload blocked", { description: validation.error });
+        return;
+      }
       const reader = new FileReader();
       reader.onloadend = () => {
         const result = reader.result as string;
@@ -142,6 +148,7 @@ export default function VideoUploader({
           <span className="px-2 py-1 rounded-full bg-slate-800/80">JPG</span>
           <span className="px-2 py-1 rounded-full bg-slate-800/80">PNG</span>
           <span className="px-2 py-1 rounded-full bg-slate-800/80">WEBP</span>
+          <span className="px-2 py-1 rounded-full bg-slate-800/80">Max {MAX_UPLOAD_MB}MB</span>
         </div>
       </div>
 
@@ -244,6 +251,13 @@ export function VideoPreview({
       >
         <video controls autoPlay loop className="w-full h-full object-contain rounded-xl">
           <source src={generatedVideo} type="video/mp4" />
+          <track
+            kind="captions"
+            label="English captions (placeholder)"
+            srcLang="en"
+            src="data:text/vtt,WEBVTT%0A%0A00:00:00.000%20--%3E%2000:00:02.000%0ACaptions%20will%20be%20available%20soon."
+            default
+          />
         </video>
 
         {/* Download button overlay */}
@@ -257,6 +271,7 @@ export function VideoPreview({
         >
           <button
             onClick={onDownload}
+            type="button"
             className="rounded-full h-10 w-10 group-hover:w-auto group-hover:px-5 bg-slate-800/90 backdrop-blur text-white hover:bg-slate-700 shadow-xl border border-slate-700/50 font-semibold text-sm transition-all duration-300 flex items-center justify-center overflow-hidden cursor-pointer"
           >
             <Download className="w-4 h-4 shrink-0" />
@@ -311,10 +326,7 @@ export function VideoPreview({
         <TotoroSilhouette className="w-20 h-24 mx-auto mb-3 text-slate-600" />
       </motion.div>
 
-      <p
-        className="font-display text-xl mb-1"
-        style={{ color: theme.colors.primary }}
-      >
+      <p className="font-display text-xl mb-1" style={{ color: theme.colors.primary }}>
         Waiting for Animation
       </p>
       <p className="text-slate-500 text-xs">
@@ -344,4 +356,3 @@ export function VideoPreview({
     </div>
   );
 }
-

@@ -2,11 +2,14 @@ import { GoogleGenAI } from "@google/genai";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { type NextRequest, NextResponse } from "next/server";
+import { getEnv } from "@/lib/env";
+import { ALLOWED_IMAGE_TYPES, estimateBase64Bytes, validatePrompt } from "@/lib/imageValidation";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+const env = getEnv();
+const ai = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
 
 // Redis client for daily usage tracking
-const redis = process.env.UPSTASH_REDIS_REST_URL ? Redis.fromEnv() : null;
+const redis = env.UPSTASH_REDIS_REST_URL ? Redis.fromEnv() : null;
 
 // More restrictive limits for video (expensive operation)
 const VIDEO_DAILY_LIMIT = 10; // vs 30 for images
@@ -77,6 +80,69 @@ async function checkDailyLimit(): Promise<boolean> {
   return count <= VIDEO_DAILY_LIMIT;
 }
 
+function validatePayload(body: unknown) {
+  if (!body || typeof body !== "object") {
+    return {
+      ok: false,
+      status: 400,
+      error: "Invalid request body.",
+      code: "INVALID_INPUT",
+    } as const;
+  }
+
+  const { image, mimeType, prompt } = body as {
+    image?: string;
+    mimeType?: string;
+    prompt?: string;
+  };
+
+  if (!image || typeof image !== "string") {
+    return {
+      ok: false,
+      status: 400,
+      error: "Image data is required.",
+      code: "INVALID_INPUT",
+    } as const;
+  }
+
+  if (
+    !mimeType ||
+    !ALLOWED_IMAGE_TYPES.includes(mimeType as (typeof ALLOWED_IMAGE_TYPES)[number])
+  ) {
+    return {
+      ok: false,
+      status: 415,
+      error: "Unsupported image type. Use JPG, PNG, or WEBP.",
+      code: "UNSUPPORTED_MEDIA_TYPE",
+    } as const;
+  }
+
+  const size = estimateBase64Bytes(image);
+  if (size > env.MAX_UPLOAD_BYTES) {
+    return {
+      ok: false,
+      status: 413,
+      error: `Image too large. Max size is ${Math.round(env.MAX_UPLOAD_BYTES / (1024 * 1024))}MB.`,
+      code: "PAYLOAD_TOO_LARGE",
+    } as const;
+  }
+
+  const promptResult = validatePrompt(prompt ?? "");
+  if (!promptResult.ok) {
+    return {
+      ok: false,
+      status: 400,
+      error: promptResult.error,
+      code: "INVALID_INPUT",
+    } as const;
+  }
+
+  return {
+    ok: true,
+    value: { image, mimeType, prompt: promptResult.value },
+  } as const;
+}
+
 export async function POST(req: NextRequest) {
   try {
     // Get client IP for rate limiting
@@ -84,6 +150,16 @@ export async function POST(req: NextRequest) {
       req.headers.get("x-forwarded-for")?.split(",")[0] ??
       req.headers.get("x-real-ip") ??
       "anonymous";
+
+    const body = await req.json().catch(() => null);
+    const validation = validatePayload(body);
+    if (!validation.ok) {
+      return NextResponse.json(
+        { error: validation.error, code: validation.code },
+        { status: validation.status }
+      );
+    }
+    const { image, mimeType, prompt } = validation.value;
 
     // Check rate limit
     let rateLimitResult: { success: boolean; remaining: number };
@@ -105,6 +181,7 @@ export async function POST(req: NextRequest) {
         {
           error:
             "Too many video requests. You can generate 2 videos per hour. Please try again later.",
+          code: "RATE_LIMITED",
         },
         {
           status: 429,
@@ -123,12 +200,11 @@ export async function POST(req: NextRequest) {
         {
           error:
             "Daily video limit reached. This demo has a daily cap to manage costs. Please try again tomorrow!",
+          code: "DAILY_LIMIT",
         },
         { status: 429 }
       );
     }
-
-    const { image, mimeType, prompt } = await req.json();
 
     console.log("Starting video generation with Veo 3.1...");
 
@@ -137,7 +213,7 @@ export async function POST(req: NextRequest) {
       model: "veo-3.1-fast-generate-preview",
       prompt: `${prompt}. Create a cinematic Studio Ghibli style video. Hand-drawn animation aesthetic, soft watercolor colors, magical atmosphere, smooth natural movement, high quality.`,
       image: {
-        imageBytes: image,
+        imageBytes: Buffer.from(image, "base64"),
         mimeType: mimeType,
       },
       config: {
@@ -200,7 +276,7 @@ export async function POST(req: NextRequest) {
     console.log("Video generated successfully, downloading...");
 
     // Download video from URI
-    const response = await fetch(`${videoUri}&key=${process.env.GEMINI_API_KEY}`);
+    const response = await fetch(`${videoUri}&key=${env.GEMINI_API_KEY}`);
     if (!response.ok) {
       console.error("Failed to download video:", response.statusText);
       return NextResponse.json(
@@ -237,6 +313,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           error: "API quota exceeded. Please try again tomorrow.",
+          code: "QUOTA_EXCEEDED",
         },
         { status: 429 }
       );
@@ -246,6 +323,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           error: "Video generation timed out. Please try with a different photo.",
+          code: "TIMEOUT",
         },
         { status: 504 }
       );
@@ -254,6 +332,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         error: e.message || "Failed to generate video. Please try again.",
+        code: "INTERNAL_ERROR",
       },
       { status: 500 }
     );

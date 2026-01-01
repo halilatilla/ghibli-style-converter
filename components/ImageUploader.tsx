@@ -3,6 +3,8 @@
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
 import { useCallback, useState } from "react";
+import { toast } from "sonner";
+import { MAX_UPLOAD_MB, validateClientFile } from "@/lib/imageValidation";
 import { cn } from "@/lib/utils";
 import { useGhibliTheme } from "./GhibliThemeContext";
 import { TotoroSVG } from "./TotoroSVG";
@@ -28,7 +30,11 @@ export default function ImageUploader({
 
   const processFile = useCallback(
     (file: File) => {
-      if (!file.type.startsWith("image/")) return;
+      const validation = validateClientFile(file);
+      if (!validation.ok) {
+        toast.error("Upload blocked", { description: validation.error });
+        return;
+      }
       const reader = new FileReader();
       reader.onloadend = () => {
         const result = reader.result as string;
@@ -141,6 +147,7 @@ export default function ImageUploader({
           <span className="px-2 py-1 rounded-full bg-slate-800/80">JPG</span>
           <span className="px-2 py-1 rounded-full bg-slate-800/80">PNG</span>
           <span className="px-2 py-1 rounded-full bg-slate-800/80">WEBP</span>
+          <span className="px-2 py-1 rounded-full bg-slate-800/80">Max {MAX_UPLOAD_MB}MB</span>
         </div>
       </div>
 

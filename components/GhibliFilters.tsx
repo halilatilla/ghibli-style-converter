@@ -65,12 +65,7 @@ export default function GhibliFilters() {
 
         {/* Ink Spill Filter - for hover effects */}
         <filter id="ink-spill">
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.5"
-            numOctaves="3"
-            result="noise"
-          />
+          <feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="3" result="noise" />
           <feDisplacementMap
             in="SourceGraphic"
             in2="noise"
@@ -91,4 +86,3 @@ export default function GhibliFilters() {
     </svg>
   );
 }
-
