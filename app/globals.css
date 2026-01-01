@@ -12,17 +12,18 @@
 
 /* Default Ghibli theme variables (Totoro) */
 :root {
-  --ghibli-primary: #5b8c5a;
-  --ghibli-secondary: #b8d8ba;
-  --ghibli-accent: #ffd966;
-  --ghibli-background: #f8fbf3;
-  --ghibli-background-dark: #1c2e1c;
+  --ghibli-primary: #6b8f71;
+  --ghibli-secondary: #d6e6d3;
+  --ghibli-accent: #f8c987;
+  --ghibli-ink: #1f1a14;
+  --ghibli-background: #f5f1e6;
+  --ghibli-background-dark: #14231c;
   --ghibli-gradient: linear-gradient(
     135deg,
-    #e8f5e9 0%,
-    #f1f8e9 35%,
-    #fff9e6 75%,
-    #fffde7 100%
+    #f7d7a1 0%,
+    #f1e7c8 35%,
+    #e0ecd7 65%,
+    #d0e0cf 100%
   );
   --ghibli-gradient-dark: linear-gradient(
     135deg,
@@ -33,17 +34,18 @@
   );
 }
 
-/* Base styles - dark mode with authentic Ghibli feel */
+/* Base styles - lighter Miyazaki palette */
 body {
-  background: var(--ghibli-gradient-dark);
+  background: var(--ghibli-gradient);
   min-height: 100vh;
   position: relative;
+  color: var(--ghibli-ink);
   font-smooth: always;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Hand-drawn paper texture overlay - Ghibli watercolor style */
+/* Hand-drawn paper texture overlay - Enhanced Miyazaki watercolor style */
 .bg-noise {
   position: fixed;
   top: 0;
@@ -52,14 +54,44 @@ body {
   height: 100vh;
   pointer-events: none;
   z-index: 50;
-  opacity: 0.08;
-  mix-blend-mode: multiply;
+  opacity: 0.12;
+  mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='5' seed='15' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.8'/%3E%3C/svg%3E");
+  /* Subtle animation to simulate paper texture variations */
+  animation: paper-texture 20s ease-in-out infinite;
 }
-/* Wobbly hand-drawn circles and borders */
+
+@keyframes paper-texture {
+  0%,
+  100% {
+    opacity: 0.12;
+  }
+  50% {
+    opacity: 0.15;
+  }
+}
+/* Wobbly hand-drawn circles and borders - MORE organic, less perfect */
 .wobbly-box {
   border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
   border-style: solid;
+  /* Subtle hand-drawn wobble animation */
+  animation: subtle-wobble 12s ease-in-out infinite;
+}
+
+@keyframes subtle-wobble {
+  0%,
+  100% {
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  }
+  25% {
+    border-radius: 245px 25px 215px 25px / 25px 215px 25px 245px;
+  }
+  50% {
+    border-radius: 265px 10px 235px 10px / 10px 235px 10px 265px;
+  }
+  75% {
+    border-radius: 250px 20px 220px 20px / 20px 220px 20px 250px;
+  }
 }
 
 .wobbly-circle {
@@ -87,7 +119,7 @@ body {
   mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.05' numOctaves='3' stitchTiles='stitch'/%3E%3CfeDisplacementMap in='SourceGraphic' scale='10'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
 }
 
-/* Breathing animation */
+/* Breathing animation - More natural, organic rhythm */
 .breathe {
   animation: breathe 4s ease-in-out infinite;
 }
@@ -97,8 +129,29 @@ body {
   100% {
     transform: scale(1);
   }
-  50% {
-    transform: scale(1.02);
+  40% {
+    transform: scale(1.015);
+  }
+  60% {
+    transform: scale(1.025);
+  }
+}
+
+/* Deeper breathing for living elements */
+.breathe-deep {
+  animation: breathe-deep 5s ease-in-out infinite;
+}
+
+@keyframes breathe-deep {
+  0%,
+  100% {
+    transform: scale(1) translateY(0);
+  }
+  45% {
+    transform: scale(1.02) translateY(-2px);
+  }
+  65% {
+    transform: scale(1.035) translateY(-3px);
   }
 }
 
@@ -125,15 +178,26 @@ body::before {
   z-index: 1;
 }
 
-/* Ghibli-style card - hand-drawn organic feel */
+/* Ghibli-style card - hand-drawn organic feel with breathing */
 .ghibli-card {
-  @apply rounded-[2rem] backdrop-blur-lg shadow-2xl overflow-hidden;
+  @apply rounded-4xl backdrop-blur-lg shadow-2xl overflow-hidden;
   background: rgba(15, 23, 42, 0.75);
   border: 2px solid rgba(255, 255, 255, 0.08);
   position: relative;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3),
     0 10px 20px -5px rgba(0, 0, 0, 0.25), 0 20px 35px -8px rgba(0, 0, 0, 0.2),
     inset 0 2px 4px rgba(255, 255, 255, 0.05),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  /* Add pencil sketch filter to border */
+  /* filter: url(#pencil-sketch); NOTE: Can cause layout shifts if not careful, use specific class instead */
+}
+
+.ghibli-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px -1px rgba(0, 0, 0, 0.35),
+    0 15px 30px -5px rgba(0, 0, 0, 0.3), 0 25px 45px -8px rgba(0, 0, 0, 0.25),
+    inset 0 2px 4px rgba(255, 255, 255, 0.08),
     inset 0 -2px 4px rgba(0, 0, 0, 0.05);
 }
 
@@ -580,6 +644,219 @@ textarea:focus {
 [data-sonner-toast] [data-button]:hover {
   background: rgba(148, 163, 184, 0.3);
   border-color: rgba(148, 163, 184, 0.5);
+}
+
+/* ============================================
+   Miyazaki Handcraft Effects
+   ============================================ */
+
+/* Hand-drawn sketch line effect */
+.sketch-border {
+  position: relative;
+  /* Use the filter from GhibliFilters.tsx */
+  filter: url(#pencil-sketch);
+}
+
+.sketch-border::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border: 2px solid currentColor;
+  border-radius: inherit;
+  opacity: 0.3;
+  animation: sketch-tremble 3s ease-in-out infinite;
+}
+
+@keyframes sketch-tremble {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(0.5px, -0.5px);
+  }
+  50% {
+    transform: translate(-0.5px, 0.5px);
+  }
+  75% {
+    transform: translate(0.5px, 0.5px);
+  }
+}
+
+/* Watercolor bleed effect */
+.watercolor-bleed {
+  position: relative;
+}
+
+.watercolor-bleed::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  background: radial-gradient(
+    ellipse at center,
+    var(--ghibli-primary) 0%,
+    rgba(var(--ghibli-primary-rgb, 91, 140, 90), 0.3) 30%,
+    rgba(var(--ghibli-secondary-rgb, 184, 216, 186), 0.2) 60%,
+    transparent 100%
+  );
+  filter: blur(12px);
+  opacity: 0.4;
+  z-index: -1;
+  border-radius: inherit;
+  animation: watercolor-pulse 6s ease-in-out infinite;
+}
+
+@keyframes watercolor-pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+/* Organic hover lift - feels handcrafted */
+.organic-lift {
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.organic-lift:hover {
+  transform: translateY(-4px) rotate(-0.5deg);
+}
+
+.organic-lift:active {
+  transform: translateY(-1px) rotate(0deg);
+  transition-duration: 0.1s;
+}
+
+/* Gentle shadow depth */
+.miyazaki-shadow {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.12),
+    0 16px 48px rgba(0, 0, 0, 0.08);
+}
+
+.miyazaki-shadow-hover:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), 0 12px 32px rgba(0, 0, 0, 0.16),
+    0 24px 64px rgba(0, 0, 0, 0.12);
+}
+
+/* Ma (間) - Breathing space utility classes */
+.ma-space {
+  padding: 2.5rem;
+}
+
+.ma-vertical {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+
+.ma-horizontal {
+  margin-left: 3rem;
+  margin-right: 3rem;
+}
+
+/* Organic entrance animations */
+@keyframes emerge-from-mist {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+    filter: blur(8px);
+  }
+  60% {
+    opacity: 0.8;
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
+}
+
+.emerge-from-mist {
+  animation: emerge-from-mist 1.2s ease-out forwards;
+}
+
+/* Natural momentum spring */
+@keyframes spring-bounce {
+  0% {
+    transform: scale(0.9);
+  }
+  40% {
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.98);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.spring-bounce {
+  animation: spring-bounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Hand-pressed button effect */
+.hand-pressed {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: all 0.15s ease;
+}
+
+.hand-pressed:active {
+  transform: scale(0.95) translateY(2px);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Pencil sketch texture overlay */
+.pencil-sketch {
+  position: relative;
+}
+
+.pencil-sketch::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.03) 2px,
+      rgba(0, 0, 0, 0.03) 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.03) 2px,
+      rgba(0, 0, 0, 0.03) 4px
+    );
+  opacity: 0.4;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Wind-affected gentle sway */
+@keyframes gentle-sway {
+  0%,
+  100% {
+    transform: rotate(0deg) translateX(0);
+  }
+  25% {
+    transform: rotate(0.5deg) translateX(2px);
+  }
+  75% {
+    transform: rotate(-0.5deg) translateX(-2px);
+  }
+}
+
+.wind-sway {
+  animation: gentle-sway 8s ease-in-out infinite;
+  transform-origin: bottom center;
 }
 
 /* ============================================

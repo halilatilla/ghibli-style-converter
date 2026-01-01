@@ -465,6 +465,7 @@ export default function GhibliBackground() {
             radial-gradient(ellipse 700px 500px at 50% 90%, ${theme.colors.accent}08 0%, transparent 50%)
           `,
           mixBlendMode: "multiply",
+          filter: "url(#paper-texture)", 
         }}
       />
 

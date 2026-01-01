@@ -396,7 +396,7 @@ export default function Home() {
             className="flex flex-col gap-6"
           >
             {/* Upload Card - matches height with Your Masterpiece */}
-            <Card className="ghibli-card flex flex-col dappled-light wobbly-box border-none">
+            <Card className="ghibli-card flex flex-col dappled-light wobbly-box border-none sketch-border">
               <CardHeader className="border-b-2 border-slate-700/40 pb-5 pt-6 px-7 shrink-0 relative">
                 <div className="absolute inset-0 watercolor-edge opacity-20 pointer-events-none" />
                 <CardTitle className="flex items-center text-lg font-bold text-slate-100">
@@ -438,7 +438,7 @@ export default function Home() {
             </Card>
 
             {/* Prompt Card */}
-            <Card className="ghibli-card flex flex-col dappled-light wobbly-box border-none">
+            <Card className="ghibli-card flex flex-col dappled-light wobbly-box border-none sketch-border">
               <CardHeader className="border-b-2 border-slate-700/40 pb-5 pt-6 px-7 shrink-0 relative">
                 <div className="absolute inset-0 watercolor-edge opacity-20 pointer-events-none" />
                 <CardTitle className="flex items-center text-lg font-bold text-slate-100">
@@ -557,7 +557,7 @@ export default function Home() {
             className="flex flex-col gap-6"
           >
             {/* Result Card - same aspect ratio as Upload Card */}
-            <Card className="ghibli-card flex flex-col overflow-hidden dappled-light wobbly-box border-none">
+            <Card className="ghibli-card flex flex-col overflow-hidden dappled-light wobbly-box border-none sketch-border">
               <CardHeader className="border-b-2 border-slate-700/40 pb-5 pt-6 px-7 shrink-0 relative">
                 <div className="absolute inset-0 watercolor-edge opacity-20 pointer-events-none" />
                 <CardTitle className="flex items-center text-lg font-bold text-slate-100">

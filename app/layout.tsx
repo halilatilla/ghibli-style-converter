@@ -3,6 +3,8 @@ import { Caveat, Quicksand } from "next/font/google";
 import { Toaster } from "sonner";
 import { GhibliThemeProvider } from "@/components/GhibliThemeContext";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import GhibliFilters from "@/components/GhibliFilters";
+import CustomCursor from "@/components/CustomCursor";
 import { JsonLd } from "./jsonld";
 import "./globals.css";
 
@@ -112,6 +114,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${quicksand.variable} ${caveat.variable} font-sans antialiased`}>
         <ThemeProvider>
           <GhibliThemeProvider>
+            <GhibliFilters />
+            <CustomCursor />
             {children}
             <Toaster
               position="top-center"
