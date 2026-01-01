@@ -213,7 +213,7 @@ export async function POST(req: NextRequest) {
       model: "veo-3.1-fast-generate-preview",
       prompt: `${prompt}. Create a cinematic Studio Ghibli style video. Hand-drawn animation aesthetic, soft watercolor colors, magical atmosphere, smooth natural movement, high quality.`,
       image: {
-        imageBytes: Buffer.from(image, "base64"),
+        imageBytes: image,
         mimeType: mimeType,
       },
       config: {
