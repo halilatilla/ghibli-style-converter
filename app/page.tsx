@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import FullscreenPreview from "@/components/home/FullscreenPreview";
 import Hero from "@/components/home/Hero";
 import PromptCard from "@/components/home/PromptCard";
+import ProTipsCard from "@/components/home/ProTipsCard";
 import ResultCard from "@/components/home/ResultCard";
 import UploadCard from "@/components/home/UploadCard";
 import { useHomeController } from "@/features/home/hooks/useHomeController";
@@ -24,28 +25,15 @@ export default function Home() {
         <Hero theme={theme} mode={controller.mode} onModeChange={controller.handleModeChange} />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="flex flex-col gap-6">
-            <UploadCard
-              mode={controller.mode}
-              theme={theme}
-              selectedImage={controller.selectedImage}
-              onImageSelected={controller.handleImageSelected}
-              onClear={controller.handleClearImage}
-              disabled={controller.status === "processing"}
-            />
-
-            <PromptCard
-              mode={controller.mode}
-              theme={theme}
-              prompt={controller.prompt}
-              onPromptChange={controller.handlePromptChange}
-              selectedPreset={controller.selectedPreset}
-              onPresetSelect={controller.handlePresetSelect}
-              status={controller.status}
-              selectedImage={controller.selectedImage}
-              onSubmit={controller.handleGenerate}
-            />
-          </div>
+          {/* Row 1: Upload + Result - same height */}
+          <UploadCard
+            mode={controller.mode}
+            theme={theme}
+            selectedImage={controller.selectedImage}
+            onImageSelected={controller.handleImageSelected}
+            onClear={controller.handleClearImage}
+            disabled={controller.status === "processing"}
+          />
 
           <ResultCard
             mode={controller.mode}
@@ -57,6 +45,21 @@ export default function Home() {
             onDownload={controller.handleDownload}
             onFullscreen={controller.openFullscreen}
           />
+
+          {/* Row 2: Prompt + ProTips */}
+          <PromptCard
+            mode={controller.mode}
+            theme={theme}
+            prompt={controller.prompt}
+            onPromptChange={controller.handlePromptChange}
+            selectedPreset={controller.selectedPreset}
+            onPresetSelect={controller.handlePresetSelect}
+            status={controller.status}
+            selectedImage={controller.selectedImage}
+            onSubmit={controller.handleGenerate}
+          />
+
+          <ProTipsCard theme={theme} />
         </div>
       </main>
 

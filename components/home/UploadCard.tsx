@@ -50,7 +50,7 @@ export default function UploadCard({
             selectedImage={selectedImage}
             onClear={onClear}
             disabled={disabled}
-            className="aspect-video"
+            className="aspect-[4/3]"
           />
         ) : (
           <VideoUploader
@@ -58,7 +58,7 @@ export default function UploadCard({
             selectedImage={selectedImage}
             onClear={onClear}
             disabled={disabled}
-            className="aspect-video"
+            className="aspect-[4/3]"
           />
         )}
       </CardContent>

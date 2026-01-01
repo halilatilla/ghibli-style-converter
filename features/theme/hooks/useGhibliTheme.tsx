@@ -1,6 +1,13 @@
 "use client";
 
-import { createContext, type ReactNode, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  type ReactElement,
+  type ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { GHIBLI_THEMES } from "@/shared/constants/themes";
 import type { GhibliFilm, GhibliThemeConfig } from "@/shared/types";
 
@@ -12,7 +19,7 @@ interface GhibliThemeContextType {
 
 const GhibliThemeContext = createContext<GhibliThemeContextType | undefined>(undefined);
 
-export function GhibliThemeProvider({ children }: { children: ReactNode }) {
+export function GhibliThemeProvider({ children }: { children: ReactNode }): ReactElement {
   const [film, setFilm] = useState<GhibliFilm>("totoro");
   const [mounted, setMounted] = useState(false);
 

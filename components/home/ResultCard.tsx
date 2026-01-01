@@ -101,7 +101,7 @@ export default function ResultCard({
         </CardTitle>
       </CardHeader>
       <CardContent className="p-5">
-        <div className="w-full aspect-video flex items-center justify-center relative rounded-2xl overflow-hidden bg-slate-950/30 border-2 border-dashed border-slate-800/50">
+        <div className="w-full aspect-[4/3] flex items-center justify-center relative rounded-2xl overflow-hidden bg-slate-950/30 border-2 border-dashed border-slate-800/50">
           {mode === "video" ? (
             <VideoPreview
               generatedVideo={generatedVideo}

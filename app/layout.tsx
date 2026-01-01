@@ -90,15 +90,15 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/icon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/icon-32x32.png", sizes: "32x32", type: "image/png" },
-    ],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
-  },
-  manifest: "/manifest.json",
+  // icons: {
+  //   icon: [
+  //     { url: "/favicon.ico" },
+  //     { url: "/icon-16x16.png", sizes: "16x16", type: "image/png" },
+  //     { url: "/icon-32x32.png", sizes: "32x32", type: "image/png" },
+  //   ],
+  //   apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  // },
+  // manifest: "/manifest.json",
   alternates: {
     canonical: "https://ghiblistyle-converter.vercel.app",
   },
