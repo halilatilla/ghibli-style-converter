@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
+import { useApiKey } from "@/features/apiKey/hooks/useApiKey";
 import { useGeneration } from "@/features/generation/hooks";
 import { downloadGeneration } from "@/features/generation/utils/download.utils";
 import { validateGenerationRequest } from "@/features/generation/utils/validation.utils";
@@ -15,6 +16,7 @@ export function useHomeController() {
   const promptState = usePromptState(mode);
   const generation = useGeneration(mode);
   const fullscreen = useFullscreenPreview();
+  const apiKeyState = useApiKey();
 
   const handleModeChange = (newMode: Mode) => {
     setMode(newMode);
@@ -42,11 +44,14 @@ export function useHomeController() {
 
     if (generation.status === "processing") return;
 
-    await generation.generate({
-      image: upload.selectedImage!,
-      mimeType: upload.mimeType,
-      prompt: promptState.prompt.trim(),
-    });
+    await generation.generate(
+      {
+        image: upload.selectedImage!,
+        mimeType: upload.mimeType,
+        prompt: promptState.prompt.trim(),
+      },
+      apiKeyState.apiKey || undefined
+    );
   };
 
   const handleDownload = () => {
@@ -69,6 +74,13 @@ export function useHomeController() {
     generatedImage: generation.generatedImage,
     generatedVideo: generation.generatedVideo,
     isFullscreen: fullscreen.isFullscreen,
+    // API Key state
+    apiKey: apiKeyState.apiKey,
+    hasApiKey: apiKeyState.hasApiKey,
+    isApiKeyLoaded: apiKeyState.isLoaded,
+    setApiKey: apiKeyState.setApiKey,
+    clearApiKey: apiKeyState.clearApiKey,
+    // Handlers
     handleModeChange,
     handleImageSelected,
     handleClearImage,

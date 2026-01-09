@@ -43,18 +43,25 @@ async function postJson<T>(
 
 export const apiService = {
   async generateImage(
-    request: GenerationRequest
+    request: GenerationRequest,
+    apiKey?: string
   ): Promise<{ image: string; remaining?: string | null }> {
-    const { data, remaining } = await postJson<ImageGenerationResponse>("/api/generate", request);
+    const requestWithKey = apiKey ? { ...request, apiKey } : request;
+    const { data, remaining } = await postJson<ImageGenerationResponse>(
+      "/api/generate",
+      requestWithKey
+    );
     return { image: data.image, remaining };
   },
 
   async generateVideo(
-    request: GenerationRequest
+    request: GenerationRequest,
+    apiKey?: string
   ): Promise<VideoGenerationResponse & { remaining?: string | null }> {
+    const requestWithKey = apiKey ? { ...request, apiKey } : request;
     const { data, remaining } = await postJson<VideoGenerationResponse>(
       "/api/generate-video",
-      request
+      requestWithKey
     );
     return { ...data, remaining };
   },

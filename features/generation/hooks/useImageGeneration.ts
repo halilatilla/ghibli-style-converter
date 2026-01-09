@@ -8,15 +8,19 @@ export function useImageGeneration() {
   const state = useGenerationState();
 
   const generate = useCallback(
-    async (request: GenerationRequest) => {
+    async (request: GenerationRequest, apiKey?: string) => {
       state.setProcessing();
 
       try {
-        const { image, remaining } = await apiService.generateImage(request);
+        const { image, remaining } = await apiService.generateImage(request, apiKey);
         state.setSuccess({ image, video: null });
 
+        const description = apiKey 
+          ? "Using your personal API key ✨" 
+          : remaining ? `Remaining quota: ${remaining}` : undefined;
+
         toast.success("🎨 Your Ghibli character is ready!", {
-          description: remaining ? `Remaining quota: ${remaining}` : undefined,
+          description,
         });
       } catch (e: unknown) {
         const err = e as ApiError;

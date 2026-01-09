@@ -19,7 +19,12 @@ export default function Home() {
     <div className="min-h-screen flex flex-col relative">
       <div className="bg-noise" />
       <GhibliBackground />
-      <Header />
+      <Header
+        apiKey={controller.apiKey}
+        hasApiKey={controller.hasApiKey}
+        onApiKeyChange={controller.setApiKey}
+        onClearApiKey={controller.clearApiKey}
+      />
 
       <main className="grow container mx-auto px-4 py-8 max-w-6xl relative z-10">
         <Hero theme={theme} mode={controller.mode} onModeChange={controller.handleModeChange} />

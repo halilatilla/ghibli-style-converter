@@ -6,7 +6,17 @@ import { getEnv } from "@/lib/env";
 import { ALLOWED_IMAGE_TYPES, estimateBase64Bytes, validatePrompt } from "@/lib/imageValidation";
 
 const env = getEnv();
-const ai = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
+
+// Helper to create AI client with the appropriate API key
+function createAiClient(apiKey?: string) {
+  const key = apiKey || env.GEMINI_API_KEY;
+  return new GoogleGenAI({ apiKey: key });
+}
+
+// Check if using user's own API key
+function isUserApiKey(apiKey?: string): boolean {
+  return Boolean(apiKey && apiKey.trim().length > 0);
+}
 
 // Redis client for daily usage tracking
 const redis = env.UPSTASH_REDIS_REST_URL ? Redis.fromEnv() : null;
@@ -90,10 +100,11 @@ function validatePayload(body: unknown) {
     } as const;
   }
 
-  const { image, mimeType, prompt } = body as {
+  const { image, mimeType, prompt, apiKey } = body as {
     image?: string;
     mimeType?: string;
     prompt?: string;
+    apiKey?: string;
   };
 
   if (!image || typeof image !== "string") {
@@ -139,7 +150,7 @@ function validatePayload(body: unknown) {
 
   return {
     ok: true,
-    value: { image, mimeType, prompt: promptResult.value },
+    value: { image, mimeType, prompt: promptResult.value, apiKey: apiKey?.trim() },
   } as const;
 }
 
@@ -159,51 +170,60 @@ export async function POST(req: NextRequest) {
         { status: validation.status }
       );
     }
-    const { image, mimeType, prompt } = validation.value;
+    const { image, mimeType, prompt, apiKey } = validation.value;
+    const usingOwnKey = isUserApiKey(apiKey);
 
-    // Check rate limit
-    let rateLimitResult: { success: boolean; remaining: number };
+    // Check rate limit (skip if user is using their own API key)
+    let rateLimitResult: { success: boolean; remaining: number } = {
+      success: true,
+      remaining: 999,
+    };
 
-    if (ratelimit) {
-      // Use Upstash Redis rate limiter (production)
-      const result = await ratelimit.limit(ip);
-      rateLimitResult = {
-        success: result.success,
-        remaining: result.remaining,
-      };
-    } else {
-      // Use in-memory fallback (development)
-      rateLimitResult = checkInMemoryRateLimit(ip);
-    }
+    if (!usingOwnKey) {
+      if (ratelimit) {
+        // Use Upstash Redis rate limiter (production)
+        const result = await ratelimit.limit(ip);
+        rateLimitResult = {
+          success: result.success,
+          remaining: result.remaining,
+        };
+      } else {
+        // Use in-memory fallback (development)
+        rateLimitResult = checkInMemoryRateLimit(ip);
+      }
 
-    if (!rateLimitResult.success) {
-      return NextResponse.json(
-        {
-          error: "Too many requests. Please wait a minute before trying again.",
-          code: "RATE_LIMITED",
-        },
-        {
-          status: 429,
-          headers: {
-            "X-RateLimit-Remaining": "0",
-            "Retry-After": "60",
+      if (!rateLimitResult.success) {
+        return NextResponse.json(
+          {
+            error: "Too many requests. Please wait a minute before trying again.",
+            code: "RATE_LIMITED",
           },
-        }
-      );
+          {
+            status: 429,
+            headers: {
+              "X-RateLimit-Remaining": "0",
+              "Retry-After": "60",
+            },
+          }
+        );
+      }
+
+      // Check daily limit (only for default API key users)
+      const dailyAllowed = await checkDailyLimit();
+      if (!dailyAllowed) {
+        return NextResponse.json(
+          {
+            error:
+              "🌸 Oh no! Our free daily magic has run out for today. But don't worry - you can add your own Gemini API key above to keep creating! Get one free at ai.google.dev 🎨",
+            code: "DAILY_LIMIT",
+          },
+          { status: 429 }
+        );
+      }
     }
 
-    // Check daily limit
-    const dailyAllowed = await checkDailyLimit();
-    if (!dailyAllowed) {
-      return NextResponse.json(
-        {
-          error:
-            "Daily usage limit reached. This demo has a daily cap to manage costs. Please try again tomorrow!",
-          code: "DAILY_LIMIT",
-        },
-        { status: 429 }
-      );
-    }
+    // Create AI client with the appropriate API key
+    const ai = createAiClient(apiKey);
 
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-image",
@@ -258,8 +278,69 @@ export async function POST(req: NextRequest) {
     );
   } catch (e: any) {
     console.error("API Error:", e);
+
+    // Parse the error message for user-friendly responses
+    const errorMessage = e.message || "";
+
+    // Handle API key related errors
+    if (errorMessage.includes("API_KEY_INVALID") || errorMessage.includes("invalid API key")) {
+      return NextResponse.json(
+        {
+          error:
+            "🔑 Hmm, that API key doesn't seem to work. Double-check it's a valid Gemini API key from ai.google.dev",
+          code: "INVALID_API_KEY",
+        },
+        { status: 401 }
+      );
+    }
+
+    // Handle quota exceeded errors
+    if (
+      errorMessage.includes("RESOURCE_EXHAUSTED") ||
+      errorMessage.includes("quota") ||
+      errorMessage.includes("rate limit")
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            "🌙 The magic spirits are resting! API quota exceeded. If using your own key, check your Google AI Studio usage. Otherwise, try again later or add your own API key.",
+          code: "QUOTA_EXCEEDED",
+        },
+        { status: 429 }
+      );
+    }
+
+    // Handle permission errors
+    if (errorMessage.includes("PERMISSION_DENIED")) {
+      return NextResponse.json(
+        {
+          error:
+            "🚫 This API key doesn't have permission to use the image generation model. Make sure you've enabled the Gemini API in your Google Cloud project.",
+          code: "PERMISSION_DENIED",
+        },
+        { status: 403 }
+      );
+    }
+
+    // Handle safety/content filter errors
+    if (errorMessage.includes("SAFETY") || errorMessage.includes("blocked")) {
+      return NextResponse.json(
+        {
+          error:
+            "🛡️ The spirits couldn't transform this image. Try a different photo or adjust your prompt.",
+          code: "CONTENT_BLOCKED",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Generic error with friendly message
     return NextResponse.json(
-      { error: e.message || "Failed to generate image.", code: "INTERNAL_ERROR" },
+      {
+        error:
+          "✨ Something magical went wrong! Please try again. If this keeps happening, try using your own API key.",
+        code: "INTERNAL_ERROR",
+      },
       { status: 500 }
     );
   }

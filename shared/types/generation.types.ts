@@ -6,6 +6,7 @@ export interface GenerationRequest {
   image: string;
   mimeType: string;
   prompt: string;
+  apiKey?: string;
 }
 
 export interface GenerationResult {
