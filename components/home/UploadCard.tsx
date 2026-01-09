@@ -23,9 +23,9 @@ export default function UploadCard({
   disabled,
 }: Props) {
   return (
-    <Card className="ghibli-card flex flex-col dappled-light wobbly-box border-none sketch-border">
+    <Card className="ghibli-card flex flex-col md:dappled-light md:wobbly-box border-none md:sketch-border rounded-2xl">
       <CardHeader className="border-b-2 border-slate-700/40 pb-5 pt-6 px-7 shrink-0 relative">
-        <div className="absolute inset-0 watercolor-edge opacity-20 pointer-events-none" />
+        <div className="absolute inset-0 watercolor-edge opacity-20 pointer-events-none hidden md:block" />
         <CardTitle className="flex items-center text-lg font-bold text-slate-100">
           <motion.div
             className="w-12 h-12 rounded-2xl flex items-center justify-center text-lg mr-4 text-white shadow-lg wobbly-circle"

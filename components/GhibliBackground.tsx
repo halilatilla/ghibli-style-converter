@@ -436,8 +436,14 @@ export function SootSprite({ className = "" }: { className?: string }) {
 }
 
 export default function GhibliBackground() {
+  const [mounted, setMounted] = useState(false);
   const { theme } = useGhibliTheme();
   const { enableParticles, enableBlur, enableComplexAnimations } = usePerformance();
+
+  // Wait for client-side hydration before rendering dynamic content
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const ParticleComponent = useMemo(() => {
     if (!enableParticles) return LightweightParticles;
@@ -474,8 +480,8 @@ export default function GhibliBackground() {
         }}
       />
 
-      {/* Watercolor wash overlay - only on desktop */}
-      {enableComplexAnimations && (
+      {/* Watercolor wash overlay - only on desktop, after hydration */}
+      {mounted && enableComplexAnimations && (
         <div
           className="absolute inset-0 opacity-30"
           style={{
@@ -487,8 +493,8 @@ export default function GhibliBackground() {
         />
       )}
 
-      {/* Soft light accents - only on desktop */}
-      {enableBlur && (
+      {/* Soft light accents - only on desktop, after hydration */}
+      {mounted && enableBlur && (
         <div
           className="absolute inset-0 opacity-20"
           style={{
@@ -499,11 +505,11 @@ export default function GhibliBackground() {
         />
       )}
 
-      {/* Particles */}
-      <ParticleComponent />
+      {/* Particles - only render after hydration */}
+      {mounted && <ParticleComponent />}
 
-      {/* Bottom decorative elements */}
-      {enableComplexAnimations && (theme.particles === "clouds" ? <BottomClouds /> : <BottomGrass />)}
+      {/* Bottom decorative elements - only after hydration */}
+      {mounted && enableComplexAnimations && (theme.particles === "clouds" ? <BottomClouds /> : <BottomGrass />)}
     </div>
   );
 }

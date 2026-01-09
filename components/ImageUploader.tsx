@@ -109,9 +109,11 @@ export default function ImageUploader({
       <input
         type="file"
         accept="image/*"
+        capture="environment"
         onChange={(e) => e.target.files?.[0] && processFile(e.target.files[0])}
-        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
+        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20 touch-manipulation"
         disabled={disabled}
+        aria-label="Upload photo"
       />
 
       <div className="flex flex-col items-center space-y-4 relative z-10">

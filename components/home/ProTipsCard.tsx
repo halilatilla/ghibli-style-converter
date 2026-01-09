@@ -35,9 +35,9 @@ export default function ProTipsCard({ theme }: Props) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.4, duration: 0.6 }}
     >
-      <Card className="ghibli-card overflow-hidden dappled-light wobbly-box border-none sketch-border">
+      <Card className="ghibli-card overflow-hidden md:dappled-light md:wobbly-box border-none md:sketch-border rounded-2xl">
         <CardHeader className="border-b-2 border-slate-700/40 pb-4 pt-5 px-6 relative">
-          <div className="absolute inset-0 watercolor-edge opacity-20 pointer-events-none" />
+          <div className="absolute inset-0 watercolor-edge opacity-20 pointer-events-none hidden md:block" />
           <CardTitle className="flex items-center text-lg font-bold text-slate-100">
             <motion.div
               className="w-10 h-10 rounded-xl flex items-center justify-center mr-3 text-white shadow-lg wobbly-circle"

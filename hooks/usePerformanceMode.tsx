@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 
 type PerformanceMode = "high" | "medium" | "low";
 
@@ -59,10 +59,31 @@ const REDUCED_MOTION_CONFIG: PerformanceConfig = {
   enableMouseTracking: false,
 };
 
-export function usePerformanceMode(): PerformanceConfig {
-  const [config, setConfig] = useState<PerformanceConfig>(MEDIUM_CONFIG);
+// Check if running on mobile device or small viewport
+function checkIsMobile(): boolean {
+  if (typeof window === "undefined") return false;
+  
+  // Check user agent for mobile devices
+  const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  );
+  
+  // Check viewport width (responsive breakpoint)
+  const isSmallViewport = window.innerWidth < 768;
+  
+  // Check touch capability
+  const hasTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+  
+  return isMobileUA || isSmallViewport || (hasTouch && isSmallViewport);
+}
 
-  useEffect(() => {
+export function usePerformanceMode(): PerformanceConfig {
+  // Always start with MEDIUM_CONFIG to avoid hydration mismatch
+  // The useEffect will update it on the client
+  const [config, setConfig] = useState<PerformanceConfig>(MEDIUM_CONFIG);
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  const updateConfig = useCallback(() => {
     // Check for reduced motion preference
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) {
@@ -70,10 +91,7 @@ export function usePerformanceMode(): PerformanceConfig {
       return;
     }
 
-    // Check if mobile device
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    ) || window.innerWidth < 768;
+    const isMobile = checkIsMobile();
 
     // Check for low-end device hints
     const nav = navigator as any;
@@ -96,19 +114,42 @@ export function usePerformanceMode(): PerformanceConfig {
 
       setConfig(isHighEnd ? HIGH_CONFIG : MEDIUM_CONFIG);
     }
+  }, []);
+
+  useEffect(() => {
+    // Mark as hydrated and do initial check
+    setIsHydrated(true);
+    updateConfig();
+
+    // Listen for viewport resize (debounced)
+    let resizeTimeout: NodeJS.Timeout;
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(updateConfig, 150);
+    };
+    window.addEventListener("resize", handleResize);
 
     // Listen for reduced motion changes
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const handleChange = (e: MediaQueryListEvent) => {
+    const handleMotionChange = (e: MediaQueryListEvent) => {
       if (e.matches) {
         setConfig(REDUCED_MOTION_CONFIG);
+      } else {
+        updateConfig();
       }
     };
-    mediaQuery.addEventListener("change", handleChange);
-    return () => mediaQuery.removeEventListener("change", handleChange);
-  }, []);
+    mediaQuery.addEventListener("change", handleMotionChange);
 
-  return config;
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      mediaQuery.removeEventListener("change", handleMotionChange);
+      clearTimeout(resizeTimeout);
+    };
+  }, [updateConfig]);
+
+  // Return config with hydration info
+  // Before hydration, return MEDIUM config to match server render
+  return isHydrated ? config : MEDIUM_CONFIG;
 }
 
 // Context for global access
