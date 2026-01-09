@@ -1,11 +1,11 @@
 import { motion } from "framer-motion";
 import { Download, Maximize2, Sparkles } from "lucide-react";
 import { useMemo } from "react";
-import { KodamaSilhouette, SootSprite, TotoroSilhouette } from "@/components/GhibliBackground";
-import { LoadingSootSprites } from "@/components/SootSprites";
+import { TotoroSilhouette } from "@/components/GhibliBackground";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { VideoPreview } from "@/components/VideoUploader";
+import { usePerformance } from "@/hooks/usePerformanceMode";
 import type { Mode } from "@/shared/types";
 
 type Props = {
@@ -19,36 +19,6 @@ type Props = {
   onFullscreen: () => void;
 };
 
-function FloatingSpirits() {
-  return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      {[...Array(3)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute"
-          style={{
-            left: `${20 + i * 30}%`,
-            top: `${60 + i * 10}%`,
-          }}
-          animate={{
-            y: [0, -20, 0],
-            x: [0, 10, 0],
-            opacity: [0.3, 0.6, 0.3],
-          }}
-          transition={{
-            duration: 4 + i,
-            delay: i * 0.5,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        >
-          <SootSprite className="w-6 h-6 text-slate-500" />
-        </motion.div>
-      ))}
-    </div>
-  );
-}
-
 export default function ResultCard({
   mode,
   theme,
@@ -59,41 +29,42 @@ export default function ResultCard({
   onDownload,
   onFullscreen,
 }: Props) {
+  const { enableComplexAnimations, isMobile } = usePerformance();
+
   const cardGlow = useMemo(
     () =>
-      status === "success"
+      status === "success" && enableComplexAnimations
         ? [
-            `0 4px 12px ${theme.colors.secondary}40, 0 0 0px ${theme.colors.accent}`,
-            `0 4px 16px ${theme.colors.accent}60, 0 0 24px ${theme.colors.accent}`,
-            `0 4px 12px ${theme.colors.secondary}40, 0 0 0px ${theme.colors.accent}`,
+            `0 4px 12px ${theme.colors.secondary}40`,
+            `0 4px 16px ${theme.colors.accent}60`,
+            `0 4px 12px ${theme.colors.secondary}40`,
           ]
-        : `0 4px 12px ${theme.colors.secondary}40, inset 0 2px 4px rgba(255,255,255,0.2)`,
-    [status, theme.colors.accent, theme.colors.secondary]
+        : `0 4px 12px ${theme.colors.secondary}40`,
+    [status, theme.colors.accent, theme.colors.secondary, enableComplexAnimations]
   );
 
   return (
-    <Card className="ghibli-card flex flex-col overflow-hidden dappled-light wobbly-box border-none sketch-border">
+    <Card className="ghibli-card flex flex-col overflow-hidden border-none md:wobbly-box md:dappled-light md:sketch-border rounded-2xl">
       <CardHeader className="border-b-2 border-slate-700/40 pb-5 pt-6 px-7 shrink-0 relative">
-        <div className="absolute inset-0 watercolor-edge opacity-20 pointer-events-none" />
+        {!isMobile && <div className="absolute inset-0 watercolor-edge opacity-20 pointer-events-none" />}
         <CardTitle className="flex items-center text-lg font-bold text-slate-100">
           <motion.div
-            className="w-12 h-12 rounded-2xl flex items-center justify-center text-lg mr-4 text-white shadow-lg wobbly-circle"
+            className="w-12 h-12 rounded-2xl md:wobbly-circle flex items-center justify-center text-lg mr-4 text-white shadow-lg"
             style={{
               background: `linear-gradient(135deg, ${theme.colors.secondary}, ${theme.colors.primary})`,
-              boxShadow: `0 4px 12px ${theme.colors.secondary}40, inset 0 2px 4px rgba(255,255,255,0.2)`,
-            }}
-            animate={{
               boxShadow: cardGlow,
-              scale: status === "success" ? [1, 1.05, 1] : 1,
             }}
-            transition={{
+            animate={enableComplexAnimations ? {
+              boxShadow: cardGlow,
+              scale: status === "success" ? [1, 1.03, 1] : 1,
+            } : undefined}
+            transition={enableComplexAnimations ? {
               duration: 2,
               repeat: status === "success" ? Infinity : 0,
               ease: "easeInOut",
-            }}
-            whileHover={{ rotate: 10, scale: 1.05 }}
+            } : undefined}
           >
-            <Sparkles className="w-6 h-6 drop-shadow-md" />
+            <Sparkles className="w-6 h-6" />
           </motion.div>
           <span className="font-display text-2xl" style={{ color: theme.colors.secondary }}>
             Your Masterpiece
@@ -112,33 +83,31 @@ export default function ResultCard({
             />
           ) : status === "processing" ? (
             <div className="text-center p-6 relative z-10 max-w-md w-full">
-              <LoadingSootSprites />
-              <motion.h3
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="font-display text-2xl mb-2 mt-4"
+              {/* Simple loading spinner instead of heavy animation */}
+              <div className="flex justify-center mb-4">
+                <div 
+                  className="w-16 h-16 border-4 border-slate-700 rounded-full animate-spin"
+                  style={{ borderTopColor: theme.colors.accent }}
+                />
+              </div>
+              <h3
+                className="font-display text-2xl mb-2"
                 style={{ color: theme.colors.primary }}
               >
                 Creating Your Ghibli Character...
-              </motion.h3>
+              </h3>
               <p className="text-slate-300 text-sm mb-2 font-display">
                 The soot sprites are painting your transformation
               </p>
               <p className="text-slate-500 text-xs font-display">This usually takes 5-15 seconds</p>
               <div className="flex justify-center gap-2 mt-4">
                 {[0, 1, 2].map((i) => (
-                  <motion.div
+                  <div
                     key={i}
-                    className="w-2 h-2 rounded-full"
-                    style={{ backgroundColor: theme.colors.accent }}
-                    animate={{
-                      scale: [1, 1.5, 1],
-                      opacity: [0.3, 1, 0.3],
-                    }}
-                    transition={{
-                      duration: 1.5,
-                      repeat: Infinity,
-                      delay: i * 0.2,
+                    className="w-2 h-2 rounded-full animate-pulse"
+                    style={{ 
+                      backgroundColor: theme.colors.accent,
+                      animationDelay: `${i * 0.2}s`
                     }}
                   />
                 ))}
@@ -198,41 +167,15 @@ export default function ResultCard({
             </>
           ) : (
             <div className="text-center p-6 relative">
-              <FloatingSpirits />
-              <motion.div
-                animate={{ y: [0, -8, 0] }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
+              <div className={enableComplexAnimations ? "animate-float-slow" : ""}>
                 <TotoroSilhouette className="w-20 h-24 mx-auto mb-3 text-slate-600" />
-              </motion.div>
+              </div>
               <p className="font-display text-xl mb-1" style={{ color: theme.colors.primary }}>
                 Waiting for Magic
               </p>
               <p className="text-slate-500 text-xs">
                 Upload your photo to begin the transformation
               </p>
-              <div className="flex justify-center gap-3 mt-4 opacity-40">
-                {[...Array(3)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    animate={{
-                      y: [0, -5, 0],
-                      rotate: [0, i % 2 === 0 ? 5 : -5, 0],
-                    }}
-                    transition={{
-                      duration: 2 + i * 0.5,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                  >
-                    <KodamaSilhouette className="w-6 h-6 text-slate-700" />
-                  </motion.div>
-                ))}
-              </div>
             </div>
           )}
         </div>

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
+import { usePerformance } from "@/hooks/usePerformanceMode";
 import { useGhibliTheme } from "./GhibliThemeContext";
 
 // Helper to generate stable random values
@@ -10,10 +11,36 @@ function seededRandom(seed: number) {
   return x - Math.floor(x);
 }
 
-// Floating particles based on theme
+// Lightweight CSS-only particles for mobile
+function LightweightParticles() {
+  const { theme } = useGhibliTheme();
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Just 5 simple CSS animated particles */}
+      {[0, 1, 2, 3, 4].map((i) => (
+        <div
+          key={i}
+          className="absolute rounded-full animate-float-slow opacity-30"
+          style={{
+            left: `${20 + i * 15}%`,
+            top: `${30 + (i % 3) * 20}%`,
+            width: 4 + i,
+            height: 4 + i,
+            backgroundColor: theme.colors.accent,
+            animationDelay: `${i * 2}s`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+// Floating particles based on theme - OPTIMIZED
 function DustParticles() {
   const [mounted, setMounted] = useState(false);
   const { theme } = useGhibliTheme();
+  const { particleCount, enableBlur } = usePerformance();
 
   useEffect(() => {
     setMounted(true);
@@ -21,39 +48,37 @@ function DustParticles() {
 
   const particles = useMemo(
     () =>
-      Array.from({ length: 40 }, (_, i) => ({
+      Array.from({ length: particleCount }, (_, i) => ({
         id: i,
         x: seededRandom(i * 1) * 100,
         y: seededRandom(i * 2) * 100,
         size: seededRandom(i * 3) * 3 + 1.5,
         duration: seededRandom(i * 4) * 25 + 18,
         delay: seededRandom(i * 5) * 12,
-        blur: seededRandom(i * 6) * 2 + 1,
       })),
-    []
+    [particleCount]
   );
 
-  if (!mounted) return null;
+  if (!mounted || particleCount === 0) return null;
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {particles.map((p) => (
         <motion.div
           key={p.id}
-          className="absolute rounded-full"
+          className="absolute rounded-full will-change-transform"
           style={{
             left: `${p.x}%`,
             top: `${p.y}%`,
             width: p.size,
             height: p.size,
-            background: `radial-gradient(circle, ${theme.colors.accent}80 0%, ${theme.colors.accent}30 70%, transparent 100%)`,
-            filter: `blur(${p.blur}px)`,
+            backgroundColor: theme.colors.accent,
+            opacity: 0.4,
+            filter: enableBlur ? "blur(1px)" : undefined,
           }}
           animate={{
-            y: [0, -40, -20, 0],
-            x: [0, 15, -10, 5, 0],
-            opacity: [0.1, 0.5, 0.3, 0.1],
-            scale: [1, 1.2, 0.9, 1],
+            y: [0, -30, 0],
+            opacity: [0.2, 0.5, 0.2],
           }}
           transition={{
             duration: p.duration,
@@ -70,41 +95,46 @@ function DustParticles() {
 function SpiritParticles() {
   const [mounted, setMounted] = useState(false);
   const { theme } = useGhibliTheme();
+  const { particleCount } = usePerformance();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  const count = Math.min(particleCount, 12);
   const spirits = useMemo(
     () =>
-      Array.from({ length: 20 }, (_, i) => ({
+      Array.from({ length: count }, (_, i) => ({
         id: i,
         x: seededRandom(i * 10) * 100,
         y: seededRandom(i * 20) * 100,
-        size: seededRandom(i * 30) * 10 + 6,
+        size: seededRandom(i * 30) * 8 + 6,
         duration: seededRandom(i * 40) * 18 + 12,
         delay: seededRandom(i * 50) * 10,
       })),
-    []
+    [count]
   );
 
-  if (!mounted) return null;
+  if (!mounted || count === 0) return null;
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {spirits.map((s) => (
         <motion.div
           key={s.id}
-          className="absolute"
+          className="absolute rounded-full will-change-transform"
           style={{
             left: `${s.x}%`,
             top: `${s.y}%`,
+            width: s.size,
+            height: s.size,
+            backgroundColor: theme.colors.accent,
+            opacity: 0.5,
           }}
           animate={{
-            y: [0, -60, -30, 0],
-            x: [0, 25, -15, 10, 0],
-            opacity: [0, 0.7, 0.5, 0],
-            scale: [0.3, 1.1, 0.8, 0.3],
+            y: [0, -40, 0],
+            opacity: [0, 0.6, 0],
+            scale: [0.5, 1, 0.5],
           }}
           transition={{
             duration: s.duration,
@@ -112,18 +142,7 @@ function SpiritParticles() {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-        >
-          {/* Spirit orb with authentic Ghibli glow */}
-          <div
-            className="rounded-full blur-[2px]"
-            style={{
-              width: s.size,
-              height: s.size,
-              background: `radial-gradient(circle, ${theme.colors.accent} 0%, ${theme.colors.primary}80 50%, transparent 100%)`,
-              boxShadow: `0 0 ${s.size}px ${theme.colors.accent}60`,
-            }}
-          />
-        </motion.div>
+        />
       ))}
     </div>
   );
@@ -131,43 +150,42 @@ function SpiritParticles() {
 
 function LeafParticles() {
   const [mounted, setMounted] = useState(false);
+  const { particleCount } = usePerformance();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  const count = Math.min(particleCount, 10);
   const leaves = useMemo(
     () =>
-      Array.from({ length: 20 }, (_, i) => ({
+      Array.from({ length: count }, (_, i) => ({
         id: i,
         x: seededRandom(i * 100) * 100,
-        startY: -10,
-        size: seededRandom(i * 200) * 12 + 8,
         duration: seededRandom(i * 300) * 15 + 20,
         delay: seededRandom(i * 400) * 15,
-        rotation: seededRandom(i * 500) * 360,
       })),
-    []
+    [count]
   );
 
-  if (!mounted) return null;
+  if (!mounted || count === 0) return null;
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {leaves.map((l) => (
         <motion.div
           key={l.id}
-          className="absolute text-green-600/50 dark:text-green-400/30"
+          className="absolute text-green-600/40 will-change-transform"
           style={{
             left: `${l.x}%`,
-            top: `${l.startY}%`,
-            fontSize: l.size,
+            top: "-5%",
+            fontSize: 16,
           }}
           animate={{
-            y: [0, window?.innerHeight + 100 || 1000],
-            x: [0, 50, -30, 20, 0],
-            rotate: [l.rotation, l.rotation + 720],
-            opacity: [0, 0.7, 0.7, 0],
+            y: [0, 1200],
+            x: [0, 30, -20, 0],
+            rotate: [0, 360],
+            opacity: [0, 0.6, 0.6, 0],
           }}
           transition={{
             duration: l.duration,
@@ -185,14 +203,16 @@ function LeafParticles() {
 
 function CloudParticles() {
   const [mounted, setMounted] = useState(false);
+  const { particleCount } = usePerformance();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  const count = Math.min(Math.floor(particleCount / 5), 5);
   const clouds = useMemo(
     () =>
-      Array.from({ length: 8 }, (_, i) => ({
+      Array.from({ length: count }, (_, i) => ({
         id: i,
         x: seededRandom(i * 1000) * 120 - 20,
         y: seededRandom(i * 2000) * 60 + 10,
@@ -200,17 +220,17 @@ function CloudParticles() {
         duration: seededRandom(i * 4000) * 60 + 40,
         delay: seededRandom(i * 5000) * 20,
       })),
-    []
+    [count]
   );
 
-  if (!mounted) return null;
+  if (!mounted || count === 0) return null;
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {clouds.map((c) => (
         <motion.div
           key={c.id}
-          className="absolute"
+          className="absolute will-change-transform"
           style={{
             left: `${c.x}%`,
             top: `${c.y}%`,
@@ -218,7 +238,7 @@ function CloudParticles() {
           }}
           animate={{
             x: [0, 200],
-            opacity: [0, 0.6, 0.6, 0],
+            opacity: [0, 0.5, 0.5, 0],
           }}
           transition={{
             duration: c.duration,
@@ -227,16 +247,10 @@ function CloudParticles() {
             ease: "linear",
           }}
         >
-          <svg
-            width="120"
-            height="60"
-            viewBox="0 0 120 60"
-            className="fill-white/30 dark:fill-white/10"
-          >
+          <svg width="100" height="50" viewBox="0 0 120 60" className="fill-white/25">
             <ellipse cx="30" cy="40" rx="25" ry="15" />
             <ellipse cx="55" cy="35" rx="30" ry="20" />
             <ellipse cx="85" cy="40" rx="25" ry="15" />
-            <ellipse cx="60" cy="25" rx="20" ry="15" />
           </svg>
         </motion.div>
       ))}
@@ -246,14 +260,16 @@ function CloudParticles() {
 
 function CrystalParticles() {
   const [mounted, setMounted] = useState(false);
+  const { particleCount } = usePerformance();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  const count = Math.min(particleCount, 12);
   const crystals = useMemo(
     () =>
-      Array.from({ length: 20 }, (_, i) => ({
+      Array.from({ length: count }, (_, i) => ({
         id: i,
         x: seededRandom(i * 10000) * 100,
         y: seededRandom(i * 20000) * 100,
@@ -261,24 +277,24 @@ function CrystalParticles() {
         duration: seededRandom(i * 40000) * 8 + 4,
         delay: seededRandom(i * 50000) * 5,
       })),
-    []
+    [count]
   );
 
-  if (!mounted) return null;
+  if (!mounted || count === 0) return null;
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {crystals.map((c) => (
         <motion.div
           key={c.id}
-          className="absolute"
+          className="absolute will-change-transform"
           style={{
             left: `${c.x}%`,
             top: `${c.y}%`,
           }}
           animate={{
-            opacity: [0, 1, 0],
-            scale: [0.5, 1.2, 0.5],
+            opacity: [0, 0.8, 0],
+            scale: [0.5, 1, 0.5],
           }}
           transition={{
             duration: c.duration,
@@ -288,7 +304,7 @@ function CrystalParticles() {
           }}
         >
           <div
-            className="rotate-45 bg-gradient-to-br from-cyan-300/60 to-blue-400/60 dark:from-cyan-400/40 dark:to-blue-500/40"
+            className="rotate-45 bg-gradient-to-br from-cyan-300/50 to-blue-400/50"
             style={{ width: c.size, height: c.size }}
           />
         </motion.div>
@@ -421,8 +437,11 @@ export function SootSprite({ className = "" }: { className?: string }) {
 
 export default function GhibliBackground() {
   const { theme } = useGhibliTheme();
+  const { enableParticles, enableBlur, enableComplexAnimations } = usePerformance();
 
   const ParticleComponent = useMemo(() => {
+    if (!enableParticles) return LightweightParticles;
+    
     switch (theme.particles) {
       case "dust":
         return DustParticles;
@@ -437,55 +456,54 @@ export default function GhibliBackground() {
       default:
         return DustParticles;
     }
-  }, [theme.particles]);
+  }, [theme.particles, enableParticles]);
 
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
-      {/* Dynamic gradient background with watercolor effect */}
+      {/* Dynamic gradient background */}
       <div
-        className="absolute inset-0 transition-all duration-1000"
+        className="absolute inset-0"
         style={{
           background: "var(--ghibli-gradient)",
         }}
       />
       <div
-        className="absolute inset-0 transition-all duration-1000 dark:opacity-100 opacity-0"
+        className="absolute inset-0 dark:opacity-100 opacity-0"
         style={{
           background: "var(--ghibli-gradient-dark)",
         }}
       />
 
-      {/* Watercolor wash overlay - authentic Ghibli background feel */}
-      <div
-        className="absolute inset-0 opacity-40"
-        style={{
-          background: `
-            radial-gradient(ellipse 800px 600px at 20% 30%, ${theme.colors.primary}12 0%, transparent 50%),
-            radial-gradient(ellipse 600px 800px at 80% 70%, ${theme.colors.secondary}10 0%, transparent 50%),
-            radial-gradient(ellipse 700px 500px at 50% 90%, ${theme.colors.accent}08 0%, transparent 50%)
-          `,
-          mixBlendMode: "multiply",
-          filter: "url(#paper-texture)",
-        }}
-      />
+      {/* Watercolor wash overlay - only on desktop */}
+      {enableComplexAnimations && (
+        <div
+          className="absolute inset-0 opacity-30"
+          style={{
+            background: `
+              radial-gradient(ellipse 600px 400px at 20% 30%, ${theme.colors.primary}10 0%, transparent 50%),
+              radial-gradient(ellipse 500px 600px at 80% 70%, ${theme.colors.secondary}08 0%, transparent 50%)
+            `,
+          }}
+        />
+      )}
 
-      {/* Soft light accents - Ghibli lighting style */}
-      <div
-        className="absolute inset-0 opacity-30"
-        style={{
-          background: `
-            radial-gradient(circle 400px at 70% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 60%),
-            radial-gradient(circle 300px at 30% 60%, rgba(255, 255, 255, 0.05) 0%, transparent 60%)
-          `,
-          mixBlendMode: "soft-light",
-        }}
-      />
+      {/* Soft light accents - only on desktop */}
+      {enableBlur && (
+        <div
+          className="absolute inset-0 opacity-20"
+          style={{
+            background: `
+              radial-gradient(circle 300px at 70% 20%, rgba(255, 255, 255, 0.06) 0%, transparent 60%)
+            `,
+          }}
+        />
+      )}
 
       {/* Particles */}
       <ParticleComponent />
 
-      {/* Bottom decorative elements - show different based on theme */}
-      {theme.particles === "clouds" ? <BottomClouds /> : <BottomGrass />}
+      {/* Bottom decorative elements */}
+      {enableComplexAnimations && (theme.particles === "clouds" ? <BottomClouds /> : <BottomGrass />)}
     </div>
   );
 }

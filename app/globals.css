@@ -889,3 +889,141 @@ textarea:focus {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
+
+/* ============================================
+   Reduced Motion Support - CRITICAL FOR PERFORMANCE
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .bg-noise,
+  .wobbly-box,
+  .wobbly-circle,
+  .wind-sway,
+  .ghibli-float,
+  .animate-float-slow {
+    animation: none !important;
+  }
+}
+
+/* ============================================
+   Mobile Performance Optimizations
+   ============================================ */
+
+/* Simple CSS-only float animation for mobile */
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+/* Mobile: Disable heavy effects */
+@media (max-width: 768px) {
+  /* Disable complex animations */
+  .wobbly-box {
+    animation: none !important;
+    border-radius: 1rem !important;
+  }
+
+  .wobbly-circle {
+    animation: none !important;
+    border-radius: 50% !important;
+  }
+
+  .bg-noise {
+    animation: none !important;
+    opacity: 0.08 !important;
+  }
+
+  /* Disable backdrop blur on mobile - MAJOR performance boost */
+  .backdrop-blur,
+  .backdrop-blur-sm,
+  .backdrop-blur-md,
+  .backdrop-blur-lg,
+  .backdrop-blur-xl {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Simplify box shadows */
+  .ghibli-card {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  /* Reduce blur filters */
+  .blur-xl,
+  .blur-2xl,
+  .blur-3xl {
+    filter: blur(8px) !important;
+  }
+
+  /* Disable paper texture filter effects */
+  .watercolor-edge,
+  .sketch-border,
+  .dappled-light {
+    display: none !important;
+  }
+
+  /* Disable animated filter effects */
+  .pencil-filter,
+  .watercolor-filter {
+    filter: none !important;
+  }
+
+  /* Reduce transition durations */
+  * {
+    transition-duration: 0.15s !important;
+  }
+
+  /* Hide custom cursor on mobile */
+  .custom-cursor {
+    display: none !important;
+  }
+}
+
+/* Low-power mode hints */
+@media (prefers-reduced-motion: reduce), (max-width: 768px) {
+  /* Use GPU-accelerated properties only */
+  .will-change-transform {
+    will-change: transform;
+  }
+
+  /* Remove expensive filters */
+  .drop-shadow-md,
+  .drop-shadow-lg,
+  .drop-shadow-xl,
+  .drop-shadow-2xl {
+    filter: none !important;
+  }
+
+  /* Simplify gradients */
+  .ghibli-gradient-complex {
+    background: var(--ghibli-gradient) !important;
+  }
+}
+
+/* Tablet optimizations (medium devices) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .wobbly-box,
+  .wobbly-circle {
+    animation-duration: 16s !important;
+  }
+
+  .bg-noise {
+    opacity: 0.1 !important;
+  }
+}

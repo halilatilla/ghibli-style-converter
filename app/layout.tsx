@@ -5,6 +5,7 @@ import CustomCursor from "@/components/CustomCursor";
 import GhibliFilters from "@/components/GhibliFilters";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { GhibliThemeProvider } from "@/features/theme/hooks/useGhibliTheme";
+import { PerformanceProvider } from "@/hooks/usePerformanceMode";
 import { JsonLd } from "./jsonld";
 import "./globals.css";
 
@@ -113,27 +114,29 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className={`${quicksand.variable} ${caveat.variable} font-sans antialiased`}>
         <ThemeProvider>
-          <GhibliThemeProvider>
-            <GhibliFilters />
-            <CustomCursor />
-            {children}
-            <Toaster
-              position="top-center"
-              closeButton
-              richColors
-              theme="dark"
-              toastOptions={{
-                style: {
-                  background: "rgba(15, 23, 42, 0.95)",
-                  backdropFilter: "blur(12px)",
-                  border: "1px solid rgba(148, 163, 184, 0.2)",
-                  borderRadius: "1rem",
-                  fontFamily: "var(--font-quicksand)",
-                },
-                className: "ghibli-toast",
-              }}
-            />
-          </GhibliThemeProvider>
+          <PerformanceProvider>
+            <GhibliThemeProvider>
+              <GhibliFilters />
+              <CustomCursor />
+              {children}
+              <Toaster
+                position="top-center"
+                closeButton
+                richColors
+                theme="dark"
+                toastOptions={{
+                  style: {
+                    background: "rgba(15, 23, 42, 0.95)",
+                    backdropFilter: "blur(12px)",
+                    border: "1px solid rgba(148, 163, 184, 0.2)",
+                    borderRadius: "1rem",
+                    fontFamily: "var(--font-quicksand)",
+                  },
+                  className: "ghibli-toast",
+                }}
+              />
+            </GhibliThemeProvider>
+          </PerformanceProvider>
         </ThemeProvider>
       </body>
     </html>
