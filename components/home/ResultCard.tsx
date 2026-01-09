@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { Download, Maximize2, Sparkles } from "lucide-react";
-import { useMemo } from "react";
 import { TotoroSilhouette } from "@/components/GhibliBackground";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -31,17 +30,12 @@ export default function ResultCard({
 }: Props) {
   const { enableComplexAnimations, isMobile } = usePerformance();
 
-  const cardGlow = useMemo(
-    () =>
-      status === "success" && enableComplexAnimations
-        ? [
-            `0 4px 12px ${theme.colors.secondary}40`,
-            `0 4px 16px ${theme.colors.accent}60`,
-            `0 4px 12px ${theme.colors.secondary}40`,
-          ]
-        : `0 4px 12px ${theme.colors.secondary}40`,
-    [status, theme.colors.accent, theme.colors.secondary, enableComplexAnimations]
-  );
+  const baseGlow = `0 4px 12px ${theme.colors.secondary}40`;
+  const animatedGlow = [
+    `0 4px 12px ${theme.colors.secondary}40`,
+    `0 4px 16px ${theme.colors.accent}60`,
+    `0 4px 12px ${theme.colors.secondary}40`,
+  ];
 
   return (
     <Card className="ghibli-card flex flex-col overflow-hidden border-none md:wobbly-box md:dappled-light md:sketch-border rounded-2xl">
@@ -52,15 +46,15 @@ export default function ResultCard({
             className="w-12 h-12 rounded-2xl md:wobbly-circle flex items-center justify-center text-lg mr-4 text-white shadow-lg"
             style={{
               background: `linear-gradient(135deg, ${theme.colors.secondary}, ${theme.colors.primary})`,
-              boxShadow: cardGlow,
+              boxShadow: baseGlow,
             }}
-            animate={enableComplexAnimations ? {
-              boxShadow: cardGlow,
-              scale: status === "success" ? [1, 1.03, 1] : 1,
+            animate={enableComplexAnimations && status === "success" ? {
+              boxShadow: animatedGlow,
+              scale: [1, 1.03, 1],
             } : undefined}
-            transition={enableComplexAnimations ? {
+            transition={enableComplexAnimations && status === "success" ? {
               duration: 2,
-              repeat: status === "success" ? Infinity : 0,
+              repeat: Infinity,
               ease: "easeInOut",
             } : undefined}
           >
